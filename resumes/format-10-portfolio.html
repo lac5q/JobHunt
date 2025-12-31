@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Product Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.45;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        .page {
+            padding: 0.5in;
+            min-height: 11in;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 5px solid white;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .hero .tagline {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 15px;
+        }
+
+        .hero .contact {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .portfolio-card {
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .card-company {
+            font-size: 13px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-metrics {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .card-metric {
+            background: #f0f3ff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .card-description {
+            font-size: 11px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .card-highlights {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .card-highlights li {
+            margin-bottom: 5px;
+            padding-left: 15px;
+            position: relative;
+            font-size: 10px;
+            line-height: 1.5;
+            color: #2c3e50;
+        }
+
+        .card-highlights li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 25px 0 15px 0;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .experience-visual {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .exp-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .exp-dates {
+            font-size: 11px;
+            color: #7f8c8d;
+        }
+
+        .exp-company {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .exp-summary {
+            font-size: 12px;
+            color: #4a5568;
+            font-style: italic;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .subsection-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 12px 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subsection-title::before {
+            content: '▸';
+            color: #667eea;
+        }
+
+        .bullet-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .bullet-list li {
+            margin-bottom: 7px;
+            padding-left: 18px;
+            position: relative;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .bullet-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 10px;
+        }
+
+        .skills-showcase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .skills-showcase-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .skills-columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .skill-column {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .skill-column-title {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .skill-list {
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .page {
+                padding: 0.5in;
+                page-break-after: always;
+            }
+
+            .print-button {
+                display: none;
+            }
+
+            .hero, .skills-showcase, .highlight, .card-icon {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">Print Portfolio</button>
+
+    <div class="container">
+        <!-- Page 1 -->
+        <div class="page">
+            <div class="hero">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFLhrcVCSYY8w/profile-displayphoto-shrink_800_800/B56ZX04IgtHQAg-/0/1743570110941?e=1766620800&v=beta&t=9KHaWvyX8UvAxH_yLT7FD15TObn3kZgtfQP1A3j7m1o" alt="Luis Calderon" class="profile-photo">
+                <h1>Luis Calderon</h1>
+                <div class="tagline">AI/ML Product Leader | Building Products That Scale</div>
+                <div class="contact">San Diego, CA • lcalderon@gmail.com • linkedin.com/in/luiscalderon</div>
+            </div>
+
+            <div class="section-title">Product Portfolio Highlights</div>
+
+            <div class="portfolio-grid">
+                <!-- Card 1: SketchPop -->
+                <div class="portfolio-card">
+                    <div class="card-icon">🎨</div>
+                    <div class="card-title">E-commerce AI Transformation</div>
+                    <div class="card-company">SketchPop LLC • CPO</div>
+                    <div class="card-metrics">
+                        <span class="card-metric">$3M Revenue</span>
+                        <span class="card-metric">20% Margins</span>
+                        <span class="card-metric">40% Cost ↓</span>
+                    </div>
+                    <div class="card-description">
+                        Acquired and scaled custom art e-commerce through comprehensive AI-powered transformation
+                    </div>
+                    <ul class="card-highlights">
+                        <li>AI chatbot deployment (40% cost reduction, 4.8+ stars)</li>
+                        <li>LLM integration (GPT-4/Claude) for personalized comms</li>
+                        <li>AI demand forecasting (30% fulfillment delay reduction)</li>
+                        <li>ML-powered quality control and recommendations</li>
+                        <li>2x order volume with same team size via automation</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2: Intuit AI Products -->
+                <div class="portfolio-card">
+                    <div class="card-icon">🤖</div>
+                    <div class="card-title">AI Product Suite (4 Products)</div>
+                    <div class="card-company">Intuit • Product Leader</div>
+                    <div class="card-metrics">
+                        <span class="card-metric">$900M P&L</span>
+                        <span class="card-metric">10-15% CAGR</span>
+                        <span class="card-metric">Millions Users</span>
+                    </div>
+                    <div class="card-description">
+                        Shipped 4 major AI/ML products serving millions of self-employed users
+                    </div>
+                    <ul class="card-highlights">
+                        <li>Expense Categorization AI (60%+ manual entry reduction)</li>
+                        <li>Deduction Finder ML (HITL, $1,200+ avg refund boost)</li>
+                        <li>Audit Risk Predictor (ML-powered IRS risk analysis)</li>
+                        <li>Document Extraction AI (OCR for W-2s, 1099s, receipts)</li>
+                        <li>Cross-BU AI coordination and shared ML infrastructure</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3: Ancestry Growth -->
+                <div class="portfolio-card">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">Growth Product Leadership</div>
+                    <div class="card-company">Ancestry • Director of Product</div>
+                    <div class="card-metrics">
+                        <span class="card-metric">$800M Business</span>
+                        <span class="card-metric">5% Revenue ↑</span>
+                        <span class="card-metric">30% Conversion ↑</span>
+                    </div>
+                    <div class="card-description">
+                        Led acquisition, conversion & growth for $800M subscription business
+                    </div>
+                    <ul class="card-highlights">
+                        <li>Abandon cart feature (5% revenue lift)</li>
+                        <li>Mobile initiative (30% conversion lift)</li>
+                        <li>Customer journey mapping and optimization</li>
+                        <li>Cross-functional leadership across departments</li>
+                        <li>GTM strategy and product roadmap influence</li>
+                    </ul>
+                </div>
+
+                <!-- Card 4: eBay Payments -->
+                <div class="portfolio-card">
+                    <div class="card-icon">💳</div>
+                    <div class="card-title">Marketplace Payments Platform</div>
+                    <div class="card-company">eBay • Product Leader</div>
+                    <div class="card-metrics">
+                        <span class="card-metric">$100M+ Lift</span>
+                        <span class="card-metric">+2% Conversion</span>
+                        <span class="card-metric">-33% Defects</span>
+                    </div>
+                    <div class="card-description">
+                        Managed payments product and global analytics driving massive business impact
+                    </div>
+                    <ul class="card-highlights">
+                        <li>Checkout optimization (+2% conversion = $100M+ lift)</li>
+                        <li>Operational excellence (-33% defects, improved NPS)</li>
+                        <li>Global Payments Analytics team leadership</li>
+                        <li>A/B testing framework and experimentation culture</li>
+                        <li>Hired, trained, mentored 6+ analysts and managers</li>
+                    </ul>
+                </div>
+
+                <!-- Card 5: AI Consulting -->
+                <div class="portfolio-card">
+                    <div class="card-icon">🔬</div>
+                    <div class="card-title">AI/ML Consulting Practice</div>
+                    <div class="card-company">Growth Alchemy Lab • Founder</div>
+                    <div class="card-metrics">
+                        <span class="card-metric">30-50% Cost ↓</span>
+                        <span class="card-metric">15-25% Retention ↑</span>
+                        <span class="card-metric">Multiple Clients</span>
+                    </div>
+                    <div class="card-description">
+                        Founded AI/ML consulting advising startups on strategy and implementation
+                    </div>
+                    <ul class="card-highlights">
+                        <li>AI strategy, feature prioritization, roadmap development</li>
+                        <li>LLM integration (GPT-4, Claude, Gemini, Llama)</li>
+                        <li>Ivo.AI: AI agent architecture advisory</li>
+                        <li>B2B SaaS: AI feature development and GTM</li>
+                        <li>E-commerce: AI chatbot and automation deployment</li>
+                    </ul>
+                </div>
+
+                <!-- Card 6: Additional Ventures -->
+                <div class="portfolio-card">
+                    <div class="card-icon">💼</div>
+                    <div class="card-title">Additional Leadership Roles</div>
+                    <div class="card-company">Doctor.com, Tile, Epilogue Capital</div>
+                    <div class="card-metrics">
+                        <span class="card-metric">15% Engagement ↑</span>
+                        <span class="card-metric">HaaS Model</span>
+                        <span class="card-metric">M&A</span>
+                    </div>
+                    <div class="card-description">
+                        Product leadership and investing across healthcare, IoT, and acquisitions
+                    </div>
+                    <ul class="card-highlights">
+                        <li>Doctor.com: Analytics platform (15% engagement increase)</li>
+                        <li>Tile: Subscription renewal, hardware-as-a-service</li>
+                        <li>Epilogue Capital: Managing Partner, acquiring businesses</li>
+                        <li>Multiple product launches and business transformations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page">
+            <div class="section-title">Detailed Experience</div>
+
+            <!-- SketchPop Detailed -->
+            <div class="experience-visual">
+                <div class="exp-header">
+                    <div class="exp-title">Chief Product Officer</div>
+                    <div class="exp-dates">July 2025 - Present</div>
+                </div>
+                <div class="exp-company">SketchPop LLC • San Diego, CA</div>
+                <div class="exp-summary">
+                    Acquired and scaled custom art e-commerce business to $3M revenue with 30-person team and 20% margins through AI-powered operational transformation and product innovation.
+                </div>
+
+                <div class="subsection-title">AI Implementation & Operational Efficiency</div>
+                <ul class="bullet-list">
+                    <li>Deployed AI chatbot achieving <span class="highlight">40% cost reduction</span> while maintaining 4.8+ star satisfaction</li>
+                    <li>Integrated LLM-powered tools (GPT-4/Claude) for personalized communications and upsell recommendations</li>
+                    <li>AI demand forecasting reducing fulfillment delays by <span class="highlight">30%</span></li>
+                    <li>Rebuilt backend with modern AI infrastructure for scalable deployment</li>
+                    <li>AI quality control system flagging issues before artist review</li>
+                    <li>ML models for customer preference prediction and personalized products</li>
+                    <li>AI content generation for SEO, descriptions, marketing copy</li>
+                    <li>Data pipeline for continuous AI model improvement via feedback loops</li>
+                </ul>
+
+                <div class="subsection-title">Business Outcomes</div>
+                <ul class="bullet-list">
+                    <li>Revenue: <span class="highlight">$3M annual</span> | Profitability: <span class="highlight">20% margins</span></li>
+                    <li>Operational Leverage: <span class="highlight">2x order volume</span> with same 30-person team via AI automation</li>
+                </ul>
+            </div>
+
+            <!-- Growth Alchemy Lab Detailed -->
+            <div class="experience-visual">
+                <div class="exp-header">
+                    <div class="exp-title">Growth Management Consultant (Founder)</div>
+                    <div class="exp-dates">September 2024 - Present</div>
+                </div>
+                <div class="exp-company">Growth Alchemy Lab • San Diego, CA</div>
+                <div class="exp-summary">
+                    Founded AI/ML product consulting practice advising startups on AI strategy, implementation, and operational deployment using LLMs, AI agents, and operational AI.
+                </div>
+
+                <ul class="bullet-list">
+                    <li>AI/ML product strategy, feature prioritization, roadmap development (ROI-focused)</li>
+                    <li>Guide AI operations: chatbots, agents, workflow automation (GPT-4, Claude, Gemini, Llama)</li>
+                    <li>Build vs. buy evaluation, vendor selection, AI metrics frameworks</li>
+                    <li>Prompt engineering, LLM orchestration, AI agent frameworks for production</li>
+                    <li><strong>Ivo.AI:</strong> AI agent architecture, LLM integration strategy advisory</li>
+                    <li><strong>B2B SaaS:</strong> AI feature development, roadmaps, cost-benefit, GTM</li>
+                    <li><strong>E-commerce:</strong> AI chatbot deployment, customer service automation</li>
+                    <li>Client impact: <span class="highlight">30-50% cost reduction</span>, <span class="highlight">15-25% retention gains</span></li>
+                </ul>
+            </div>
+
+            <!-- Intuit Detailed -->
+            <div class="experience-visual">
+                <div class="exp-header">
+                    <div class="exp-title">Consumer Group Product Management Leader - Growth</div>
+                    <div class="exp-dates">October 2021 - September 2024</div>
+                </div>
+                <div class="exp-company">Intuit • San Diego, CA</div>
+                <div class="exp-summary">
+                    Led $900M-$1B Self-Employed business as Principal/Group PM, managing 4 Product Managers, delivering 10-15% CAGR through AI innovation.
+                </div>
+
+                <div class="subsection-title">AI/ML Products Shipped</div>
+                <ul class="bullet-list">
+                    <li>Expense Categorization AI: <span class="highlight">60%+ manual entry reduction</span> for millions</li>
+                    <li>Deduction Finder ML: HITL algorithm, <span class="highlight">$1,200+ avg refund increase</span></li>
+                    <li>Audit Risk Predictor: ML predicting IRS audit risk, suggesting optimizations</li>
+                    <li>Document Extraction AI: OCR/AI extracting data from W-2s, 1099s, receipts</li>
+                    <li>Cross-BU AI coordination ensuring consistent experiences, shared ML infrastructure</li>
+                </ul>
+
+                <div class="subsection-title">Business Impact</div>
+                <ul class="bullet-list">
+                    <li>Revenue: <span class="highlight">10-15% CAGR on $900M+</span> business ($100-150M annual growth)</li>
+                    <li>Team: Managed 4 PMs | Users: Millions of self-employed (freelancers, gig workers, small businesses)</li>
+                </ul>
+            </div>
+
+            <!-- Additional Roles Condensed -->
+            <div class="experience-visual">
+                <div class="exp-header">
+                    <div class="exp-title">Additional Product Leadership & Consulting</div>
+                    <div class="exp-dates">2000 - 2018</div>
+                </div>
+                <div class="exp-company">Ancestry, eBay, Doctor.com, Tile, Accenture, Booz Allen, Capgemini</div>
+
+                <ul class="bullet-list">
+                    <li><strong>Ancestry:</strong> Director - <span class="highlight">$800M business</span>, 5% revenue lift, 30% mobile conversion lift</li>
+                    <li><strong>eBay:</strong> Product Leader - <span class="highlight">$100M+ business lift</span>, +2% conversion, -33% defects</li>
+                    <li><strong>Doctor.com:</strong> Director - Analytics platform, <span class="highlight">15% engagement increase</span></li>
+                    <li><strong>Tile:</strong> Growth Product - Subscription renewal, hardware-as-a-service model</li>
+                    <li><strong>Accenture:</strong> <span class="highlight">$50-100M cost savings</span>, 10% efficiency gain</li>
+                    <li><strong>Booz Allen:</strong> <span class="highlight">$15M contract</span>, managed <span class="highlight">$100M project</span></li>
+                    <li><strong>Capgemini:</strong> <span class="highlight">$1B telecom billing</span> system for Nextel</li>
+                </ul>
+            </div>
+
+            <div class="skills-showcase">
+                <div class="skills-showcase-title">Core Competencies</div>
+                <div class="skills-columns">
+                    <div class="skill-column">
+                        <div class="skill-column-title">AI/ML</div>
+                        <div class="skill-list">
+                            • GPT-4, Claude, Gemini<br>
+                            • LLM Integration<br>
+                            • AI Agents<br>
+                            • HITL Training<br>
+                            • ML Models<br>
+                            • Prompt Engineering<br>
+                            • OCR/NLP<br>
+                            • Predictive Analytics
+                        </div>
+                    </div>
+                    <div class="skill-column">
+                        <div class="skill-column-title">Product</div>
+                        <div class="skill-list">
+                            • Product-Led Growth<br>
+                            • 0-1 Products<br>
+                            • Product Strategy<br>
+                            • Roadmap Development<br>
+                            • A/B Testing<br>
+                            • Analytics & Metrics<br>
+                            • UX/UI<br>
+                            • Go-to-Market
+                        </div>
+                    </div>
+                    <div class="skill-column">
+                        <div class="skill-column-title">Leadership</div>
+                        <div class="skill-list">
+                            • P&L Management<br>
+                            • Team Building<br>
+                            • Cross-functional<br>
+                            • Hiring & Mentoring<br>
+                            • Strategy<br>
+                            • Stakeholder Mgmt<br>
+                            • Change Management<br>
+                            • Execution
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; padding: 20px; background: #f8f9fa; border-radius: 12px; font-size: 13px;">
+<div class="education-item">
+            <div><strong>MBA & MS</strong><br>University of Michigan (Ross & SEAS)</div>
+            <div style="text-align: right; color: var(--text-secondary);">2009 - 2011</div>
+        </div>
+        <div class="education-item">
+            <div><strong>BS, Electrical Engineering</strong><br>University of Virginia</div>
+            <div style="text-align: right; color: var(--text-secondary);">1996 - 2000</div>
+        </div>
+                <div><strong>Managing Partner</strong><br>Epilogue Capital (2018-Present)</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

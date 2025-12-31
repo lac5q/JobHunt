@@ -1,0 +1,4583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis's Job Search Dashboard - GET PAID FAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        header .subtitle {
+            font-size: 1em;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .alert-banner {
+            background: #ff5722;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 15px 25px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            background: #e9ecef;
+            color: #667eea;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px 30px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .stat-card.urgent h3 {
+            color: #ff5722;
+        }
+
+        .stat-card.success h3 {
+            color: #4caf50;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .priority-box {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .priority-box h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+
+        /* CRM Styles */
+        .crm-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .crm-controls input, .crm-controls select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .crm-controls input:focus, .crm-controls select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+        }
+
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.85em;
+        }
+
+        /* Contact Table */
+        .contact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+
+        .contact-table th, .contact-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .contact-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #667eea;
+            position: sticky;
+            top: 0;
+        }
+
+        .contact-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-new { background: #e3f2fd; color: #1976d2; }
+        .status-contacted { background: #fff3e0; color: #f57c00; }
+        .status-responded { background: #e8f5e9; color: #388e3c; }
+        .status-call-scheduled { background: #f3e5f5; color: #7b1fa2; }
+        .status-call-completed { background: #e0f7fa; color: #0097a7; }
+        .status-referral { background: #fce4ec; color: #c2185b; }
+        .status-interviewing { background: #fff8e1; color: #ffa000; }
+        .status-offer { background: #c8e6c9; color: #2e7d32; }
+        .status-rejected { background: #ffebee; color: #c62828; }
+        .status-no-response { background: #eceff1; color: #546e7a; }
+
+        .warmth-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .warmth-hot { background: #f44336; }
+        .warmth-warm { background: #ff9800; }
+        .warmth-cold { background: #2196f3; }
+
+        .follow-up-due {
+            background: #ffebee !important;
+        }
+
+        .follow-up-today {
+            background: #fff3e0 !important;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Pipeline Funnel */
+        .funnel-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .funnel-stage {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+        }
+
+        .funnel-stage h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .funnel-stage .count {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .funnel-stage .conversion {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Quick Actions */
+        .action-button {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            margin: 10px 10px 10px 0;
+        }
+
+        .action-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .action-button.secondary {
+            background: #667eea;
+        }
+
+        .action-button.secondary:hover {
+            background: #5568d3;
+        }
+
+        /* Path Cards */
+        .path-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .path-card {
+            background: white;
+            border: 3px solid #e0e0e0;
+            padding: 25px;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .path-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .path-card.fast {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .path-card.medium {
+            border-color: #ff9800;
+            background: #fff3e0;
+        }
+
+        .path-card.slow {
+            border-color: #9e9e9e;
+            background: #f5f5f5;
+        }
+
+        .path-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .path-card .timeline {
+            display: inline-block;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .path-card .income {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4caf50;
+            margin: 10px 0;
+        }
+
+        /* Task List */
+        .task-list {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .task-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .task-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        /* Doc Cards */
+        .doc-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .doc-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .doc-card p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        /* Weekly Schedule */
+        .weekly-schedule {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .day-block {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+        }
+
+        .day-block h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .day-block ul {
+            margin-left: 20px;
+        }
+
+        .day-block li {
+            margin-bottom: 5px;
+        }
+
+        /* Analytics Charts */
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 200px;
+            padding: 20px 0;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            min-width: 40px;
+            transition: all 0.3s;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75em;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Export/Import Section */
+        .export-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .export-section h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        /* CRM Cards Layout */
+        .crm-view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .crm-view-toggle button {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .crm-view-toggle button.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .crm-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .contact-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .contact-card.priority-high {
+            border-left: 5px solid #f44336;
+        }
+
+        .contact-card.priority-medium {
+            border-left: 5px solid #ff9800;
+        }
+
+        .contact-card.priority-ross {
+            border-left: 5px solid #ffc107;
+        }
+
+        .contact-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .contact-card-name {
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .contact-card-title {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .contact-card-company {
+            font-size: 0.95em;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .contact-card-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0;
+        }
+
+        .contact-card-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .contact-card-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        .contact-card-stat {
+            text-align: center;
+        }
+
+        .contact-card-stat-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .contact-card-stat-label {
+            font-size: 0.7em;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .contact-card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .contact-card-actions button,
+        .contact-card-actions a {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-compose {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-compose:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-linkedin {
+            background: #0077b5;
+            color: white;
+        }
+
+        .btn-status {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-edit {
+            background: #e8e8e8;
+            color: #666;
+            flex: 0 !important;
+            min-width: 45px !important;
+        }
+
+        .btn-log {
+            background: #fff3e0;
+            color: #e65100;
+            flex: 0 !important;
+            min-width: 70px !important;
+        }
+
+        .btn-log:hover {
+            background: #ffe0b2;
+        }
+
+        .outreach-history {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .outreach-history-title {
+            font-size: 0.8em;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .outreach-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 6px 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-top: 4px;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .outreach-item-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+        }
+
+        .outreach-item-icon.email { background: #e3f2fd; color: #1976d2; }
+        .outreach-item-icon.linkedin { background: #e1f5fe; color: #0077b5; }
+        .outreach-item-icon.call { background: #e8f5e9; color: #388e3c; }
+        .outreach-item-icon.response { background: #fff3e0; color: #f57c00; }
+
+        .outreach-item-content {
+            flex: 1;
+        }
+
+        .outreach-item-date {
+            font-size: 0.75em;
+            color: #999;
+        }
+
+        .add-outreach-btn {
+            width: 100%;
+            padding: 8px;
+            background: none;
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            color: #888;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-outreach-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        /* Quick Stats Bar */
+        .crm-quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+        }
+
+        .crm-quick-stat {
+            text-align: center;
+            color: white;
+        }
+
+        .crm-quick-stat-value {
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .crm-quick-stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        /* Outreach Modal */
+        .outreach-type-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .outreach-type-btn {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .outreach-type-btn:hover,
+        .outreach-type-btn.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .outreach-type-btn .icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .path-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .tab-btn {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* ============================================
+           AI PANEL STYLES
+           ============================================ */
+
+        /* Backdrop overlay (hidden on desktop, visible on mobile) */
+        .ai-panel-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+            display: none; /* Hidden on desktop */
+        }
+
+        .ai-panel-backdrop.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ai-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: min(600px, 35vw);
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            transform: translateX(100%);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+            overflow: hidden;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-panel.open {
+            transform: translateX(0);
+        }
+
+        .ai-panel-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .ai-panel-header h2 {
+            margin: 0;
+            font-size: 1.3em;
+        }
+
+        .ai-panel-header button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .ai-panel-header button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .ai-panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .ai-panel-section {
+            margin-bottom: 20px;
+        }
+
+        .ai-panel-section h3 {
+            margin: 0 0 10px 0;
+            font-size: 1em;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .ai-panel select,
+        .ai-panel textarea,
+        .ai-panel input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+
+        .ai-panel textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .ai-panel-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .ai-panel-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .ai-actions {
+            display: none;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .ai-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-copy {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-send {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-copy:hover,
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Mobile Responsive - AI Panel */
+        @media (max-width: 768px) {
+            /* Show backdrop on mobile */
+            .ai-panel-backdrop {
+                display: block;
+            }
+
+            /* Full-screen overlay on mobile */
+            .ai-panel {
+                width: 100vw;
+                height: 100vh;
+                right: 0;
+                top: 0;
+                transform: translateY(100%); /* Slide from bottom instead of right */
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+            }
+
+            .ai-panel.open {
+                transform: translateY(0); /* Slide up to show */
+            }
+
+            /* Enhanced header for mobile */
+            .ai-panel-header {
+                padding: 16px 20px;
+            }
+
+            .ai-panel-header h2 {
+                font-size: 1.2em;
+            }
+
+            /* Larger touch targets for close button */
+            .ai-panel-header button {
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+                font-size: 1.6em;
+            }
+
+            /* Optimize content padding for mobile */
+            .ai-panel-content {
+                padding: 16px;
+                /* Ensure scrolling works properly with mobile keyboards */
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Better form inputs for mobile */
+            .ai-panel select,
+            .ai-panel textarea,
+            .ai-panel input {
+                padding: 12px;
+                font-size: 16px; /* Prevent iOS zoom on focus */
+                border-radius: 8px;
+            }
+
+            /* Email input keyboard */
+            .ai-panel input[type="email"] {
+                -webkit-appearance: none;
+            }
+
+            /* URL input keyboard */
+            .ai-panel input[type="url"] {
+                -webkit-appearance: none;
+            }
+
+            /* Larger textarea for mobile */
+            .ai-panel textarea {
+                min-height: 100px;
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+
+            /* Larger touch targets for buttons */
+            .ai-panel-buttons button,
+            .ai-actions button {
+                padding: 14px 16px;
+                min-height: 48px;
+                font-size: 1em;
+            }
+
+            /* Stack buttons on very small screens */
+            @media (max-width: 400px) {
+                .ai-panel-buttons,
+                .ai-actions {
+                    flex-direction: column;
+                }
+
+                .ai-panel-buttons button,
+                .ai-actions button {
+                    width: 100%;
+                }
+            }
+        }
+
+        /* Additional mobile optimization for compose buttons in cards */
+        @media (max-width: 768px) {
+            .btn-compose {
+                padding: 12px 16px;
+                min-height: 44px;
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="position: relative;">
+                <h1>Job Search Command Center</h1>
+                <button id="settings-btn" onclick="openSettingsModal()" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">
+                    <span id="sync-indicator" style="width: 10px; height: 10px; border-radius: 50%; background: #888;"></span>
+                    Settings
+                </button>
+            </div>
+            <p>Luis Calderon | Hands-On Product Leader | $900M P&L | AI/ML Expertise</p>
+            <p class="subtitle">Target: $200-280K+ | VP/Director/Principal PM | Solo PM or Team Leader</p>
+        </header>
+
+        <div class="alert-banner" id="alert-banner">
+            <span id="follow-up-alert">Loading...</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card urgent">
+                <h3 id="days-active">0</h3>
+                <p>Days Active</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="total-contacts">0</h3>
+                <p>Total Contacts</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="response-rate">0%</h3>
+                <p>Response Rate</p>
+            </div>
+            <div class="stat-card success">
+                <h3 id="calls-scheduled">0</h3>
+                <p>Calls Scheduled</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="interviews">0</h3>
+                <p>Interviews</p>
+            </div>
+            <div class="stat-card success">
+                <h3 id="offers">0</h3>
+                <p>Offers</p>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="contacts">Contacts CRM</button>
+            <button class="tab-btn" data-tab="pipeline">Pipeline</button>
+            <button class="tab-btn" data-tab="analytics">Analytics</button>
+            <button class="tab-btn" data-tab="resources">Resources</button>
+            <a href="./ai-tools.html" class="tab-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none;">🤖 AI Tools</a>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <!-- Priority Alert -->
+            <div class="priority-box">
+                <h3>This Week's Focus</h3>
+                <p><strong>Goal:</strong> Get fractional income flowing ($15-25K/month) while building full-time pipeline</p>
+                <p><strong>Action:</strong> 4 fractional applications + 50 Ross alumni messages + LinkedIn update</p>
+                <p><strong>Expected Outcome:</strong> 10-15 responses, 3-5 calls, 1-2 fractional interviews by Friday</p>
+            </div>
+
+            <!-- Today's Follow-ups -->
+            <div class="section">
+                <h2>Today's Follow-ups</h2>
+                <div id="todays-followups" class="task-list">
+                    <p style="color: #666;">No follow-ups due today. Add contacts to get started!</p>
+                </div>
+            </div>
+
+            <!-- Today's Priority Tasks -->
+            <div class="section">
+                <h2>Today's Priorities</h2>
+                <div class="task-list">
+                    <div class="task-item">
+                        <input type="checkbox" id="task1">
+                        <label for="task1"><strong>Update LinkedIn About</strong> - Use LinkedIn button from resume (30 mins)</label>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" id="task2">
+                        <label for="task2"><strong>Apply to Toptal</strong> - https://www.toptal.com/product-managers (30 mins)</label>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" id="task3">
+                        <label for="task3"><strong>Find 50 Ross Alumni</strong> - LinkedIn search: Ross MBA at Series B-D companies (30 mins)</label>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" id="task4">
+                        <label for="task4"><strong>Message 10 Ross Alumni</strong> - Use template in documents (30 mins)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section">
+                <h2>Quick Actions</h2>
+                <a href="https://www.toptal.com/product-managers" target="_blank" class="action-button">Apply to Toptal</a>
+                <a href="https://www.catalant.com" target="_blank" class="action-button">Apply to Catalant</a>
+                <a href="https://a.team" target="_blank" class="action-button">Apply to A.Team</a>
+                <a href="https://gun.io" target="_blank" class="action-button">Apply to Gun.io</a>
+                <a href="https://www.linkedin.com/search/results/people/?keywords=ross%20school%20of%20business" target="_blank" class="action-button secondary">Find Ross Alumni</a>
+                <button onclick="openAddContactModal()" class="action-button secondary">+ Add Contact</button>
+            </div>
+
+            <!-- Fast Paths to Income -->
+            <div class="section">
+                <h2>Fast Paths to Income</h2>
+                <div class="path-grid">
+                    <div class="path-card fast">
+                        <h3>Path 1: Fractional PM Work</h3>
+                        <div class="timeline">2-3 weeks to first check</div>
+                        <div class="income">$15-25K/month (part-time)</div>
+                        <p><strong>Why Fast:</strong> Companies hire fractional PMs in 1-2 weeks.</p>
+                    </div>
+                    <div class="path-card fast">
+                        <h3>Path 2: Ross Alumni Network</h3>
+                        <div class="timeline">3-4 weeks to offer</div>
+                        <div class="income">$200-280K base + equity</div>
+                        <p><strong>Why Fast:</strong> Warm intro → skip HR → hiring manager</p>
+                    </div>
+                    <div class="path-card medium">
+                        <h3>Path 3: PE-Backed Companies</h3>
+                        <div class="timeline">4-6 weeks</div>
+                        <div class="income">$180-250K base + equity</div>
+                        <p><strong>Why Faster:</strong> PE firms pressure portfolio cos to hire fast</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contacts CRM Tab -->
+        <div id="contacts" class="tab-content">
+            <div class="section">
+                <h2>Contact Management</h2>
+
+                <!-- Quick Stats -->
+                <div class="crm-quick-stats">
+                    <div class="crm-quick-stat">
+                        <div class="crm-quick-stat-value" id="crm-total">0</div>
+                        <div class="crm-quick-stat-label">Total Contacts</div>
+                    </div>
+                    <div class="crm-quick-stat">
+                        <div class="crm-quick-stat-value" id="crm-emailed">0</div>
+                        <div class="crm-quick-stat-label">Emailed</div>
+                    </div>
+                    <div class="crm-quick-stat">
+                        <div class="crm-quick-stat-value" id="crm-responses">0</div>
+                        <div class="crm-quick-stat-label">Responses</div>
+                    </div>
+                    <div class="crm-quick-stat">
+                        <div class="crm-quick-stat-value" id="crm-calls">0</div>
+                        <div class="crm-quick-stat-label">Calls Booked</div>
+                    </div>
+                    <div class="crm-quick-stat">
+                        <div class="crm-quick-stat-value" id="crm-response-rate">0%</div>
+                        <div class="crm-quick-stat-label">Response Rate</div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="crm-controls">
+                    <input type="text" id="search-contacts" placeholder="Search contacts..." style="flex: 1; min-width: 200px;" oninput="renderCRM()">
+                    <select id="filter-status" onchange="renderCRM()">
+                        <option value="">All Statuses</option>
+                        <option value="new">New</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="responded">Responded</option>
+                        <option value="call-scheduled">Call Scheduled</option>
+                        <option value="call-completed">Call Completed</option>
+                        <option value="referral">Referral Made</option>
+                        <option value="interviewing">Interviewing</option>
+                        <option value="offer">Offer</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="no-response">No Response</option>
+                    </select>
+                    <select id="filter-source" onchange="renderCRM()">
+                        <option value="">All Sources</option>
+                        <option value="ross-alumni">Ross Alumni</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="referral">Referral</option>
+                        <option value="recruiter">Recruiter</option>
+                        <option value="company-direct">Company Direct</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <label style="display: flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;">
+                        <input type="checkbox" id="filter-show-na" onchange="renderCRM()" style="cursor: pointer;">
+                        Show NA
+                    </label>
+                    <button class="btn btn-primary" onclick="openAddContactModal()">+ Add Contact</button>
+                    <button class="btn" style="background: #0077b5; color: white;" onclick="document.getElementById('linkedin-archive-folder').click()" title="Import Connections + Messages from LinkedIn export">📥 Import LinkedIn</button>
+                    <input type="file" id="linkedin-archive-folder" webkitdirectory multiple style="display:none" onchange="importLinkedInArchiveFolder(event)">
+                    <button class="btn btn-success" onclick="syncLinkedInNow()" title="Sync conversations from Chrome extension">🔄 Sync</button>
+                    <a href="./network-explorer.html" class="btn btn-success" style="text-decoration: none;">Explore Network</a>
+                </div>
+
+                <!-- View Toggle -->
+                <div class="crm-view-toggle">
+                    <button class="active" onclick="setCRMView('cards', this)">Card View</button>
+                    <button onclick="setCRMView('table', this)">Table View</button>
+                </div>
+
+                <!-- Card View -->
+                <div id="crm-cards-view" class="crm-cards-grid">
+                    <!-- Cards will be populated here -->
+                </div>
+
+                <!-- Table View (hidden by default) -->
+                <div id="crm-table-view" style="display: none; overflow-x: auto;">
+                    <table class="contact-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Company</th>
+                                <th>Title</th>
+                                <th>Source</th>
+                                <th>Status</th>
+                                <th>Outreach</th>
+                                <th>Last Contact</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contacts-table-body">
+                            <!-- Contacts will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="export-section">
+                    <h3>Data Management</h3>
+                    <button class="btn btn-secondary" onclick="exportToCSV()">Export to CSV</button>
+                    <button class="btn btn-secondary" onclick="exportToJSON()">Export to JSON</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">Import from CSV/JSON</button>
+                    <input type="file" id="import-file" accept=".csv,.json" style="display:none" onchange="importData(event)">
+                    <button class="btn btn-danger" onclick="clearAllData()" style="margin-left: 20px;">Clear All Data</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Log Outreach Modal -->
+        <div class="modal" id="outreach-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Log Outreach</h2>
+                    <button class="modal-close" onclick="closeOutreachModal()">&times;</button>
+                </div>
+                <input type="hidden" id="outreach-contact-id">
+                <p id="outreach-contact-name" style="font-weight: 600; margin-bottom: 20px; color: #667eea;"></p>
+
+                <div class="outreach-type-grid">
+                    <div class="outreach-type-btn selected" data-type="email" onclick="selectOutreachType('email', this)">
+                        <div class="icon">📧</div>
+                        <div>Email Sent</div>
+                    </div>
+                    <div class="outreach-type-btn" data-type="linkedin" onclick="selectOutreachType('linkedin', this)">
+                        <div class="icon">💼</div>
+                        <div>LinkedIn Message</div>
+                    </div>
+                    <div class="outreach-type-btn" data-type="call" onclick="selectOutreachType('call', this)">
+                        <div class="icon">📞</div>
+                        <div>Phone Call</div>
+                    </div>
+                    <div class="outreach-type-btn" data-type="response" onclick="selectOutreachType('response', this)">
+                        <div class="icon">📥</div>
+                        <div>Got Response</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes (optional)</label>
+                    <textarea id="outreach-notes" placeholder="What did you discuss? Any follow-up needed?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Set Follow-up Date</label>
+                    <input type="date" id="outreach-followup">
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="closeOutreachModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveOutreach()">Log Outreach</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pipeline Tab -->
+        <div id="pipeline" class="tab-content">
+            <div class="section">
+                <h2>Outreach Pipeline</h2>
+
+                <div class="funnel-container" id="pipeline-funnel">
+                    <!-- Funnel stages will be populated here -->
+                </div>
+
+                <h3 style="margin-bottom: 15px;">Pipeline by Stage</h3>
+                <div id="pipeline-by-stage">
+                    <!-- Pipeline details will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics" class="tab-content">
+            <div class="section">
+                <h2>Performance Analytics</h2>
+
+                <!-- AI Message Analytics -->
+                <div class="chart-container" style="margin-bottom: 30px;">
+                    <h3>AI Message Analytics</h3>
+                    <div id="message-analytics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <!-- Stats cards populated by JS -->
+                    </div>
+                    <div id="message-breakdown" style="margin-top: 20px;">
+                        <!-- Message type breakdown -->
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Weekly Activity</h3>
+                    <div class="bar-chart" id="weekly-chart">
+                        <!-- Chart will be populated here -->
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="chart-container">
+                        <h3>Response Rates by Source</h3>
+                        <div id="source-stats">
+                            <!-- Stats will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Conversion Metrics</h3>
+                        <div id="conversion-stats">
+                            <!-- Stats will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Activity Timeline</h3>
+                    <div id="activity-timeline">
+                        <!-- Timeline will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Tab -->
+        <div id="resources" class="tab-content">
+            <div class="section">
+                <h2>Key Documents</h2>
+
+                <a href="./resume.html" class="doc-card" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                    <h3>Resume (View/Print)</h3>
+                    <p>Hands-on product leader, AI expertise, $900M P&L. Use LinkedIn buttons to copy!</p>
+                </a>
+
+                <a href="./LINKEDIN-SECTIONS-BREAKDOWN.md" class="doc-card">
+                    <h3>LinkedIn Update Guide</h3>
+                    <p>Exact text for About, Headline, Experience sections. Copy-paste ready!</p>
+                </a>
+
+                <a href="./YOUR-AI-COMPETITIVE-ADVANTAGE.md" class="doc-card">
+                    <h3>AI Competitive Advantage</h3>
+                    <p>Why you're top 1%: Pre-ChatGPT ML + modern LLMs. Use in interviews!</p>
+                </a>
+            </div>
+
+            <div class="section">
+                <h2>Ross Alumni Message Template</h2>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #667eea;">
+                    <p style="margin-bottom: 15px;"><strong>Use this for LinkedIn DMs:</strong></p>
+                    <pre style="background: white; padding: 15px; border-radius: 8px; overflow-x: auto;">Hey [Name],
+
+Luis Calderon - Ross '11. Led $900M TurboTax, now exploring next move.
+
+Saw you're at [Company]. Quick question - are you hiring product leaders who can ship AI products hands-on? Just cut costs 40% with AI chatbots at my current company.
+
+15 min call to hear what you're building?
+
+Go Blue,
+Luis
+703.786.7899</pre>
+                    <button class="btn btn-primary" onclick="copyTemplate()" style="margin-top: 10px;">Copy Template</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Weekly Schedule</h2>
+                <div class="weekly-schedule">
+                    <div class="day-block">
+                        <h4>Monday (2 hours) - SETUP DAY</h4>
+                        <ul>
+                            <li>Update LinkedIn About section (30 mins)</li>
+                            <li>Apply to Toptal fractional PM (30 mins)</li>
+                            <li>Find 50 Ross alumni at target companies (30 mins)</li>
+                            <li>Message 10 Ross alumni (30 mins)</li>
+                        </ul>
+                    </div>
+                    <div class="day-block">
+                        <h4>Tuesday-Thursday (1 hour each)</h4>
+                        <ul>
+                            <li>Apply to one fractional platform (20 mins)</li>
+                            <li>Message 10 Ross alumni (40 mins)</li>
+                            <li>Take networking calls as scheduled</li>
+                        </ul>
+                    </div>
+                    <div class="day-block">
+                        <h4>Friday (30 mins) - REVIEW DAY</h4>
+                        <ul>
+                            <li>Review responses and calls scheduled</li>
+                            <li>Follow up with non-responders</li>
+                            <li>Plan next week's targets</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                <h2>Your Contact Info</h2>
+                <p><strong>Email:</strong> luis@calderon.com</p>
+                <p><strong>Phone:</strong> 703.786.7899</p>
+                <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/luiscalderonmba/" target="_blank">linkedin.com/in/luiscalderonmba</a></p>
+                <p><strong>Location:</strong> San Diego, CA (open to remote, willing to travel LA/SF)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Contact Modal -->
+    <div class="modal" id="contact-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add Contact</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+
+            <!-- Tabs for Contact Details and Message History -->
+            <div style="display: flex; border-bottom: 2px solid #e0e0e0; margin-bottom: 20px;">
+                <button type="button" id="contact-details-tab" class="modal-tab active" onclick="switchContactTab('details')" style="flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid #667eea;">
+                    Contact Details
+                </button>
+                <button type="button" id="message-history-tab" class="modal-tab" onclick="switchContactTab('history')" style="flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent;">
+                    Message History <span id="message-count-badge" style="background: #667eea; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.85em; margin-left: 5px;">0</span>
+                </button>
+            </div>
+
+            <!-- Contact Details Form -->
+            <div id="contact-details-content">
+            <form id="contact-form" onsubmit="saveContact(event)">
+                <input type="hidden" id="contact-id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name *</label>
+                        <input type="text" id="contact-first-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name *</label>
+                        <input type="text" id="contact-last-name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Company *</label>
+                        <input type="text" id="contact-company" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="contact-title">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="contact-email">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="contact-phone">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>LinkedIn URL</label>
+                    <input type="url" id="contact-linkedin" placeholder="https://linkedin.com/in/...">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Source *</label>
+                        <select id="contact-source" required>
+                            <option value="">Select source...</option>
+                            <option value="ross-alumni">Ross Alumni</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="referral">Referral</option>
+                            <option value="recruiter">Recruiter</option>
+                            <option value="company-direct">Company Direct</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status *</label>
+                        <select id="contact-status" required>
+                            <option value="new">New</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="responded">Responded</option>
+                            <option value="call-scheduled">Call Scheduled</option>
+                            <option value="call-completed">Call Completed</option>
+                            <option value="referral">Referral Made</option>
+                            <option value="interviewing">Interviewing</option>
+                            <option value="offer">Offer</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="no-response">No Response</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Last Contacted</label>
+                        <input type="date" id="contact-last-contacted">
+                    </div>
+                    <div class="form-group">
+                        <label>Follow-up Date</label>
+                        <input type="date" id="contact-followup">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="contact-notes" placeholder="Add any relevant notes, conversation history, etc."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Contact</button>
+                </div>
+            </form>
+            </div>
+
+            <!-- Message History Content -->
+            <div id="message-history-content" style="display: none;">
+                <div id="message-history-list" style="max-height: 400px; overflow-y: auto;">
+                    <p style="text-align: center; color: #888; padding: 40px;">No messages sent yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Sync Settings</h2>
+                <button class="modal-close" onclick="closeSettingsModal()">&times;</button>
+            </div>
+            <div style="padding: 20px;">
+                <div id="sync-status-section" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; background: #f0f0f0;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span id="sync-status-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #888;"></span>
+                        <span id="sync-status-text">Not configured</span>
+                    </div>
+                    <p id="sync-last-updated" style="font-size: 0.85em; color: #666; margin-top: 8px;"></p>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Supabase URL</label>
+                    <input type="text" id="supabase-url" placeholder="https://xxxxx.supabase.co" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Supabase API Key (anon)</label>
+                    <input type="password" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="saveSupabaseConfig()" class="btn btn-primary" style="flex: 1;">Save & Connect</button>
+                    <button onclick="syncNow()" class="btn btn-secondary" id="sync-now-btn" style="flex: 1;" disabled>Sync Now</button>
+                </div>
+
+                <hr style="margin: 25px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                <h3 style="margin-bottom: 15px; font-size: 1em;">Gmail Accounts</h3>
+                <div style="margin-bottom: 20px;">
+                    <!-- Personal Gmail -->
+                    <div style="padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 15px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 1.5em;">📧</span>
+                                <div>
+                                    <strong>Personal Gmail</strong>
+                                    <div id="personal-gmail-email" style="font-size: 0.85em; color: #666;">Not connected</div>
+                                </div>
+                            </div>
+                            <span id="personal-gmail-status" style="font-size: 1.2em;">⚠️</span>
+                        </div>
+                        <input type="text" id="personal-client-id" placeholder="OAuth Client ID (e.g., 123456.apps.googleusercontent.com)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px; font-size: 0.85em;">
+                        <button id="personal-connect-btn" onclick="connectPersonalGmail()" class="btn btn-secondary" style="width: 100%;">Connect Personal Gmail</button>
+                    </div>
+
+                    <!-- Work Gmail -->
+                    <div style="padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 1.5em;">💼</span>
+                                <div>
+                                    <strong>Work Gmail</strong>
+                                    <div id="work-gmail-email" style="font-size: 0.85em; color: #666;">Not connected</div>
+                                </div>
+                            </div>
+                            <span id="work-gmail-status" style="font-size: 1.2em;">⚠️</span>
+                        </div>
+                        <input type="text" id="work-client-id" placeholder="OAuth Client ID (e.g., 987654.apps.googleusercontent.com)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px; font-size: 0.85em;">
+                        <button id="work-connect-btn" onclick="connectWorkGmail()" class="btn btn-secondary" style="width: 100%;">Connect Work Gmail</button>
+                    </div>
+                    <p style="font-size: 0.8em; color: #888; margin-top: 10px;">
+                        <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color: #667eea;">Get OAuth Client ID</a> from Google Cloud Console
+                    </p>
+                </div>
+
+                <hr style="margin: 25px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                <h3 style="margin-bottom: 15px; font-size: 1em;">Data Management</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="exportAllData()" class="btn btn-secondary" style="flex: 1;">Export JSON</button>
+                    <button onclick="document.getElementById('import-file').click()" class="btn btn-secondary" style="flex: 1;">Import JSON</button>
+                    <input type="file" id="import-file" accept=".json" onchange="importAllData(event)" style="display: none;">
+                </div>
+                <p style="font-size: 0.8em; color: #888; margin-top: 10px;">Export creates a backup file. Import merges with existing data.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                <h3 style="margin-bottom: 15px; font-size: 1em;">📂 LinkedIn Archive Import</h3>
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+                    Import connections and messages from your LinkedIn data export.
+                    <a href="linkedin-archives/README.md" target="_blank" style="color: #667eea;">How to export →</a>
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="document.getElementById('linkedin-connections-file').click()" class="btn btn-secondary" style="flex: 1;">
+                        👥 Import Connections.csv
+                    </button>
+                    <button onclick="document.getElementById('linkedin-messages-file').click()" class="btn btn-secondary" style="flex: 1;">
+                        💬 Import messages.csv
+                    </button>
+                    <input type="file" id="linkedin-connections-file" accept=".csv" onchange="importLinkedInConnections(event)" style="display: none;">
+                    <input type="file" id="linkedin-messages-file" accept=".csv" onchange="importLinkedInMessages(event)" style="display: none;">
+                </div>
+                <p style="font-size: 0.8em; color: #888; margin-top: 10px;">
+                    Files are in the unzipped LinkedIn export folder. Import connections first, then messages.
+                </p>
+
+                <div style="margin-top: 20px;">
+                    <a href="SUPABASE-SETUP.md" target="_blank" style="color: #667eea; font-size: 0.9em;">View setup instructions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // SUPABASE SYNC MODULE
+        // ============================================
+
+        const SyncManager = {
+            supabaseUrl: null,
+            supabaseKey: null,
+            isSyncing: false,
+            lastSync: null,
+
+            init() {
+                // SECURITY: Credentials should only be stored in localStorage, never hardcoded in source
+                // Users must configure Supabase credentials through the Settings UI
+                this.supabaseUrl = localStorage.getItem('supabaseUrl');
+                this.supabaseKey = localStorage.getItem('supabaseKey');
+                this.lastSync = localStorage.getItem('lastSync');
+
+                this.updateUI();
+
+                if (this.isConfigured()) {
+                    this.loadFromCloud();
+                }
+            },
+
+            isConfigured() {
+                return this.supabaseUrl && this.supabaseKey;
+            },
+
+            updateUI() {
+                const indicator = document.getElementById('sync-indicator');
+                const statusDot = document.getElementById('sync-status-dot');
+                const statusText = document.getElementById('sync-status-text');
+                const lastUpdated = document.getElementById('sync-last-updated');
+                const syncNowBtn = document.getElementById('sync-now-btn');
+                const urlInput = document.getElementById('supabase-url');
+                const keyInput = document.getElementById('supabase-key');
+
+                if (urlInput) urlInput.value = this.supabaseUrl || '';
+                if (keyInput) keyInput.value = this.supabaseKey || '';
+
+                if (this.isSyncing) {
+                    if (indicator) indicator.style.background = '#ffc107';
+                    if (statusDot) statusDot.style.background = '#ffc107';
+                    if (statusText) statusText.textContent = 'Syncing...';
+                } else if (this.isConfigured()) {
+                    if (indicator) indicator.style.background = '#4caf50';
+                    if (statusDot) statusDot.style.background = '#4caf50';
+                    if (statusText) statusText.textContent = 'Connected';
+                    if (syncNowBtn) syncNowBtn.disabled = false;
+                } else {
+                    if (indicator) indicator.style.background = '#888';
+                    if (statusDot) statusDot.style.background = '#888';
+                    if (statusText) statusText.textContent = 'Not configured';
+                    if (syncNowBtn) syncNowBtn.disabled = true;
+                }
+
+                if (lastUpdated && this.lastSync) {
+                    lastUpdated.textContent = 'Last synced: ' + new Date(this.lastSync).toLocaleString();
+                } else if (lastUpdated) {
+                    lastUpdated.textContent = '';
+                }
+            },
+
+            async saveConfig(url, key) {
+                this.supabaseUrl = url.trim().replace(/\/$/, '');
+                this.supabaseKey = key.trim();
+
+                localStorage.setItem('supabaseUrl', this.supabaseUrl);
+                localStorage.setItem('supabaseKey', this.supabaseKey);
+
+                // Test connection
+                try {
+                    const response = await fetch(`${this.supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                        headers: {
+                            'apikey': this.supabaseKey,
+                            'Authorization': `Bearer ${this.supabaseKey}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Connection failed: ' + response.statusText);
+                    }
+
+                    this.updateUI();
+                    await this.syncToCloud();
+                    alert('Connected successfully! Your data is now syncing.');
+                    return true;
+                } catch (error) {
+                    alert('Connection failed: ' + error.message + '\n\nPlease check your URL and API key.');
+                    this.supabaseUrl = null;
+                    this.supabaseKey = null;
+                    localStorage.removeItem('supabaseUrl');
+                    localStorage.removeItem('supabaseKey');
+                    this.updateUI();
+                    return false;
+                }
+            },
+
+            async loadFromCloud() {
+                if (!this.isConfigured() || this.isSyncing) return;
+
+                this.isSyncing = true;
+                this.updateUI();
+
+                try {
+                    const response = await fetch(`${this.supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                        headers: {
+                            'apikey': this.supabaseKey,
+                            'Authorization': `Bearer ${this.supabaseKey}`
+                        }
+                    });
+
+                    if (!response.ok) throw new Error('Failed to load data');
+
+                    const data = await response.json();
+                    if (data && data.length > 0) {
+                        const cloudData = data[0];
+                        const cloudTime = new Date(cloudData.updated_at).getTime();
+                        const localTime = parseInt(localStorage.getItem('localDataTimestamp') || '0');
+
+                        // Cloud is newer, use cloud data
+                        if (cloudTime > localTime) {
+                            if (cloudData.contacts) {
+                                localStorage.setItem('jobSearchContacts', JSON.stringify(cloudData.contacts));
+                            }
+                            if (cloudData.progress) {
+                                localStorage.setItem('jobSearchProgress', JSON.stringify(cloudData.progress));
+                            }
+                            if (cloudData.message_templates) {
+                                localStorage.setItem('messageTemplates', JSON.stringify(cloudData.message_templates));
+                            }
+                            if (cloudData.reviewed_contacts) {
+                                localStorage.setItem('reviewedContacts', JSON.stringify(cloudData.reviewed_contacts));
+                            }
+                            localStorage.setItem('localDataTimestamp', cloudTime.toString());
+
+                            // Refresh displays
+                            if (typeof updateAllDisplays === 'function') {
+                                updateAllDisplays();
+                            }
+                        }
+
+                        // ALWAYS load LinkedIn conversations (independent of cloud/local comparison)
+                        if (cloudData.linkedin_conversations && cloudData.linkedin_conversations.length > 0) {
+                            this.importLinkedInConversations(cloudData.linkedin_conversations);
+                        }
+                    }
+
+                    this.lastSync = new Date().toISOString();
+                    localStorage.setItem('lastSync', this.lastSync);
+
+                    // Deduplicate after loading cloud data
+                    if (typeof deduplicateContacts === 'function') {
+                        const dedupeResult = deduplicateContacts();
+                        if (dedupeResult.removed > 0) {
+                            console.log(`Removed ${dedupeResult.removed} duplicates after cloud sync`);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Cloud load error:', error);
+                } finally {
+                    this.isSyncing = false;
+                    this.updateUI();
+                }
+            },
+
+            async syncToCloud() {
+                if (!this.isConfigured() || this.isSyncing) return;
+
+                this.isSyncing = true;
+                this.updateUI();
+
+                try {
+                    const payload = {
+                        id: 'main',
+                        contacts: JSON.parse(localStorage.getItem('jobSearchContacts') || '[]'),
+                        progress: JSON.parse(localStorage.getItem('jobSearchProgress') || '{}'),
+                        message_templates: JSON.parse(localStorage.getItem('messageTemplates') || '[]'),
+                        reviewed_contacts: JSON.parse(localStorage.getItem('reviewedContacts') || '[]')
+                    };
+
+                    const response = await fetch(`${this.supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': this.supabaseKey,
+                            'Authorization': `Bearer ${this.supabaseKey}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error('Failed to sync data');
+
+                    this.lastSync = new Date().toISOString();
+                    localStorage.setItem('lastSync', this.lastSync);
+                    localStorage.setItem('localDataTimestamp', Date.now().toString());
+                } catch (error) {
+                    console.error('Cloud sync error:', error);
+                } finally {
+                    this.isSyncing = false;
+                    this.updateUI();
+                }
+            },
+
+            // Import LinkedIn conversations from Supabase and merge with contacts
+            importLinkedInConversations(linkedinConversations) {
+                try {
+                    console.log('Importing LinkedIn conversations:', linkedinConversations.length);
+                    const existingContacts = getContacts();
+                    
+                    // Helper function to normalize contact names (handles both 'name' and 'firstName'/'lastName' formats)
+                    const getContactName = (contact) => {
+                        if (contact.name) return contact.name;
+                        if (contact.firstName || contact.lastName) {
+                            return `${contact.firstName || ''} ${contact.lastName || ''}`.trim();
+                        }
+                        return 'Unknown Contact';
+                    };
+                    
+                    // Build map using normalized names (handles both contact formats)
+                    const existingMap = new Map();
+                    existingContacts.forEach(c => {
+                        const normalizedName = getContactName(c).toLowerCase();
+                        if (normalizedName && normalizedName !== 'unknown contact') {
+                            existingMap.set(normalizedName, c);
+                        }
+                    });
+                    let newContactsAdded = 0;
+                    let contactsUpdated = 0;
+
+                    linkedinConversations.forEach(conv => {
+                        console.log('Processing conversation:', conv);
+                        const contactName = conv.contactName || 'Unknown Contact';
+                        const nameLower = contactName.toLowerCase();
+
+                        // Check if contact already exists
+                        if (existingMap.has(nameLower)) {
+                            const existing = existingMap.get(nameLower);
+
+                            // Update last contact date if LinkedIn conversation is newer
+                            const convDate = new Date(conv.timestamp || conv.syncedAt);
+                            const existingDate = new Date(existing.lastContact || 0);
+
+                            if (convDate > existingDate) {
+                                existing.lastContact = conv.timestamp || conv.syncedAt;
+                                existing.linkedInUrl = conv.url;
+
+                                // Initialize arrays if they don't exist
+                                if (!existing.messageHistory) existing.messageHistory = [];
+                                if (!existing.outreach) existing.outreach = [];
+
+                                // Check if this message is already in messageHistory (prevent duplicates)
+                                const messageExists = existing.messageHistory.some(m =>
+                                    m.date === (conv.timestamp || conv.syncedAt) &&
+                                    m.body && m.body.includes(conv.lastMessage)
+                                );
+
+                                if (!messageExists) {
+                                    // Add to messageHistory array (for new Phase 3 timeline)
+                                    const messageEntry = {
+                                        id: `linkedin-${conv.id || Date.now()}`,
+                                        date: conv.timestamp || conv.syncedAt,
+                                        type: 'linkedin-message',
+                                        subject: 'LinkedIn Message',
+                                        body: conv.lastMessage || '',
+                                        sentVia: 'linkedin',
+                                        aiGenerated: false,
+                                        responded: false, // Will be manually updated if they reply
+                                        responseDate: null
+                                    };
+                                    existing.messageHistory.push(messageEntry);
+
+                                    // Also add to outreach array (for tracking)
+                                    const outreachEntry = {
+                                        type: 'linkedin',
+                                        date: conv.timestamp || conv.syncedAt,
+                                        notes: conv.lastMessage || '',
+                                        channel: 'linkedin-messaging'
+                                    };
+                                    existing.outreach.push(outreachEntry);
+
+                                    contactsUpdated++;
+                                }
+                            }
+                        } else {
+                            // Create new contact from LinkedIn conversation
+                            const newContact = {
+                                id: conv.id || `linkedin-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                                name: contactName,  // Use the extracted contactName variable
+                                company: '',
+                                title: '',
+                                email: '',
+                                linkedin: conv.url || '',
+                                linkedInUrl: conv.url || '',
+                                source: 'linkedin',
+                                status: 'contacted',
+                                addedDate: conv.timestamp || conv.syncedAt,
+                                lastContact: conv.timestamp || conv.syncedAt,
+                                notes: `LinkedIn conversation:\n${conv.lastMessage || ''}`,
+                                messageHistory: [{
+                                    id: `linkedin-${conv.id || Date.now()}`,
+                                    date: conv.timestamp || conv.syncedAt,
+                                    type: 'linkedin-message',
+                                    subject: 'LinkedIn Message',
+                                    body: conv.lastMessage || '',
+                                    sentVia: 'linkedin',
+                                    aiGenerated: false,
+                                    responded: false,
+                                    responseDate: null
+                                }],
+                                outreach: [{
+                                    type: 'linkedin',
+                                    date: conv.timestamp || conv.syncedAt,
+                                    notes: conv.lastMessage || '',
+                                    channel: 'linkedin-messaging'
+                                }]
+                            };
+
+                            console.log('Creating new contact:', newContact.name);
+                            existingContacts.push(newContact);
+                            existingMap.set(nameLower, newContact);
+                            newContactsAdded++;
+                        }
+                    });
+
+                    // Save updated contacts
+                    if (newContactsAdded > 0 || contactsUpdated > 0) {
+                        saveContacts(existingContacts);
+                        console.log(`LinkedIn sync: ${newContactsAdded} new contacts, ${contactsUpdated} updated`);
+
+                        // Deduplicate after import
+                        const dedupeResult = deduplicateContacts();
+                        if (dedupeResult.removed > 0) {
+                            console.log(`Removed ${dedupeResult.removed} duplicates after LinkedIn import`);
+                        }
+
+                        // Refresh all UI displays
+                        if (typeof updateAllDisplays === 'function') {
+                            updateAllDisplays();
+                        }
+                        if (typeof renderAnalytics === 'function') {
+                            renderAnalytics(); // Refresh analytics to show new messages
+                        }
+
+                        // Show notification
+                        if (newContactsAdded > 0 || contactsUpdated > 0) {
+                            this.showLinkedInNotification(newContactsAdded, contactsUpdated);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error importing LinkedIn conversations:', error);
+                }
+            },
+
+            showLinkedInNotification(newCount, updatedCount) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #0a66c2, #0077b5);
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    z-index: 999999;
+                    font-family: -apple-system, system-ui, sans-serif;
+                    font-size: 14px;
+                    animation: slideIn 0.3s ease;
+                `;
+
+                // Build message based on counts
+                const parts = [];
+                if (newCount > 0) parts.push(`${newCount} new`);
+                if (updatedCount > 0) parts.push(`${updatedCount} updated`);
+                notification.innerHTML = `<strong>✓ LinkedIn Sync</strong><br>${parts.join(', ')} contact${(newCount + updatedCount) > 1 ? 's' : ''}`;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => notification.remove(), 4000);
+            }
+        };
+
+        // Settings modal functions
+        function openSettingsModal() {
+            SyncManager.updateUI();
+            updateGmailAccountsUI();
+            document.getElementById('settings-modal').classList.add('active');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.remove('active');
+        }
+
+        // Gmail Account Management
+        function updateGmailAccountsUI() {
+            const status = DualGmailClient.getAccountStatus();
+
+            // Update Personal Gmail UI
+            const personalEmail = document.getElementById('personal-gmail-email');
+            const personalStatus = document.getElementById('personal-gmail-status');
+            const personalClientId = document.getElementById('personal-client-id');
+
+            if (status.personal.connected) {
+                personalEmail.textContent = status.personal.email || 'Connected';
+                personalEmail.style.color = '#27ae60';
+                personalStatus.textContent = '✅';
+                personalClientId.value = DualGmailClient.accounts.personal.clientId || '';
+                document.getElementById('personal-connect-btn').textContent = 'Reconnect';
+            } else {
+                personalEmail.textContent = 'Not connected';
+                personalEmail.style.color = '#666';
+                personalStatus.textContent = '⚠️';
+                personalClientId.value = DualGmailClient.accounts.personal.clientId || '';
+            }
+
+            // Update Work Gmail UI
+            const workEmail = document.getElementById('work-gmail-email');
+            const workStatus = document.getElementById('work-gmail-status');
+            const workClientId = document.getElementById('work-client-id');
+
+            if (status.work.connected) {
+                workEmail.textContent = status.work.email || 'Connected';
+                workEmail.style.color = '#27ae60';
+                workStatus.textContent = '✅';
+                workClientId.value = DualGmailClient.accounts.work.clientId || '';
+                document.getElementById('work-connect-btn').textContent = 'Reconnect';
+            } else {
+                workEmail.textContent = 'Not connected';
+                workEmail.style.color = '#666';
+                workStatus.textContent = '⚠️';
+                workClientId.value = DualGmailClient.accounts.work.clientId || '';
+            }
+        }
+
+        async function connectPersonalGmail() {
+            const clientId = document.getElementById('personal-client-id').value.trim();
+
+            if (!clientId) {
+                alert('Please enter an OAuth Client ID for your personal Gmail account');
+                return;
+            }
+
+            try {
+                document.getElementById('personal-connect-btn').textContent = 'Connecting...';
+                document.getElementById('personal-connect-btn').disabled = true;
+
+                DualGmailClient.configureAccount('personal', clientId);
+                await DualGmailClient.authorizeAccount('personal');
+
+                updateGmailAccountsUI();
+                alert('Personal Gmail connected successfully!');
+            } catch (error) {
+                console.error('Personal Gmail connection failed:', error);
+                alert(`Failed to connect personal Gmail: ${error.message || error}`);
+            } finally {
+                document.getElementById('personal-connect-btn').textContent = 'Connect Personal Gmail';
+                document.getElementById('personal-connect-btn').disabled = false;
+            }
+        }
+
+        async function connectWorkGmail() {
+            const clientId = document.getElementById('work-client-id').value.trim();
+
+            if (!clientId) {
+                alert('Please enter an OAuth Client ID for your work Gmail account');
+                return;
+            }
+
+            try {
+                document.getElementById('work-connect-btn').textContent = 'Connecting...';
+                document.getElementById('work-connect-btn').disabled = true;
+
+                DualGmailClient.configureAccount('work', clientId);
+                await DualGmailClient.authorizeAccount('work');
+
+                updateGmailAccountsUI();
+                alert('Work Gmail connected successfully!');
+            } catch (error) {
+                console.error('Work Gmail connection failed:', error);
+                alert(`Failed to connect work Gmail: ${error.message || error}`);
+            } finally {
+                document.getElementById('work-connect-btn').textContent = 'Connect Work Gmail';
+                document.getElementById('work-connect-btn').disabled = false;
+            }
+        }
+
+        function saveSupabaseConfig() {
+            const url = document.getElementById('supabase-url').value;
+            const key = document.getElementById('supabase-key').value;
+
+            if (!url || !key) {
+                alert('Please enter both URL and API key');
+                return;
+            }
+
+            SyncManager.saveConfig(url, key);
+        }
+
+        function syncNow() {
+            if (SyncManager.isConfigured()) {
+                SyncManager.syncToCloud();
+            }
+        }
+
+        async function syncLinkedInNow() {
+            if (!SyncManager.isConfigured()) {
+                alert('Please configure Supabase in Settings first');
+                return;
+            }
+
+            try {
+                const btn = event.target;
+                btn.disabled = true;
+                btn.textContent = '⏳ Syncing...';
+
+                const response = await fetch(`${SyncManager.supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                    headers: {
+                        'apikey': SyncManager.supabaseKey,
+                        'Authorization': `Bearer ${SyncManager.supabaseKey}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch LinkedIn conversations');
+
+                const data = await response.json();
+                if (data && data.length > 0 && data[0].linkedin_conversations) {
+                    const linkedinConversations = data[0].linkedin_conversations;
+                    SyncManager.importLinkedInConversations(linkedinConversations);
+
+                    btn.textContent = `✓ Synced ${linkedinConversations.length} conversations`;
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = '🔄 Sync LinkedIn';
+                    }, 2000);
+                } else {
+                    btn.textContent = '⚠️ No conversations found';
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = '🔄 Sync LinkedIn';
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('LinkedIn sync error:', error);
+                alert('Failed to sync LinkedIn conversations: ' + error.message);
+                event.target.disabled = false;
+                event.target.textContent = '🔄 Sync LinkedIn';
+            }
+        }
+
+        function cleanupBrokenContacts() {
+            let contacts = getContacts();
+            const originalCount = contacts.length;
+
+            // Remove contacts with undefined/invalid names
+            contacts = contacts.filter(c => {
+                return c.name &&
+                       c.name !== 'undefined' &&
+                       c.name !== 'undefined undefined' &&
+                       !c.name.includes('undefined');
+            });
+
+            const removedCount = originalCount - contacts.length;
+
+            if (removedCount > 0) {
+                saveContacts(contacts);
+                console.log(`Cleaned up ${removedCount} broken contacts`);
+                return removedCount;
+            }
+
+            return 0;
+        }
+
+        function deduplicateContacts() {
+            let contacts = getContacts();
+            const originalCount = contacts.length;
+
+            // Group contacts by normalized name
+            const nameGroups = {};
+            contacts.forEach(contact => {
+                const normalizedName = (contact.name || `${contact.firstName} ${contact.lastName}`).toLowerCase().trim();
+                if (!nameGroups[normalizedName]) {
+                    nameGroups[normalizedName] = [];
+                }
+                nameGroups[normalizedName].push(contact);
+            });
+
+            // Merge duplicates
+            const mergedContacts = [];
+            Object.entries(nameGroups).forEach(([name, group]) => {
+                if (group.length === 1) {
+                    // No duplicates, keep as is
+                    mergedContacts.push(group[0]);
+                } else {
+                    // Merge duplicates - keep best data from each
+                    const merged = {
+                        id: group[0].id, // Keep first ID
+                        name: group[0].name || `${group[0].firstName} ${group[0].lastName}`,
+                        firstName: group.find(c => c.firstName)?.firstName || '',
+                        lastName: group.find(c => c.lastName)?.lastName || '',
+                        company: group.find(c => c.company)?.company || '',
+                        title: group.find(c => c.title)?.title || '',
+                        email: group.find(c => c.email)?.email || '',
+                        phone: group.find(c => c.phone)?.phone || '',
+                        linkedin: group.find(c => c.linkedin)?.linkedin || '',
+                        linkedInUrl: group.find(c => c.linkedInUrl)?.linkedInUrl || '',
+                        source: group[0].source || 'linkedin',
+                        status: group.find(c => c.status && c.status !== 'new')?.status || group[0].status || 'new',
+
+                        // Merge dates - use earliest added, latest contacted
+                        addedDate: group.map(c => c.addedDate).filter(Boolean).sort()[0] || new Date().toISOString(),
+                        lastContact: group.map(c => c.lastContact).filter(Boolean).sort().reverse()[0] || null,
+                        lastContacted: group.map(c => c.lastContacted).filter(Boolean).sort().reverse()[0] || null,
+                        followUp: group.find(c => c.followUp)?.followUp || null,
+
+                        // Merge notes - concatenate all unique notes
+                        notes: [...new Set(group.map(c => c.notes).filter(Boolean))].join('\n\n'),
+
+                        // Merge outreach history - combine all, remove duplicates by date+type
+                        outreach: (() => {
+                            const allOutreach = group.flatMap(c => c.outreach || []);
+                            const unique = [];
+                            const seen = new Set();
+                            allOutreach.forEach(o => {
+                                const key = `${o.date}-${o.type}-${o.notes}`;
+                                if (!seen.has(key)) {
+                                    seen.add(key);
+                                    unique.push(o);
+                                }
+                            });
+                            return unique.sort((a, b) => new Date(b.date) - new Date(a.date));
+                        })(),
+
+                        outreachHistory: (() => {
+                            const allHistory = group.flatMap(c => c.outreachHistory || []);
+                            const unique = [];
+                            const seen = new Set();
+                            allHistory.forEach(h => {
+                                const key = `${h.date}-${h.type}`;
+                                if (!seen.has(key)) {
+                                    seen.add(key);
+                                    unique.push(h);
+                                }
+                            });
+                            return unique.sort((a, b) => new Date(b.date) - new Date(a.date));
+                        })(),
+
+                        // Keep NA status if ANY copy was marked NA
+                        isNA: group.some(c => c.isNA),
+
+                        // Use most recent update time
+                        updatedAt: group.map(c => c.updatedAt).filter(Boolean).sort().reverse()[0] || new Date().toISOString()
+                    };
+
+                    mergedContacts.push(merged);
+                }
+            });
+
+            const removedCount = originalCount - mergedContacts.length;
+
+            if (removedCount > 0) {
+                saveContacts(mergedContacts);
+                console.log(`Deduplicated ${removedCount} duplicate contacts (${originalCount} → ${mergedContacts.length})`);
+                return { removed: removedCount, before: originalCount, after: mergedContacts.length };
+            }
+
+            return { removed: 0, before: originalCount, after: mergedContacts.length };
+        }
+
+        function exportAllData() {
+            const data = {
+                contacts: JSON.parse(localStorage.getItem('jobSearchContacts') || '[]'),
+                progress: JSON.parse(localStorage.getItem('jobSearchProgress') || '{}'),
+                messageTemplates: JSON.parse(localStorage.getItem('messageTemplates') || '[]'),
+                reviewedContacts: JSON.parse(localStorage.getItem('reviewedContacts') || '[]'),
+                exportDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `job-search-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importAllData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    // Merge contacts
+                    if (data.contacts) {
+                        const existing = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+                        const existingIds = new Set(existing.map(c => c.id));
+                        const newContacts = data.contacts.filter(c => !existingIds.has(c.id));
+                        localStorage.setItem('jobSearchContacts', JSON.stringify([...existing, ...newContacts]));
+                    }
+
+                    // Merge progress
+                    if (data.progress) {
+                        const existing = JSON.parse(localStorage.getItem('jobSearchProgress') || '{}');
+                        localStorage.setItem('jobSearchProgress', JSON.stringify({...existing, ...data.progress}));
+                    }
+
+                    // Merge templates
+                    if (data.messageTemplates) {
+                        localStorage.setItem('messageTemplates', JSON.stringify(data.messageTemplates));
+                    }
+
+                    // Merge reviewed contacts
+                    if (data.reviewedContacts) {
+                        const existing = JSON.parse(localStorage.getItem('reviewedContacts') || '[]');
+                        const merged = [...new Set([...existing, ...data.reviewedContacts])];
+                        localStorage.setItem('reviewedContacts', JSON.stringify(merged));
+                    }
+
+                    localStorage.setItem('localDataTimestamp', Date.now().toString());
+
+                    if (typeof updateAllDisplays === 'function') {
+                        updateAllDisplays();
+                    }
+
+                    if (SyncManager.isConfigured()) {
+                        SyncManager.syncToCloud();
+                    }
+
+                    alert('Data imported successfully!');
+                } catch (error) {
+                    alert('Failed to import data: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================
+        // LINKEDIN ARCHIVE IMPORT
+        // ============================================
+
+        function parseCSV(text) {
+            // Simple CSV parser that handles quoted fields
+            const lines = [];
+            let currentLine = [];
+            let currentField = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        // Escaped quote
+                        currentField += '"';
+                        i++; // Skip next quote
+                    } else {
+                        // Toggle quote mode
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    // End of field
+                    currentLine.push(currentField.trim());
+                    currentField = '';
+                } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                    // End of line
+                    if (currentField || currentLine.length > 0) {
+                        currentLine.push(currentField.trim());
+                        if (currentLine.some(f => f.length > 0)) {
+                            lines.push(currentLine);
+                        }
+                        currentLine = [];
+                        currentField = '';
+                    }
+                    // Skip \r\n
+                    if (char === '\r' && nextChar === '\n') {
+                        i++;
+                    }
+                } else {
+                    currentField += char;
+                }
+            }
+
+            // Add last field/line
+            if (currentField || currentLine.length > 0) {
+                currentLine.push(currentField.trim());
+                if (currentLine.some(f => f.length > 0)) {
+                    lines.push(currentLine);
+                }
+            }
+
+            return lines;
+        }
+
+        // Import LinkedIn archive from folder (both Connections.csv and messages.csv)
+        async function importLinkedInArchiveFolder(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+
+            // Find Connections.csv and messages.csv
+            const connectionsFile = files.find(f => f.name.toLowerCase() === 'connections.csv');
+            const messagesFile = files.find(f => f.name.toLowerCase() === 'messages.csv');
+
+            if (!connectionsFile && !messagesFile) {
+                alert('No Connections.csv or messages.csv found in the selected folder.\n\nMake sure you select the unzipped LinkedIn export folder.');
+                event.target.value = '';
+                return;
+            }
+
+            let results = { connections: 0, messages: 0, updated: 0 };
+
+            try {
+                // Import connections first
+                if (connectionsFile) {
+                    const text = await connectionsFile.text();
+                    const importResult = await processLinkedInConnectionsCSV(text);
+                    results.connections = importResult.newCount;
+                    results.updated = importResult.updatedCount;
+                }
+
+                // Then import messages
+                if (messagesFile) {
+                    const text = await messagesFile.text();
+                    const importResult = await processLinkedInMessagesCSV(text);
+                    results.messages = importResult.messagesImported;
+                }
+
+                // Show results
+                alert(`✓ LinkedIn Import Complete!\n\n` +
+                    `📋 ${results.connections} new connections\n` +
+                    `🔄 ${results.updated} updated contacts\n` +
+                    `💬 ${results.messages} messages imported`);
+
+            } catch (error) {
+                console.error('Import error:', error);
+                alert('Import failed: ' + error.message);
+            }
+
+            event.target.value = '';
+        }
+
+        // Process Connections CSV text (reusable)
+        async function processLinkedInConnectionsCSV(text) {
+            const lines = parseCSV(text);
+
+            if (lines.length === 0) {
+                throw new Error('No data found in Connections.csv');
+            }
+
+            const headers = lines[0].map(h => h.toLowerCase().trim());
+            const firstNameIdx = headers.findIndex(h => h.includes('first name'));
+            const lastNameIdx = headers.findIndex(h => h.includes('last name'));
+            const companyIdx = headers.findIndex(h => h.includes('company'));
+            const positionIdx = headers.findIndex(h => h.includes('position'));
+            const emailIdx = headers.findIndex(h => h.includes('email'));
+            const connectedOnIdx = headers.findIndex(h => h.includes('connected on'));
+            const urlIdx = headers.findIndex(h => h.includes('url'));
+
+            if (firstNameIdx === -1 || lastNameIdx === -1) {
+                throw new Error('Invalid Connections.csv format - missing name columns');
+            }
+
+            const contacts = getContacts();
+            let newCount = 0;
+            let updatedCount = 0;
+
+            for (let i = 1; i < lines.length; i++) {
+                const row = lines[i];
+                if (!row || row.length === 0) continue;
+
+                const firstName = row[firstNameIdx] || '';
+                const lastName = row[lastNameIdx] || '';
+                const name = `${firstName} ${lastName}`.trim();
+
+                if (!name) continue;
+
+                const company = companyIdx !== -1 ? row[companyIdx] : '';
+                const position = positionIdx !== -1 ? row[positionIdx] : '';
+                const email = emailIdx !== -1 ? row[emailIdx] : '';
+                const connectedOn = connectedOnIdx !== -1 ? row[connectedOnIdx] : '';
+                const linkedInUrl = urlIdx !== -1 ? row[urlIdx] : '';
+
+                // Check if contact exists
+                const existingIdx = contacts.findIndex(c =>
+                    (c.name && c.name.toLowerCase() === name.toLowerCase()) ||
+                    (email && c.email && c.email.toLowerCase() === email.toLowerCase())
+                );
+
+                if (existingIdx !== -1) {
+                    const contact = contacts[existingIdx];
+                    if (company && !contact.company) contact.company = company;
+                    if (position && !contact.title) contact.title = position;
+                    if (email && !contact.email) contact.email = email;
+                    if (linkedInUrl && !contact.linkedInUrl) contact.linkedInUrl = linkedInUrl;
+                    if (!contact.source || contact.source === 'manual') contact.source = 'linkedin';
+                    updatedCount++;
+                } else {
+                    contacts.push({
+                        id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                        name: name,
+                        title: position || '',
+                        company: company || '',
+                        email: email || '',
+                        phone: '',
+                        source: 'linkedin',
+                        status: 'not-contacted',
+                        priority: 'medium',
+                        notes: '',
+                        tags: [],
+                        outreach: [],
+                        lastContact: connectedOn ? new Date(connectedOn).toISOString() : null,
+                        messageHistory: [],
+                        linkedInUrl: linkedInUrl || ''
+                    });
+                    newCount++;
+                }
+            }
+
+            saveContacts(contacts);
+            return { newCount, updatedCount };
+        }
+
+        // Process Messages CSV text (reusable)
+        async function processLinkedInMessagesCSV(text) {
+            const lines = parseCSV(text);
+
+            if (lines.length === 0) {
+                throw new Error('No data found in messages.csv');
+            }
+
+            const headers = lines[0].map(h => h.toLowerCase().trim());
+            const fromIdx = headers.indexOf('from');
+            const toIdx = headers.indexOf('to');
+            const dateIdx = headers.indexOf('date');
+            const contentIdx = headers.indexOf('content');
+
+            if (fromIdx === -1 || toIdx === -1 || contentIdx === -1) {
+                throw new Error('Invalid messages.csv format');
+            }
+
+            const contacts = getContacts();
+            const myName = 'Luis Calderon';
+            let messagesImported = 0;
+
+            for (let i = 1; i < lines.length; i++) {
+                const row = lines[i];
+                if (!row || row.length === 0) continue;
+
+                const from = row[fromIdx] || '';
+                const to = row[toIdx] || '';
+                const date = row[dateIdx] || '';
+                const content = row[contentIdx] || '';
+
+                if (!content || !from || !to) continue;
+
+                const isFromMe = from.trim() === myName;
+                const otherPersonName = isFromMe ? to.trim() : from.trim();
+
+                if (!otherPersonName) continue;
+
+                // Find matching contact
+                let contact = contacts.find(c =>
+                    c.name && c.name.toLowerCase() === otherPersonName.toLowerCase()
+                );
+
+                if (!contact) {
+                    // Create new contact
+                    contact = {
+                        id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                        name: otherPersonName,
+                        title: '',
+                        company: '',
+                        email: '',
+                        phone: '',
+                        source: 'linkedin',
+                        status: isFromMe ? 'contacted' : 'not-contacted',
+                        priority: 'medium',
+                        notes: '',
+                        tags: [],
+                        outreach: [],
+                        lastContact: date ? new Date(date).toISOString() : null,
+                        messageHistory: [],
+                        linkedInUrl: ''
+                    };
+                    contacts.push(contact);
+                }
+
+                // Add message to history
+                if (!contact.messageHistory) contact.messageHistory = [];
+                contact.messageHistory.push({
+                    id: `li-${Date.now()}-${i}`,
+                    date: date ? new Date(date).toISOString() : new Date().toISOString(),
+                    type: 'linkedin',
+                    source: 'linkedin',
+                    body: content.substring(0, 500),
+                    direction: isFromMe ? 'outbound' : 'inbound'
+                });
+
+                // Update last contact
+                if (date) {
+                    const msgDate = new Date(date).toISOString();
+                    if (!contact.lastContact || msgDate > contact.lastContact) {
+                        contact.lastContact = msgDate;
+                    }
+                }
+
+                messagesImported++;
+            }
+
+            saveContacts(contacts);
+            return { messagesImported };
+        }
+
+        function importLinkedInConnections(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const text = e.target.result;
+                    const lines = parseCSV(text);
+
+                    if (lines.length === 0) {
+                        alert('No data found in CSV file');
+                        return;
+                    }
+
+                    // First line is header
+                    const headers = lines[0].map(h => h.toLowerCase().trim());
+                    const firstNameIdx = headers.findIndex(h => h.includes('first name'));
+                    const lastNameIdx = headers.findIndex(h => h.includes('last name'));
+                    const companyIdx = headers.findIndex(h => h.includes('company'));
+                    const positionIdx = headers.findIndex(h => h.includes('position'));
+                    const emailIdx = headers.findIndex(h => h.includes('email'));
+                    const connectedOnIdx = headers.findIndex(h => h.includes('connected on'));
+
+                    if (firstNameIdx === -1 || lastNameIdx === -1) {
+                        alert('Invalid Connections.csv format - missing required columns');
+                        return;
+                    }
+
+                    const contacts = getContacts();
+                    let newCount = 0;
+                    let updatedCount = 0;
+
+                    // Process each connection
+                    for (let i = 1; i < lines.length; i++) {
+                        const row = lines[i];
+                        const firstName = row[firstNameIdx] || '';
+                        const lastName = row[lastNameIdx] || '';
+                        const name = `${firstName} ${lastName}`.trim();
+
+                        if (!name) continue;
+
+                        const company = companyIdx !== -1 ? row[companyIdx] : '';
+                        const position = positionIdx !== -1 ? row[positionIdx] : '';
+                        const email = emailIdx !== -1 ? row[emailIdx] : '';
+                        const connectedOn = connectedOnIdx !== -1 ? row[connectedOnIdx] : '';
+
+                        // Check if contact exists
+                        const existingIdx = contacts.findIndex(c =>
+                            c.name.toLowerCase() === name.toLowerCase() ||
+                            (email && c.email && c.email.toLowerCase() === email.toLowerCase())
+                        );
+
+                        if (existingIdx !== -1) {
+                            // Update existing contact
+                            const contact = contacts[existingIdx];
+                            if (company && !contact.company) contact.company = company;
+                            if (position && !contact.title) contact.title = position;
+                            if (email && !contact.email) contact.email = email;
+                            if (!contact.source || contact.source === 'manual') {
+                                contact.source = 'linkedin';
+                            }
+                            if (connectedOn && !contact.lastContact) {
+                                contact.lastContact = new Date(connectedOn).toISOString();
+                            }
+                            updatedCount++;
+                        } else {
+                            // Create new contact
+                            const newContact = {
+                                id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                                name: name,
+                                title: position || '',
+                                company: company || '',
+                                email: email || '',
+                                phone: '',
+                                source: 'linkedin',
+                                status: 'not-contacted',
+                                priority: 'medium',
+                                notes: '',
+                                tags: [],
+                                outreach: [],
+                                lastContact: connectedOn ? new Date(connectedOn).toISOString() : null,
+                                messageHistory: [],
+                                linkedInUrl: ''
+                            };
+                            contacts.push(newContact);
+                            newCount++;
+                        }
+                    }
+
+                    saveContacts(contacts);
+                    alert(`✓ LinkedIn Connections Import\n${newCount} new contacts\n${updatedCount} updated`);
+
+                } catch (error) {
+                    console.error('Import error:', error);
+                    alert('Failed to import connections: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function importLinkedInMessages(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const text = e.target.result;
+                    const lines = parseCSV(text);
+
+                    if (lines.length === 0) {
+                        alert('No data found in CSV file');
+                        return;
+                    }
+
+                    // First line is header
+                    const headers = lines[0].map(h => h.toLowerCase().trim());
+                    const fromIdx = headers.indexOf('from');
+                    const toIdx = headers.indexOf('to');
+                    const dateIdx = headers.indexOf('date');
+                    const contentIdx = headers.indexOf('content');
+                    const senderUrlIdx = headers.findIndex(h => h.includes('sender profile url'));
+                    const recipientUrlsIdx = headers.findIndex(h => h.includes('recipient profile url'));
+
+                    if (fromIdx === -1 || toIdx === -1 || dateIdx === -1 || contentIdx === -1) {
+                        alert('Invalid messages.csv format - missing required columns');
+                        return;
+                    }
+
+                    const contacts = getContacts();
+                    const myName = 'Luis Calderon'; // Your name from LinkedIn
+                    let importedCount = 0;
+                    let updatedContactsCount = 0;
+                    const updatedContactIds = new Set();
+
+                    // Process each message
+                    for (let i = 1; i < lines.length; i++) {
+                        const row = lines[i];
+                        const from = row[fromIdx] || '';
+                        const to = row[toIdx] || '';
+                        const date = row[dateIdx] || '';
+                        const content = row[contentIdx] || '';
+                        const senderUrl = senderUrlIdx !== -1 ? row[senderUrlIdx] : '';
+                        const recipientUrls = recipientUrlsIdx !== -1 ? row[recipientUrlsIdx] : '';
+
+                        if (!content || !from || !to || !date) continue;
+
+                        // Determine who the other person is (not me)
+                        const isFromMe = from.trim() === myName;
+                        const otherPersonName = isFromMe ? to.trim() : from.trim();
+                        const otherPersonUrl = isFromMe ? recipientUrls : senderUrl;
+
+                        if (!otherPersonName) continue;
+
+                        // Find matching contact
+                        let contact = contacts.find(c =>
+                            c.name.toLowerCase() === otherPersonName.toLowerCase() ||
+                            (otherPersonUrl && c.linkedInUrl && c.linkedInUrl === otherPersonUrl)
+                        );
+
+                        if (!contact) {
+                            // Create new contact from message
+                            contact = {
+                                id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                                name: otherPersonName,
+                                title: '',
+                                company: '',
+                                email: '',
+                                phone: '',
+                                source: 'linkedin',
+                                status: isFromMe ? 'contacted' : 'not-contacted',
+                                priority: 'medium',
+                                notes: '',
+                                tags: [],
+                                outreach: [],
+                                lastContact: new Date(date).toISOString(),
+                                messageHistory: [],
+                                linkedInUrl: otherPersonUrl || ''
+                            };
+                            contacts.push(contact);
+                        }
+
+                        // Initialize arrays
+                        if (!contact.messageHistory) contact.messageHistory = [];
+                        if (!contact.outreach) contact.outreach = [];
+
+                        // Check for duplicate message
+                        const messageDate = new Date(date).toISOString();
+                        const exists = contact.messageHistory.some(m =>
+                            m.date === messageDate && m.body === content
+                        );
+
+                        if (!exists) {
+                            // Add to messageHistory
+                            contact.messageHistory.push({
+                                id: `linkedin-msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                                date: messageDate,
+                                type: 'linkedin-message',
+                                subject: 'LinkedIn Message',
+                                body: content,
+                                sentVia: 'linkedin',
+                                aiGenerated: false,
+                                responded: !isFromMe,
+                                responseDate: !isFromMe ? messageDate : null
+                            });
+
+                            // Add to outreach
+                            contact.outreach.push({
+                                type: isFromMe ? 'linkedin-message-sent' : 'linkedin-message-received',
+                                date: messageDate,
+                                notes: content.substring(0, 100) + (content.length > 100 ? '...' : ''),
+                                channel: 'linkedin-messaging'
+                            });
+
+                            // Update lastContact
+                            const msgDate = new Date(messageDate);
+                            const currentLastContact = contact.lastContact ? new Date(contact.lastContact) : new Date(0);
+                            if (msgDate > currentLastContact) {
+                                contact.lastContact = messageDate;
+                            }
+
+                            // Update status if we sent message
+                            if (isFromMe && contact.status === 'not-contacted') {
+                                contact.status = 'contacted';
+                            }
+
+                            importedCount++;
+                            updatedContactIds.add(contact.id);
+                        }
+                    }
+
+                    updatedContactsCount = updatedContactIds.size;
+                    saveContacts(contacts);
+
+                    // Deduplicate after import
+                    const dedupeResult = deduplicateContacts();
+                    if (dedupeResult.removed > 0) {
+                        console.log(`Removed ${dedupeResult.removed} duplicates after LinkedIn message import`);
+                    }
+
+                    // Refresh UI
+                    if (typeof updateAllDisplays === 'function') {
+                        updateAllDisplays();
+                    }
+                    if (typeof renderAnalytics === 'function') {
+                        renderAnalytics();
+                    }
+
+                    alert(`✓ LinkedIn Messages Import\n${importedCount} messages imported\n${updatedContactsCount} contacts updated`);
+
+                } catch (error) {
+                    console.error('Import error:', error);
+                    alert('Failed to import messages: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================
+        // DATA MANAGEMENT
+        // ============================================
+
+        function getContacts() {
+            return JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+        }
+
+        function saveContacts(contacts) {
+            localStorage.setItem('jobSearchContacts', JSON.stringify(contacts));
+            localStorage.setItem('localDataTimestamp', Date.now().toString());
+            updateAllDisplays();
+            // Trigger cloud sync (debounced)
+            if (SyncManager.isConfigured()) {
+                clearTimeout(window.syncTimeout);
+                window.syncTimeout = setTimeout(() => SyncManager.syncToCloud(), 1000);
+            }
+        }
+
+        function getProgress() {
+            return JSON.parse(localStorage.getItem('jobSearchProgress') || '{}');
+        }
+
+        function saveProgress(progress) {
+            localStorage.setItem('jobSearchProgress', JSON.stringify(progress));
+            localStorage.setItem('localDataTimestamp', Date.now().toString());
+            // Trigger cloud sync (debounced)
+            if (SyncManager.isConfigured()) {
+                clearTimeout(window.syncTimeout);
+                window.syncTimeout = setTimeout(() => SyncManager.syncToCloud(), 1000);
+            }
+        }
+
+        // ============================================
+        // TAB NAVIGATION
+        // ============================================
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Handle URL parameters and hash for deep linking
+        function handleUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hash = window.location.hash.replace('#', '');
+            const searchTerm = urlParams.get('search');
+
+            // Switch to the correct tab based on hash
+            if (hash) {
+                const tabBtn = document.querySelector(`.tab-btn[data-tab="${hash}"]`);
+                if (tabBtn) {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    tabBtn.classList.add('active');
+                    document.getElementById(hash).classList.add('active');
+                }
+            }
+
+            // Fill in search and trigger filter
+            if (searchTerm) {
+                const searchInput = document.getElementById('search-contacts');
+                if (searchInput) {
+                    searchInput.value = decodeURIComponent(searchTerm);
+                    renderContactsTable();
+                }
+            }
+        }
+
+        // Run on page load
+        handleUrlParams();
+
+        // ============================================
+        // CONTACT MODAL
+        // ============================================
+
+        function openAddContactModal() {
+            document.getElementById('modal-title').textContent = 'Add Contact';
+            document.getElementById('contact-form').reset();
+            document.getElementById('contact-id').value = '';
+            document.getElementById('contact-modal').classList.add('active');
+        }
+
+        function openEditContactModal(id) {
+            const contacts = getContacts();
+            const contact = contacts.find(c => c.id === id);
+            if (!contact) return;
+
+            document.getElementById('modal-title').textContent = 'Edit Contact';
+            document.getElementById('contact-id').value = contact.id;
+            document.getElementById('contact-first-name').value = contact.firstName || '';
+            document.getElementById('contact-last-name').value = contact.lastName || '';
+            document.getElementById('contact-company').value = contact.company || '';
+            document.getElementById('contact-title').value = contact.title || '';
+            document.getElementById('contact-email').value = contact.email || '';
+            document.getElementById('contact-phone').value = contact.phone || '';
+            document.getElementById('contact-linkedin').value = contact.linkedin || '';
+            document.getElementById('contact-source').value = contact.source || '';
+            document.getElementById('contact-status').value = contact.status || 'new';
+            document.getElementById('contact-last-contacted').value = contact.lastContacted || '';
+            document.getElementById('contact-followup').value = contact.followUp || '';
+            document.getElementById('contact-notes').value = contact.notes || '';
+
+            // Load message history for this contact
+            loadMessageHistory(contact);
+
+            // Reset to details tab
+            switchContactTab('details');
+
+            document.getElementById('contact-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('contact-modal').classList.remove('active');
+            // Reset to details tab when closing
+            switchContactTab('details');
+        }
+
+        function switchContactTab(tabName) {
+            // Toggle content visibility
+            const detailsContent = document.getElementById('contact-details-content');
+            const historyContent = document.getElementById('message-history-content');
+            const detailsTab = document.getElementById('contact-details-tab');
+            const historyTab = document.getElementById('message-history-tab');
+
+            if (tabName === 'details') {
+                detailsContent.style.display = 'block';
+                historyContent.style.display = 'none';
+                detailsTab.style.borderBottom = '3px solid #667eea';
+                detailsTab.style.color = '#667eea';
+                historyTab.style.borderBottom = '3px solid transparent';
+                historyTab.style.color = '#666';
+            } else if (tabName === 'history') {
+                detailsContent.style.display = 'none';
+                historyContent.style.display = 'block';
+                detailsTab.style.borderBottom = '3px solid transparent';
+                detailsTab.style.color = '#666';
+                historyTab.style.borderBottom = '3px solid #667eea';
+                historyTab.style.color = '#667eea';
+            }
+        }
+
+        function loadMessageHistory(contact) {
+            const historyList = document.getElementById('message-history-list');
+            const countBadge = document.getElementById('message-count-badge');
+
+            // Get message history from contact
+            const messageHistory = contact.messageHistory || [];
+
+            // Update badge count
+            countBadge.textContent = messageHistory.length;
+
+            if (messageHistory.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: #888; padding: 40px;">No messages sent yet</p>';
+                return;
+            }
+
+            // Sort by date (newest first)
+            const sortedMessages = [...messageHistory].sort((a, b) =>
+                new Date(b.date) - new Date(a.date)
+            );
+
+            // Build message cards
+            let html = '';
+            sortedMessages.forEach(msg => {
+                const date = new Date(msg.date);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                // Determine account icon
+                const accountIcon = msg.sentVia === 'personal' ? '📧' : msg.sentVia === 'work' ? '💼' : '📧';
+                const accountLabel = msg.sentVia === 'personal' ? 'Personal' : msg.sentVia === 'work' ? 'Work' : 'Gmail';
+                const accountColor = msg.sentVia === 'personal' ? '#667eea' : '#9b59b6';
+
+                // Message type label
+                const typeLabel = msg.type ? msg.type.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Email';
+
+                // Body preview (first 100 chars)
+                const bodyPreview = msg.body ?
+                    (msg.body.length > 100 ? msg.body.substring(0, 100) + '...' : msg.body) :
+                    '';
+
+                html += `
+                    <div style="padding: 15px; border-left: 4px solid ${accountColor}; background: #f8f9fa; border-radius: 4px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #333; margin-bottom: 4px;">${msg.subject || '(No subject)'}</div>
+                                <div style="font-size: 0.85em; color: #666;">${formattedDate}</div>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 10px;">
+                                ${msg.aiGenerated ? '<span style="background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 4px; font-size: 0.75em; font-weight: 600;">AI Generated</span>' : ''}
+                                <span style="background: white; padding: 4px 10px; border-radius: 4px; font-size: 0.85em; display: flex; align-items: center; gap: 4px;">
+                                    <span>${accountIcon}</span>
+                                    <span>${accountLabel}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.85em; color: #555; background: white; padding: 10px; border-radius: 4px; margin-bottom: 8px;">
+                            ${bodyPreview}
+                        </div>
+                        <div style="display: flex; gap: 10px; font-size: 0.8em; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; gap: 10px;">
+                                <span style="padding: 3px 8px; background: white; border-radius: 3px; color: #666;">
+                                    ${typeLabel}
+                                </span>
+                                ${msg.responded ?
+                                    `<span style="padding: 3px 8px; background: #e8f5e9; color: #2e7d32; border-radius: 3px;">✓ Responded</span>` :
+                                    `<span style="padding: 3px 8px; background: #fff3cd; color: #856404; border-radius: 3px;">⏳ Awaiting Response</span>`
+                                }
+                            </div>
+                            <button onclick="toggleMessageResponse('${contact.id}', '${msg.id}')" style="padding: 4px 12px; background: ${msg.responded ? '#dc3545' : '#28a745'}; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85em; font-weight: 600;">
+                                ${msg.responded ? 'Mark Unresponded' : 'Mark Responded'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            historyList.innerHTML = html;
+        }
+
+        function toggleMessageResponse(contactId, messageId) {
+            const contacts = getContacts();
+            const contact = contacts.find(c => c.id === contactId);
+            if (!contact || !contact.messageHistory) return;
+
+            const message = contact.messageHistory.find(m => m.id === messageId);
+            if (!message) return;
+
+            // Toggle response status
+            message.responded = !message.responded;
+
+            // If marking as responded, set response date
+            if (message.responded) {
+                message.responseDate = new Date().toISOString();
+            } else {
+                message.responseDate = null;
+            }
+
+            // Save changes
+            saveContacts(contacts);
+
+            // Reload message history to reflect changes
+            loadMessageHistory(contact);
+
+            // Update analytics if on analytics tab
+            const analyticsTab = document.getElementById('analytics');
+            if (analyticsTab && !analyticsTab.classList.contains('active')) {
+                // Not currently viewing analytics, but refresh will happen when they switch to it
+            } else {
+                renderAnalytics();
+            }
+        }
+
+        function saveContact(event) {
+            event.preventDefault();
+
+            const contacts = getContacts();
+            const id = document.getElementById('contact-id').value;
+
+            // Find existing contact to preserve messageHistory and other data
+            const existingContact = id ? contacts.find(c => c.id === id) : null;
+
+            const contactData = {
+                id: id || Date.now().toString(),
+                firstName: document.getElementById('contact-first-name').value,
+                lastName: document.getElementById('contact-last-name').value,
+                company: document.getElementById('contact-company').value,
+                title: document.getElementById('contact-title').value,
+                email: document.getElementById('contact-email').value,
+                phone: document.getElementById('contact-phone').value,
+                linkedin: document.getElementById('contact-linkedin').value,
+                source: document.getElementById('contact-source').value,
+                status: document.getElementById('contact-status').value,
+                lastContacted: document.getElementById('contact-last-contacted').value,
+                followUp: document.getElementById('contact-followup').value,
+                notes: document.getElementById('contact-notes').value,
+                createdAt: existingContact?.createdAt || new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                // Preserve message history and outreach data
+                messageHistory: existingContact?.messageHistory || [],
+                outreach: existingContact?.outreach || []
+            };
+
+            if (id) {
+                const index = contacts.findIndex(c => c.id === id);
+                contacts[index] = contactData;
+            } else {
+                contacts.push(contactData);
+            }
+
+            saveContacts(contacts);
+            closeModal();
+        }
+
+        function deleteContact(id) {
+            if (!confirm('Are you sure you want to delete this contact?')) return;
+
+            let contacts = getContacts();
+            contacts = contacts.filter(c => c.id !== id);
+            saveContacts(contacts);
+        }
+
+        function quickUpdateStatus(id, newStatus) {
+            const contacts = getContacts();
+            const index = contacts.findIndex(c => c.id === id);
+            if (index === -1) return;
+
+            contacts[index].status = newStatus;
+            contacts[index].updatedAt = new Date().toISOString();
+
+            if (newStatus === 'contacted' && !contacts[index].lastContacted) {
+                contacts[index].lastContacted = new Date().toISOString().split('T')[0];
+            }
+
+            saveContacts(contacts);
+        }
+
+        function toggleNA(id) {
+            const contacts = getContacts();
+            const index = contacts.findIndex(c => c.id === id);
+            if (index === -1) return;
+
+            contacts[index].isNA = !contacts[index].isNA;
+            contacts[index].updatedAt = new Date().toISOString();
+
+            saveContacts(contacts);
+        }
+
+        // ============================================
+        // CONTACT TABLE
+        // ============================================
+
+        function renderContactsTable() {
+            const contacts = getContacts();
+            const searchTerm = document.getElementById('search-contacts').value.toLowerCase();
+            const statusFilter = document.getElementById('filter-status').value;
+            const sourceFilter = document.getElementById('filter-source').value;
+            const showNA = document.getElementById('filter-show-na')?.checked || false;
+
+            const filteredContacts = contacts.filter(c => {
+                const matchesSearch = !searchTerm ||
+                    `${c.firstName} ${c.lastName}`.toLowerCase().includes(searchTerm) ||
+                    c.company?.toLowerCase().includes(searchTerm) ||
+                    c.title?.toLowerCase().includes(searchTerm);
+                const matchesStatus = !statusFilter || c.status === statusFilter;
+                const matchesSource = !sourceFilter || c.source === sourceFilter;
+                const matchesNA = showNA || !c.isNA;  // Hide NA by default unless filter is checked
+                return matchesSearch && matchesStatus && matchesSource && matchesNA;
+            });
+
+            const today = new Date().toISOString().split('T')[0];
+
+            const tbody = document.getElementById('contacts-table-body');
+            tbody.innerHTML = filteredContacts.length === 0
+                ? '<tr><td colspan="8" style="text-align: center; color: #666; padding: 40px;">No contacts found. Click "+ Add Contact" to get started!</td></tr>'
+                : filteredContacts.map(c => {
+                    const isOverdue = c.followUp && c.followUp < today;
+                    const isDueToday = c.followUp === today;
+                    const rowClass = isOverdue ? 'follow-up-due' : (isDueToday ? 'follow-up-today' : '');
+
+                    return `
+                        <tr class="${rowClass}">
+                            <td>
+                                <strong>${c.name || (c.firstName + ' ' + c.lastName) || 'Unknown'}</strong>
+                                ${c.linkedin ? `<br><a href="${c.linkedin}" target="_blank" style="font-size: 0.8em;">LinkedIn</a>` : ''}
+                            </td>
+                            <td>${c.company || '-'}</td>
+                            <td>${c.title || '-'}</td>
+                            <td>${formatSource(c.source)}</td>
+                            <td><span class="status-badge status-${c.status}">${formatStatus(c.status)}</span></td>
+                            <td>${c.lastContacted ? formatDate(c.lastContacted) : '-'}</td>
+                            <td>${c.followUp ? formatDate(c.followUp) : '-'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="openEditContactModal('${c.id}')">Edit</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteContact('${c.id}')">Del</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+
+        function formatStatus(status) {
+            const statusMap = {
+                'new': 'New',
+                'contacted': 'Contacted',
+                'responded': 'Responded',
+                'call-scheduled': 'Call Scheduled',
+                'call-completed': 'Call Completed',
+                'referral': 'Referral',
+                'interviewing': 'Interviewing',
+                'offer': 'Offer',
+                'rejected': 'Rejected',
+                'no-response': 'No Response'
+            };
+            return statusMap[status] || status;
+        }
+
+        function formatSource(source) {
+            const sourceMap = {
+                'ross-alumni': 'Ross Alumni',
+                'linkedin': 'LinkedIn',
+                'referral': 'Referral',
+                'recruiter': 'Recruiter',
+                'company-direct': 'Company Direct',
+                'other': 'Other'
+            };
+            return sourceMap[source] || source;
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        // Search and filter listeners
+        document.getElementById('search-contacts').addEventListener('input', renderContactsTable);
+        document.getElementById('filter-status').addEventListener('change', renderContactsTable);
+        document.getElementById('filter-source').addEventListener('change', renderContactsTable);
+
+        // ============================================
+        // PIPELINE
+        // ============================================
+
+        function renderPipeline() {
+            const contacts = getContacts();
+
+            const stages = [
+                { key: 'new', label: 'New', count: 0 },
+                { key: 'contacted', label: 'Contacted', count: 0 },
+                { key: 'responded', label: 'Responded', count: 0 },
+                { key: 'call-scheduled', label: 'Call Scheduled', count: 0 },
+                { key: 'call-completed', label: 'Call Completed', count: 0 },
+                { key: 'referral', label: 'Referral', count: 0 },
+                { key: 'interviewing', label: 'Interviewing', count: 0 },
+                { key: 'offer', label: 'Offers', count: 0 }
+            ];
+
+            contacts.forEach(c => {
+                const stage = stages.find(s => s.key === c.status);
+                if (stage) stage.count++;
+            });
+
+            // Render funnel
+            const funnelContainer = document.getElementById('pipeline-funnel');
+            funnelContainer.innerHTML = stages.map((stage, i) => {
+                const prevCount = i > 0 ? stages[i-1].count : stage.count;
+                const conversion = prevCount > 0 ? Math.round((stage.count / prevCount) * 100) : 0;
+                return `
+                    <div class="funnel-stage">
+                        <h4>${stage.label}</h4>
+                        <div class="count">${stage.count}</div>
+                        ${i > 0 ? `<div class="conversion">${conversion}% from prev</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            // Render pipeline by stage
+            const pipelineDetails = document.getElementById('pipeline-by-stage');
+            pipelineDetails.innerHTML = stages.filter(s => s.count > 0).map(stage => {
+                const stageContacts = contacts.filter(c => c.status === stage.key);
+                return `
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">${stage.label} (${stage.count})</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            ${stageContacts.map(c => `
+                                <div style="background: #f8f9fa; padding: 10px 15px; border-radius: 8px; border-left: 3px solid #667eea;">
+                                    <strong>${c.firstName} ${c.lastName}</strong><br>
+                                    <span style="color: #666; font-size: 0.9em;">${c.company}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p style="color: #666;">No contacts in pipeline yet.</p>';
+        }
+
+        // ============================================
+        // ANALYTICS
+        // ============================================
+
+        function renderMessageAnalytics(contacts) {
+            // Aggregate all messages from all contacts
+            let allMessages = [];
+            contacts.forEach(contact => {
+                if (contact.messageHistory && Array.isArray(contact.messageHistory)) {
+                    contact.messageHistory.forEach(msg => {
+                        allMessages.push({
+                            ...msg,
+                            contactName: `${contact.firstName} ${contact.lastName}`,
+                            contactId: contact.id
+                        });
+                    });
+                }
+            });
+
+            // Calculate stats
+            const totalMessages = allMessages.length;
+            const aiGenerated = allMessages.filter(m => m.aiGenerated).length;
+            const personalAccount = allMessages.filter(m => m.sentVia === 'personal').length;
+            const workAccount = allMessages.filter(m => m.sentVia === 'work').length;
+            const responded = allMessages.filter(m => m.responded).length;
+            const responseRate = totalMessages > 0 ? Math.round((responded / totalMessages) * 100) : 0;
+
+            // Stats cards
+            const analyticsDiv = document.getElementById('message-analytics');
+            analyticsDiv.innerHTML = `
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 2em; font-weight: 700;">${totalMessages}</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">Total Messages</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 2em; font-weight: 700;">${aiGenerated}</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">AI Generated</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 2em; font-weight: 700;">${responded}</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">Responded</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 2em; font-weight: 700;">${responseRate}%</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">Response Rate</div>
+                </div>
+            `;
+
+            // Message breakdown
+            const breakdownDiv = document.getElementById('message-breakdown');
+
+            if (totalMessages === 0) {
+                breakdownDiv.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">No messages sent yet. Use the AI panel to compose your first message!</p>';
+                return;
+            }
+
+            // Group by type
+            const messagesByType = {};
+            allMessages.forEach(msg => {
+                const type = msg.type || 'email';
+                if (!messagesByType[type]) {
+                    messagesByType[type] = {
+                        count: 0,
+                        responded: 0,
+                        aiGenerated: 0
+                    };
+                }
+                messagesByType[type].count++;
+                if (msg.responded) messagesByType[type].responded++;
+                if (msg.aiGenerated) messagesByType[type].aiGenerated++;
+            });
+
+            // Build breakdown table
+            let breakdownHTML = `
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                    <h4 style="margin-top: 0;">Message Breakdown by Type</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #dee2e6;">
+                                <th style="text-align: left; padding: 10px;">Type</th>
+                                <th style="text-align: center; padding: 10px;">Total</th>
+                                <th style="text-align: center; padding: 10px;">AI Generated</th>
+                                <th style="text-align: center; padding: 10px;">Responded</th>
+                                <th style="text-align: center; padding: 10px;">Response Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            Object.entries(messagesByType).forEach(([type, stats]) => {
+                const typeLabel = type.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                const rate = Math.round((stats.responded / stats.count) * 100);
+
+                breakdownHTML += `
+                    <tr style="border-bottom: 1px solid #e0e0e0;">
+                        <td style="padding: 10px;">${typeLabel}</td>
+                        <td style="text-align: center; padding: 10px;"><strong>${stats.count}</strong></td>
+                        <td style="text-align: center; padding: 10px;">${stats.aiGenerated}</td>
+                        <td style="text-align: center; padding: 10px;">${stats.responded}</td>
+                        <td style="text-align: center; padding: 10px;">
+                            <span style="padding: 4px 10px; background: ${rate >= 50 ? '#e8f5e9' : '#fff3cd'}; color: ${rate >= 50 ? '#2e7d32' : '#856404'}; border-radius: 4px; font-weight: 600;">
+                                ${rate}%
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            breakdownHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            // Account breakdown
+            breakdownHTML += `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5em;">📧</div>
+                        <div style="font-size: 1.5em; font-weight: 700; margin: 10px 0;">${personalAccount}</div>
+                        <div style="font-size: 0.9em; color: #666;">Personal Gmail</div>
+                    </div>
+                    <div style="background: #f0e8f8; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5em;">💼</div>
+                        <div style="font-size: 1.5em; font-weight: 700; margin: 10px 0;">${workAccount}</div>
+                        <div style="font-size: 0.9em; color: #666;">Work Gmail</div>
+                    </div>
+                </div>
+            `;
+
+            breakdownDiv.innerHTML = breakdownHTML;
+        }
+
+        function renderAnalytics() {
+            const contacts = getContacts();
+
+            // Message Analytics
+            renderMessageAnalytics(contacts);
+
+            // Weekly activity chart
+            const weeklyChart = document.getElementById('weekly-chart');
+            const last7Days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                last7Days.push(date.toISOString().split('T')[0]);
+            }
+
+            const dailyCounts = last7Days.map(day => {
+                return contacts.filter(c => c.lastContacted === day || c.createdAt?.split('T')[0] === day).length;
+            });
+
+            const maxCount = Math.max(...dailyCounts, 1);
+            weeklyChart.innerHTML = last7Days.map((day, i) => {
+                const height = (dailyCounts[i] / maxCount) * 150;
+                const dayName = new Date(day).toLocaleDateString('en-US', { weekday: 'short' });
+                return `
+                    <div class="bar" style="height: ${Math.max(height, 5)}px;">
+                        <span class="bar-value">${dailyCounts[i]}</span>
+                        <span class="bar-label">${dayName}</span>
+                    </div>
+                `;
+            }).join('');
+
+            // Source stats
+            const sourceStats = document.getElementById('source-stats');
+            const sources = ['ross-alumni', 'linkedin', 'referral', 'recruiter', 'company-direct'];
+            sourceStats.innerHTML = sources.map(source => {
+                const sourceContacts = contacts.filter(c => c.source === source);
+                const responded = sourceContacts.filter(c => !['new', 'contacted', 'no-response'].includes(c.status)).length;
+                const rate = sourceContacts.length > 0 ? Math.round((responded / sourceContacts.length) * 100) : 0;
+                return `
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                        <span>${formatSource(source)}</span>
+                        <span><strong>${sourceContacts.length}</strong> contacts, <strong>${rate}%</strong> response</span>
+                    </div>
+                `;
+            }).join('');
+
+            // Conversion stats
+            const conversionStats = document.getElementById('conversion-stats');
+            const totalContacted = contacts.filter(c => c.status !== 'new').length;
+            const totalResponded = contacts.filter(c => !['new', 'contacted', 'no-response'].includes(c.status)).length;
+            const totalCalls = contacts.filter(c => ['call-scheduled', 'call-completed', 'referral', 'interviewing', 'offer'].includes(c.status)).length;
+            const totalInterviews = contacts.filter(c => ['interviewing', 'offer'].includes(c.status)).length;
+            const totalOffers = contacts.filter(c => c.status === 'offer').length;
+
+            conversionStats.innerHTML = `
+                <div style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                    <strong>Outreach → Response:</strong> ${totalContacted > 0 ? Math.round((totalResponded / totalContacted) * 100) : 0}%
+                </div>
+                <div style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                    <strong>Response → Call:</strong> ${totalResponded > 0 ? Math.round((totalCalls / totalResponded) * 100) : 0}%
+                </div>
+                <div style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                    <strong>Call → Interview:</strong> ${totalCalls > 0 ? Math.round((totalInterviews / totalCalls) * 100) : 0}%
+                </div>
+                <div style="padding: 10px 0;">
+                    <strong>Interview → Offer:</strong> ${totalInterviews > 0 ? Math.round((totalOffers / totalInterviews) * 100) : 0}%
+                </div>
+            `;
+
+            // Activity timeline
+            const timeline = document.getElementById('activity-timeline');
+            const recentActivity = contacts
+                .filter(c => c.updatedAt)
+                .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+                .slice(0, 10);
+
+            timeline.innerHTML = recentActivity.length === 0
+                ? '<p style="color: #666;">No recent activity.</p>'
+                : recentActivity.map(c => `
+                    <div style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                        <span><strong>${c.firstName} ${c.lastName}</strong> - ${formatStatus(c.status)}</span>
+                        <span style="color: #666;">${formatDate(c.updatedAt)}</span>
+                    </div>
+                `).join('');
+        }
+
+        // ============================================
+        // STATS & ALERTS
+        // ============================================
+
+        function updateStats() {
+            const contacts = getContacts();
+            const progress = getProgress();
+
+            // Days active
+            const startDate = progress.startDate || new Date().toISOString();
+            const daysActive = Math.floor((new Date() - new Date(startDate)) / (1000 * 60 * 60 * 24));
+            document.getElementById('days-active').textContent = daysActive;
+
+            // Contact stats
+            document.getElementById('total-contacts').textContent = contacts.length;
+
+            const contacted = contacts.filter(c => c.status !== 'new').length;
+            const responded = contacts.filter(c => !['new', 'contacted', 'no-response'].includes(c.status)).length;
+            const responseRate = contacted > 0 ? Math.round((responded / contacted) * 100) : 0;
+            document.getElementById('response-rate').textContent = responseRate + '%';
+
+            const callsScheduled = contacts.filter(c => ['call-scheduled', 'call-completed', 'referral', 'interviewing', 'offer'].includes(c.status)).length;
+            document.getElementById('calls-scheduled').textContent = callsScheduled;
+
+            const interviews = contacts.filter(c => ['interviewing', 'offer'].includes(c.status)).length;
+            document.getElementById('interviews').textContent = interviews;
+
+            const offers = contacts.filter(c => c.status === 'offer').length;
+            document.getElementById('offers').textContent = offers;
+
+            // Update alert banner
+            updateAlertBanner(contacts);
+
+            // Update today's follow-ups
+            updateTodaysFollowups(contacts);
+        }
+
+        function updateAlertBanner(contacts) {
+            const today = new Date().toISOString().split('T')[0];
+            const overdue = contacts.filter(c => c.followUp && c.followUp < today).length;
+            const dueToday = contacts.filter(c => c.followUp === today).length;
+
+            const alertEl = document.getElementById('follow-up-alert');
+            const bannerEl = document.getElementById('alert-banner');
+
+            if (overdue > 0) {
+                alertEl.textContent = `${overdue} overdue follow-up${overdue > 1 ? 's' : ''}! ${dueToday > 0 ? `+ ${dueToday} due today` : ''}`;
+                bannerEl.style.background = '#f44336';
+            } else if (dueToday > 0) {
+                alertEl.textContent = `${dueToday} follow-up${dueToday > 1 ? 's' : ''} due today`;
+                bannerEl.style.background = '#ff9800';
+            } else {
+                alertEl.textContent = 'No urgent follow-ups. Keep the momentum going!';
+                bannerEl.style.background = '#4caf50';
+            }
+        }
+
+        function updateTodaysFollowups(contacts) {
+            const today = new Date().toISOString().split('T')[0];
+            const todaysFollowups = contacts.filter(c => c.followUp && c.followUp <= today);
+
+            const container = document.getElementById('todays-followups');
+            container.innerHTML = todaysFollowups.length === 0
+                ? '<p style="color: #666;">No follow-ups due today. Add contacts with follow-up dates!</p>'
+                : todaysFollowups.map(c => `
+                    <div class="task-item" style="border-left-color: ${c.followUp < today ? '#f44336' : '#ff9800'};">
+                        <span style="flex: 1;">
+                            <strong>${c.firstName} ${c.lastName}</strong> at ${c.company}
+                            <span style="color: #666; font-size: 0.9em;"> - ${formatStatus(c.status)}</span>
+                            ${c.followUp < today ? '<span style="color: #f44336; font-size: 0.8em;"> (OVERDUE)</span>' : ''}
+                        </span>
+                        <button class="btn btn-sm btn-primary" onclick="openEditContactModal('${c.id}')">Update</button>
+                    </div>
+                `).join('');
+        }
+
+        // ============================================
+        // EXPORT/IMPORT
+        // ============================================
+
+        function exportToCSV() {
+            const contacts = getContacts();
+            if (contacts.length === 0) {
+                alert('No contacts to export');
+                return;
+            }
+
+            const headers = ['First Name', 'Last Name', 'Company', 'Title', 'Email', 'Phone', 'LinkedIn', 'Source', 'Status', 'Last Contacted', 'Follow-up Date', 'Notes'];
+            const rows = contacts.map(c => [
+                c.firstName, c.lastName, c.company, c.title, c.email, c.phone, c.linkedin, c.source, c.status, c.lastContacted, c.followUp, c.notes?.replace(/"/g, '""')
+            ]);
+
+            const csv = [headers, ...rows].map(row => row.map(cell => `"${cell || ''}"`).join(',')).join('\n');
+            downloadFile(csv, 'job-search-contacts.csv', 'text/csv');
+        }
+
+        function exportToJSON() {
+            const contacts = getContacts();
+            downloadFile(JSON.stringify(contacts, null, 2), 'job-search-contacts.json', 'application/json');
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let contacts;
+                    if (file.name.endsWith('.json')) {
+                        contacts = JSON.parse(e.target.result);
+                    } else if (file.name.endsWith('.csv')) {
+                        contacts = parseCSV(e.target.result);
+                    }
+
+                    if (contacts && contacts.length > 0) {
+                        const existing = getContacts();
+                        const merged = [...existing, ...contacts.map(c => ({
+                            ...c,
+                            id: c.id || Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                            createdAt: c.createdAt || new Date().toISOString()
+                        }))];
+                        saveContacts(merged);
+                        alert(`Imported ${contacts.length} contacts!`);
+                    }
+                } catch (err) {
+                    alert('Error importing file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+
+            const fieldMap = {
+                'first name': 'firstName',
+                'last name': 'lastName',
+                'company': 'company',
+                'title': 'title',
+                'email': 'email',
+                'phone': 'phone',
+                'linkedin': 'linkedin',
+                'source': 'source',
+                'status': 'status',
+                'last contacted': 'lastContacted',
+                'follow-up date': 'followUp',
+                'notes': 'notes'
+            };
+
+            return lines.slice(1).filter(line => line.trim()).map(line => {
+                const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                const contact = {};
+                headers.forEach((header, i) => {
+                    const key = fieldMap[header.toLowerCase()];
+                    if (key) {
+                        contact[key] = values[i]?.replace(/^"|"$/g, '').replace(/""/g, '"') || '';
+                    }
+                });
+                return contact;
+            });
+        }
+
+        function clearAllData() {
+            if (!confirm('Are you sure you want to delete ALL contacts? This cannot be undone!')) return;
+            if (!confirm('Really delete everything?')) return;
+
+            localStorage.removeItem('jobSearchContacts');
+            updateAllDisplays();
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+
+        function copyTemplate() {
+            const template = `Hey [Name],
+
+Luis Calderon - Ross '11. Led $900M TurboTax, now exploring next move.
+
+Saw you're at [Company]. Quick question - are you hiring product leaders who can ship AI products hands-on? Just cut costs 40% with AI chatbots at my current company.
+
+15 min call to hear what you're building?
+
+Go Blue,
+Luis
+703.786.7899`;
+            navigator.clipboard.writeText(template);
+            alert('Template copied to clipboard!');
+        }
+
+        function updateAllDisplays() {
+            updateStats();
+            renderCRM();
+            renderPipeline();
+            renderAnalytics();
+        }
+
+        // ============================================
+        // TASK CHECKBOXES (from original)
+        // ============================================
+
+        document.querySelectorAll('.task-item input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                this.closest('.task-item').classList.toggle('completed', this.checked);
+
+                const progress = getProgress();
+                progress.tasksCompleted = progress.tasksCompleted || [];
+
+                if (this.checked && !progress.tasksCompleted.includes(this.id)) {
+                    progress.tasksCompleted.push(this.id);
+                } else if (!this.checked) {
+                    progress.tasksCompleted = progress.tasksCompleted.filter(id => id !== this.id);
+                }
+
+                if (!progress.startDate) {
+                    progress.startDate = new Date().toISOString();
+                }
+
+                saveProgress(progress);
+                updateStats();
+            });
+        });
+
+        // Load saved checkbox states
+        const savedProgress = getProgress();
+        if (savedProgress.tasksCompleted) {
+            savedProgress.tasksCompleted.forEach(taskId => {
+                const checkbox = document.getElementById(taskId);
+                if (checkbox) {
+                    checkbox.checked = true;
+                    checkbox.closest('.task-item').classList.add('completed');
+                }
+            });
+        }
+
+        // ============================================
+        // CRM CARD VIEW
+        // ============================================
+
+        let currentCRMView = 'cards';
+        let selectedOutreachType = 'email';
+
+        function renderCRM() {
+            const contacts = getContacts();
+            const searchTerm = document.getElementById('search-contacts').value.toLowerCase();
+            const statusFilter = document.getElementById('filter-status').value;
+            const sourceFilter = document.getElementById('filter-source').value;
+            const showNA = document.getElementById('filter-show-na')?.checked || false;
+
+            const filteredContacts = contacts.filter(c => {
+                const matchesSearch = !searchTerm ||
+                    `${c.firstName} ${c.lastName}`.toLowerCase().includes(searchTerm) ||
+                    c.company?.toLowerCase().includes(searchTerm) ||
+                    c.title?.toLowerCase().includes(searchTerm);
+                const matchesStatus = !statusFilter || c.status === statusFilter;
+                const matchesSource = !sourceFilter || c.source === sourceFilter;
+                const matchesNA = showNA || !c.isNA;  // Hide NA by default unless filter is checked
+                return matchesSearch && matchesStatus && matchesSource && matchesNA;
+            });
+
+            // Update CRM quick stats
+            updateCRMStats(contacts);
+
+            // Render cards view
+            const cardsContainer = document.getElementById('crm-cards-view');
+            cardsContainer.innerHTML = filteredContacts.length === 0
+                ? '<div style="text-align: center; padding: 60px 20px; color: #666; grid-column: 1/-1;"><h3>No contacts found</h3><p>Click "+ Add Contact" or "Explore Network" to get started!</p></div>'
+                : filteredContacts.map(c => renderContactCard(c)).join('');
+
+            // Also update table view
+            renderContactsTable();
+        }
+
+        function renderContactCard(contact) {
+            const c = contact;
+            const today = new Date().toISOString().split('T')[0];
+            const isOverdue = c.followUp && c.followUp < today;
+            const isDueToday = c.followUp === today;
+            const outreachCount = (c.outreachHistory || []).length;
+            const hasResponded = !['new', 'contacted', 'no-response'].includes(c.status);
+
+            // Determine card priority class
+            let priorityClass = '';
+            if (isOverdue) priorityClass = 'priority-high';
+            else if (c.source === 'ross-alumni') priorityClass = 'priority-ross';
+            else if (isDueToday) priorityClass = 'priority-medium';
+
+            return `
+                <div class="contact-card ${priorityClass}">
+                    <div class="contact-card-header">
+                        <div>
+                            <div class="contact-card-name">${c.name || (c.firstName + ' ' + c.lastName) || 'Unknown'}</div>
+                            <div class="contact-card-title">${c.title || 'Title not specified'}</div>
+                            <div class="contact-card-company">${c.company || 'Company not specified'}</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-card-badges">
+                        <span class="contact-card-badge status-${c.status}">${formatStatus(c.status)}</span>
+                        <span class="contact-card-badge">${formatSource(c.source)}</span>
+                        ${isOverdue ? '<span class="contact-card-badge" style="background: #f44336; color: white;">OVERDUE</span>' : ''}
+                        ${isDueToday ? '<span class="contact-card-badge" style="background: #ff9800; color: white;">Due Today</span>' : ''}
+                    </div>
+
+                    <div class="contact-card-stats">
+                        <div class="contact-card-stat">
+                            <div class="contact-card-stat-value">${outreachCount}</div>
+                            <div class="contact-card-stat-label">Outreach</div>
+                        </div>
+                        <div class="contact-card-stat">
+                            <div class="contact-card-stat-value">${hasResponded ? '✓' : '-'}</div>
+                            <div class="contact-card-stat-label">Response</div>
+                        </div>
+                        <div class="contact-card-stat">
+                            <div class="contact-card-stat-value">${c.lastContacted ? formatDate(c.lastContacted) : '-'}</div>
+                            <div class="contact-card-stat-label">Last Contact</div>
+                        </div>
+                    </div>
+
+                    ${(c.outreachHistory && c.outreachHistory.length > 0) ? `
+                    <div class="outreach-history">
+                        <strong style="font-size: 0.75em; color: #666;">Recent Activity:</strong>
+                        ${c.outreachHistory.slice(-3).reverse().map(h => `
+                            <div class="outreach-item">
+                                <span>${getOutreachIcon(h.type)} ${h.type}</span>
+                                <span>${formatDate(h.date)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+
+                    <div class="contact-card-actions">
+                        <button class="btn-compose" onclick="openAIPanel('${c.id}')">
+                            ✉️ Compose
+                        </button>
+                        ${c.linkedin ? `<a class="btn-linkedin" href="${c.linkedin}" target="_blank">LinkedIn</a>` : ''}
+                        <button class="btn-log" onclick="openOutreachModal('${c.id}')">📝 Log</button>
+                        <button class="btn-edit" onclick="openEditContactModal('${c.id}')">✏️</button>
+                        <button class="btn-delete" onclick="toggleNA('${c.id}')" style="background: ${c.isNA ? '#f44336' : '#e0e0e0'}; color: ${c.isNA ? 'white' : '#666'};">${c.isNA ? '✓ NA' : 'NA'}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getOutreachIcon(type) {
+            const icons = {
+                'email': '📧',
+                'linkedin': '💼',
+                'call': '📞',
+                'response': '📥'
+            };
+            return icons[type] || '📋';
+        }
+
+        function setCRMView(view, btn) {
+            currentCRMView = view;
+
+            // Update button states
+            document.querySelectorAll('.crm-view-toggle button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Toggle views
+            document.getElementById('crm-cards-view').style.display = view === 'cards' ? 'grid' : 'none';
+            document.getElementById('crm-table-view').style.display = view === 'table' ? 'block' : 'none';
+        }
+
+        function updateCRMStats(contacts) {
+            const total = contacts.length;
+            const emailed = contacts.filter(c =>
+                c.outreachHistory?.some(h => h.type === 'email') ||
+                (c.lastContacted && c.status !== 'new')
+            ).length;
+            const responses = contacts.filter(c =>
+                !['new', 'contacted', 'no-response'].includes(c.status) ||
+                c.outreachHistory?.some(h => h.type === 'response')
+            ).length;
+            const calls = contacts.filter(c =>
+                ['call-scheduled', 'call-completed', 'referral', 'interviewing', 'offer'].includes(c.status)
+            ).length;
+            const responseRate = emailed > 0 ? Math.round((responses / emailed) * 100) : 0;
+
+            document.getElementById('crm-total').textContent = total;
+            document.getElementById('crm-emailed').textContent = emailed;
+            document.getElementById('crm-responses').textContent = responses;
+            document.getElementById('crm-calls').textContent = calls;
+            document.getElementById('crm-response-rate').textContent = responseRate + '%';
+        }
+
+        // ============================================
+        // OUTREACH MODAL
+        // ============================================
+
+        function openOutreachModal(contactId) {
+            const contacts = getContacts();
+            const contact = contacts.find(c => c.id === contactId);
+            if (!contact) return;
+
+            document.getElementById('outreach-contact-id').value = contactId;
+            document.getElementById('outreach-contact-name').textContent =
+                `${contact.firstName} ${contact.lastName} at ${contact.company || 'Unknown Company'}`;
+            document.getElementById('outreach-notes').value = '';
+            document.getElementById('outreach-followup').value = '';
+
+            // Reset selection
+            selectedOutreachType = 'email';
+            document.querySelectorAll('.outreach-type-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector('.outreach-type-btn[data-type="email"]').classList.add('selected');
+
+            document.getElementById('outreach-modal').classList.add('active');
+        }
+
+        function closeOutreachModal() {
+            document.getElementById('outreach-modal').classList.remove('active');
+        }
+
+        function selectOutreachType(type, btn) {
+            selectedOutreachType = type;
+            document.querySelectorAll('.outreach-type-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function saveOutreach() {
+            const contactId = document.getElementById('outreach-contact-id').value;
+            const notes = document.getElementById('outreach-notes').value;
+            const followUp = document.getElementById('outreach-followup').value;
+
+            const contacts = getContacts();
+            const index = contacts.findIndex(c => c.id === contactId);
+            if (index === -1) return;
+
+            // Initialize outreach history if not exists
+            if (!contacts[index].outreachHistory) {
+                contacts[index].outreachHistory = [];
+            }
+
+            // Add outreach entry
+            contacts[index].outreachHistory.push({
+                type: selectedOutreachType,
+                date: new Date().toISOString(),
+                notes: notes
+            });
+
+            // Update contact status based on outreach type
+            if (selectedOutreachType === 'email' || selectedOutreachType === 'linkedin') {
+                if (contacts[index].status === 'new') {
+                    contacts[index].status = 'contacted';
+                }
+                contacts[index].lastContacted = new Date().toISOString().split('T')[0];
+            } else if (selectedOutreachType === 'response') {
+                contacts[index].status = 'responded';
+                contacts[index].lastContacted = new Date().toISOString().split('T')[0];
+            } else if (selectedOutreachType === 'call') {
+                contacts[index].status = 'call-completed';
+                contacts[index].lastContacted = new Date().toISOString().split('T')[0];
+            }
+
+            // Set follow-up if provided
+            if (followUp) {
+                contacts[index].followUp = followUp;
+            }
+
+            contacts[index].updatedAt = new Date().toISOString();
+
+            saveContacts(contacts);
+            closeOutreachModal();
+        }
+
+        // ============================================
+        // COMPOSE EMAIL
+        // ============================================
+
+        function composeEmailForContact(contactId) {
+            const contacts = getContacts();
+            const contact = contacts.find(c => c.id === contactId);
+            if (!contact) return;
+
+            // Prepare contact data for AI tools page
+            const emailContext = {
+                name: `${contact.firstName} ${contact.lastName}`,
+                title: contact.title || '',
+                company: contact.company || '',
+                linkedinUrl: contact.linkedin || '',
+                connectionType: contact.source === 'ross-alumni' ? 'ross-alum' :
+                               contact.source === 'referral' ? 'referred' : '2nd-degree',
+                additionalContext: contact.notes || '',
+                contactId: contact.id
+            };
+
+            // Store in localStorage for AI tools to read
+            localStorage.setItem('outreachContact', JSON.stringify(emailContext));
+
+            // Open AI tools in new tab
+            window.open('ai-tools.html', '_blank');
+        }
+
+        // ============================================
+        // INITIALIZE
+        // ============================================
+
+        // Clean up broken contacts first (from old bug)
+        cleanupBrokenContacts();
+
+        // Deduplicate contacts on page load
+        deduplicateContacts();
+
+        // Initialize sync manager (loads cloud data if configured)
+        SyncManager.init();
+
+        updateAllDisplays();
+
+        // Close modal on outside click
+        document.getElementById('contact-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.getElementById('outreach-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeOutreachModal();
+        });
+
+        document.getElementById('settings-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeSettingsModal();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Escape key - Close any open modal or panel
+            if (e.key === 'Escape') {
+                closeModal();
+                closeOutreachModal();
+                closeSettingsModal();
+                closeAIPanel();
+            }
+
+            // Cmd/Ctrl+K - Open AI panel (only if no panel/modal is currently open)
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault(); // Prevent browser's default search
+
+                // Check if any modal or panel is already open
+                const aiPanelOpen = document.getElementById('ai-panel').classList.contains('open');
+                const modalOpen = document.getElementById('contact-modal').style.display === 'block';
+                const outreachModalOpen = document.getElementById('outreach-modal').style.display === 'block';
+                const settingsModalOpen = document.getElementById('settings-modal').style.display === 'block';
+
+                if (!aiPanelOpen && !modalOpen && !outreachModalOpen && !settingsModalOpen) {
+                    // Find the first contact to open AI panel with
+                    const contacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+                    if (contacts.length > 0) {
+                        openAIPanel(contacts[0].id);
+                    } else {
+                        alert('No contacts available. Add a contact first to use the AI panel.');
+                    }
+                }
+            }
+        });
+
+        // Enter key in additional context textarea to trigger generate
+        document.addEventListener('DOMContentLoaded', function() {
+            const additionalContextTextarea = document.getElementById('ai-additional-context');
+            if (additionalContextTextarea) {
+                additionalContextTextarea.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                        e.preventDefault();
+                        generateMessage();
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- AI Panel Backdrop (for mobile overlay) -->
+    <div id="ai-panel-backdrop" class="ai-panel-backdrop" onclick="closeAIPanel()"></div>
+
+    <!-- AI Panel (Side Panel) -->
+    <div id="ai-panel" class="ai-panel" role="dialog" aria-labelledby="ai-panel-title" aria-modal="true">
+        <div class="ai-panel-header">
+            <h2 id="ai-panel-title">AI Message Generator</h2>
+            <button id="ai-panel-close" onclick="closeAIPanel()" title="Close panel" aria-label="Close AI panel">✕</button>
+        </div>
+
+        <div class="ai-panel-content">
+            <!-- Contact Context -->
+            <div id="ai-contact-context" class="ai-panel-section">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Conversation Summary Section -->
+            <div id="ai-conversation-summary" class="ai-panel-section" style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 style="margin: 0; color: #667eea; font-size: 1em;">💬 Conversation History</h3>
+                    <button id="btn-get-summary" onclick="AIPanel.getConversationSummary()" style="background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em;">
+                        🔍 Find Conversations
+                    </button>
+                </div>
+                <div id="conversation-summary-content">
+                    <p style="color: #888; font-size: 0.9em; margin: 0;">Click to search Gmail & LinkedIn for prior conversations</p>
+                </div>
+                <!-- Use for Follow-up button (hidden until summary loaded) -->
+                <div id="summary-actions" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(102, 126, 234, 0.2);">
+                    <button id="btn-use-summary" onclick="AIPanel.useForFollowUp()" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 600;">
+                        ✨ Generate Follow-up Based on This
+                    </button>
+                </div>
+            </div>
+
+            <!-- Message Settings -->
+            <div class="ai-panel-section">
+                <h3>Message Settings</h3>
+
+                <label for="ai-message-type" style="display: block; margin-bottom: 5px; font-size: 0.9em; color: #666;">Message Type</label>
+                <select id="ai-message-type" aria-label="Select message type">
+                    <option value="email-followup">Email Follow-up</option>
+                    <option value="initial-outreach">Initial Outreach</option>
+                    <option value="thank-you">Thank You</option>
+                    <option value="coffee-chat">Coffee Chat Request</option>
+                    <option value="linkedin-message">LinkedIn Message</option>
+                    <option value="referral-request">Referral Request</option>
+                </select>
+
+                <label for="ai-tone" style="display: block; margin-bottom: 5px; font-size: 0.9em; color: #666;">Tone</label>
+                <select id="ai-tone" aria-label="Select message tone">
+                    <option value="professional-casual">Professional Casual</option>
+                    <option value="formal">Formal</option>
+                    <option value="friendly">Friendly</option>
+                    <option value="direct">Direct</option>
+                </select>
+
+                <label for="ai-additional-context" style="display: block; margin-bottom: 5px; font-size: 0.9em; color: #666;">Additional Context (Optional)</label>
+                <textarea id="ai-additional-context" aria-label="Additional context for message generation" placeholder="Add any additional context or specific details you want to mention..."></textarea>
+            </div>
+
+            <!-- Generate Buttons -->
+            <div class="ai-panel-buttons">
+                <button class="btn-generate" onclick="generateMessage()" aria-label="Generate AI message for this contact">
+                    Generate Message
+                </button>
+            </div>
+
+            <!-- Output -->
+            <div class="ai-panel-section">
+                <h3>Generated Message</h3>
+                <div id="ai-output">
+                    <p style="color: #888; font-style: italic;">Click "Generate Message" to create a personalized message</p>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div id="ai-actions" class="ai-actions">
+                <button class="btn-copy" onclick="copyToClipboard()" aria-label="Copy generated message to clipboard">
+                    Copy
+                </button>
+                <button class="btn-send" onclick="sendViaGmail()" aria-label="Send message via Gmail">
+                    Send via Gmail
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Dual Gmail Client (supports personal + work accounts) -->
+    <script src="dual-gmail-client.js"></script>
+
+    <!-- Include AI Panel -->
+    <script src="ai-panel.js"></script>
+</body>
+</html>

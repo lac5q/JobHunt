@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Data Intelligence - Luis Calderon</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { opacity: 0.9; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #1e1e30;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        .stat-card h2 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        .stat-card p { color: #888; }
+        .section {
+            background: #1e1e30;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #333;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: #252540;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #aaa;
+            transition: all 0.3s;
+        }
+        .tab:hover { border-color: #667eea; color: #e0e0e0; }
+        .tab.active { background: #667eea; border-color: #667eea; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th { color: #667eea; background: #252540; }
+        tr:hover { background: #252540; }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5568d3; }
+        .btn-success { background: #4caf50; color: white; }
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            background: #252540;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        .search-box:focus { outline: none; border-color: #667eea; }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+        }
+        .tag-ross { background: #1976d2; color: white; }
+        .tag-pm { background: #7b1fa2; color: white; }
+        .tag-director { background: #f57c00; color: white; }
+        .tag-vp { background: #388e3c; color: white; }
+        .tag-recent { background: #c2185b; color: white; }
+        .priority-high { border-left: 4px solid #4caf50; }
+        .priority-medium { border-left: 4px solid #ff9800; }
+        .chart-bar {
+            height: 30px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            color: white;
+            font-weight: 500;
+        }
+        .insight-card {
+            background: #252540;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        .insight-card h4 { color: #667eea; margin-bottom: 8px; }
+        .message-preview {
+            background: #252540;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .message-preview .from { color: #667eea; font-weight: 600; }
+        .message-preview .date { color: #666; font-size: 0.85em; }
+        .message-preview .content { margin-top: 8px; color: #ccc; }
+        .hidden { display: none; }
+        .drop-zone {
+            border: 3px dashed #444;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        .drop-zone:hover { border-color: #667eea; background: rgba(102, 126, 234, 0.1); }
+        .file-list { margin-top: 15px; }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: #252540;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .file-item.loaded { border-left: 3px solid #4caf50; }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .loading { animation: pulse 1.5s infinite; }
+    </style>
+    <script src="sync-manager.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>LinkedIn Data Intelligence</h1>
+            <p>Deep analysis of your 4,337 connections for strategic job search targeting</p>
+        </header>
+
+        <!-- Upload Section -->
+        <div class="section" id="upload-section">
+            <h2>Load Your LinkedIn Data</h2>
+            <p style="color: #888; margin-bottom: 20px;">Select the CSV files from your LinkedIn data export</p>
+
+            <div class="drop-zone" id="drop-zone">
+                <p>Drag & drop your LinkedIn CSV files here<br>or click to browse</p>
+                <p style="color: #666; font-size: 0.9em; margin-top: 10px;">Required: Connections.csv | Optional: messages.csv, Positions.csv, etc.</p>
+                <input type="file" id="file-input" multiple accept=".csv" style="display: none;">
+            </div>
+
+            <div class="file-list" id="file-list"></div>
+
+            <button class="btn btn-primary" onclick="processAllData()" id="process-btn" disabled>Analyze Data</button>
+        </div>
+
+        <!-- Main Dashboard (hidden until data loaded) -->
+        <div id="main-dashboard" class="hidden">
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h2 id="total-connections">0</h2>
+                    <p>Total Connections</p>
+                </div>
+                <div class="stat-card">
+                    <h2 id="ross-alumni">0</h2>
+                    <p>Ross Alumni</p>
+                </div>
+                <div class="stat-card">
+                    <h2 id="product-people">0</h2>
+                    <p>Product People</p>
+                </div>
+                <div class="stat-card">
+                    <h2 id="senior-leaders">0</h2>
+                    <p>Directors/VPs/C-Suite</p>
+                </div>
+                <div class="stat-card">
+                    <h2 id="recent-connections">0</h2>
+                    <p>Connected Last 90 Days</p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('priority')">Priority Targets</button>
+                <button class="tab" onclick="showTab('companies')">Companies</button>
+                <button class="tab" onclick="showTab('ross')">Ross Network</button>
+                <button class="tab" onclick="showTab('messages')">Message Intel</button>
+                <button class="tab" onclick="showTab('insights')">AI Insights</button>
+                <button class="tab" onclick="showTab('export')">Export to CRM</button>
+            </div>
+
+            <!-- Priority Targets Tab -->
+            <div id="tab-priority" class="tab-content active section">
+                <h2>High-Priority Outreach Targets</h2>
+                <p style="color: #888; margin-bottom: 15px;">Contacts most likely to help your job search, ranked by potential value</p>
+
+                <input type="text" class="search-box" id="priority-search" placeholder="Search by name, company, or title..." oninput="filterPriorityTable()">
+
+                <div style="overflow-x: auto;">
+                    <table id="priority-table">
+                        <thead>
+                            <tr>
+                                <th>Score</th>
+                                <th>Name</th>
+                                <th>Title</th>
+                                <th>Company</th>
+                                <th>Why Priority</th>
+                                <th>Connected</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="priority-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Companies Tab -->
+            <div id="tab-companies" class="tab-content section">
+                <h2>Company Analysis</h2>
+                <p style="color: #888; margin-bottom: 15px;">Companies where you have the most connections</p>
+
+                <div id="company-chart"></div>
+
+                <h3 style="color: #667eea; margin: 25px 0 15px;">Target Companies with Your Connections</h3>
+                <div id="target-companies"></div>
+            </div>
+
+            <!-- Ross Network Tab -->
+            <div id="tab-ross" class="tab-content section">
+                <h2>Ross Alumni Network</h2>
+                <p style="color: #888; margin-bottom: 15px;">Your Michigan Ross connections - highest priority for warm outreach</p>
+
+                <input type="text" class="search-box" id="ross-search" placeholder="Search Ross alumni..." oninput="filterRossTable()">
+
+                <div style="overflow-x: auto;">
+                    <table id="ross-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Title</th>
+                                <th>Company</th>
+                                <th>Connected</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ross-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Messages Tab -->
+            <div id="tab-messages" class="tab-content section">
+                <h2>Message Intelligence</h2>
+                <p style="color: #888; margin-bottom: 15px;">Analyze your conversation history for warm reconnections</p>
+
+                <div class="insight-card">
+                    <h4>Warm Reconnection Opportunities</h4>
+                    <p>People you've messaged before but haven't talked to recently - easier to re-engage</p>
+                </div>
+
+                <input type="text" class="search-box" id="message-search" placeholder="Search messages..." oninput="filterMessages()">
+
+                <div id="message-list"></div>
+            </div>
+
+            <!-- AI Insights Tab -->
+            <div id="tab-insights" class="tab-content section">
+                <h2>AI-Powered Insights</h2>
+
+                <div class="insight-card">
+                    <h4>Network Strength Analysis</h4>
+                    <div id="network-analysis"></div>
+                </div>
+
+                <div class="insight-card">
+                    <h4>Recommended Outreach Strategy</h4>
+                    <div id="outreach-strategy"></div>
+                </div>
+
+                <div class="insight-card">
+                    <h4>Gap Analysis</h4>
+                    <div id="gap-analysis"></div>
+                </div>
+            </div>
+
+            <!-- Export Tab -->
+            <div id="tab-export" class="tab-content section">
+                <h2>Export to CRM</h2>
+                <p style="color: #888; margin-bottom: 20px;">Export filtered contacts to your Job Search CRM</p>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="margin-right: 20px;"><input type="checkbox" id="export-ross" checked> Ross Alumni (<span id="export-ross-count">0</span>)</label>
+                    <label style="margin-right: 20px;"><input type="checkbox" id="export-pm" checked> Product People (<span id="export-pm-count">0</span>)</label>
+                    <label style="margin-right: 20px;"><input type="checkbox" id="export-senior"> Senior Leaders (<span id="export-senior-count">0</span>)</label>
+                    <label><input type="checkbox" id="export-recent"> Recent Connections (<span id="export-recent-count">0</span>)</label>
+                </div>
+
+                <button class="btn btn-success" onclick="exportToCRM()">Export Selected to CRM</button>
+                <button class="btn btn-primary" onclick="exportToCSV()">Export to CSV</button>
+
+                <div id="export-preview" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let connections = [];
+        let messages = [];
+        let positions = [];
+        let loadedFiles = {};
+
+        // File handling
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#667eea'; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = '#444'; });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#444';
+            handleFiles(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        function handleFiles(files) {
+            const fileList = document.getElementById('file-list');
+
+            Array.from(files).forEach(file => {
+                if (!file.name.endsWith('.csv')) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    loadedFiles[file.name] = e.target.result;
+                    updateFileList();
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        function updateFileList() {
+            const fileList = document.getElementById('file-list');
+            const requiredFiles = ['Connections.csv'];
+            const optionalFiles = ['messages.csv', 'Positions.csv', 'Company Follows.csv', 'Endorsement_Received_Info.csv'];
+
+            let html = '<h4 style="margin-bottom: 10px;">Loaded Files:</h4>';
+
+            Object.keys(loadedFiles).forEach(name => {
+                const isRequired = requiredFiles.includes(name);
+                html += `<div class="file-item loaded">
+                    <span>${name}</span>
+                    <span style="color: #4caf50;">✓ Loaded</span>
+                </div>`;
+            });
+
+            fileList.innerHTML = html;
+
+            // Enable process button if Connections.csv is loaded
+            document.getElementById('process-btn').disabled = !loadedFiles['Connections.csv'];
+        }
+
+        function processAllData() {
+            // Process connections
+            if (loadedFiles['Connections.csv']) {
+                connections = parseCSV(loadedFiles['Connections.csv'], 'connections');
+            }
+
+            // Process messages
+            if (loadedFiles['messages.csv']) {
+                messages = parseCSV(loadedFiles['messages.csv'], 'messages');
+            }
+
+            // Analyze and display
+            analyzeData();
+
+            // Show dashboard
+            document.getElementById('upload-section').classList.add('hidden');
+            document.getElementById('main-dashboard').classList.remove('hidden');
+        }
+
+        function parseCSV(csv, type) {
+            const lines = csv.split('\n');
+            let headerLine = 0;
+
+            // Skip notes at the beginning of LinkedIn exports
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i].startsWith('First Name') || lines[i].startsWith('CONVERSATION')) {
+                    headerLine = i;
+                    break;
+                }
+            }
+
+            const headers = parseCSVLine(lines[headerLine]);
+            const data = [];
+
+            for (let i = headerLine + 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+
+                const values = parseCSVLine(lines[i]);
+                const row = {};
+
+                headers.forEach((header, idx) => {
+                    row[header.trim()] = values[idx] || '';
+                });
+
+                if (type === 'connections') {
+                    row.tags = detectTags(row);
+                    row.score = calculateScore(row);
+                }
+
+                data.push(row);
+            }
+
+            return data;
+        }
+
+        function parseCSVLine(line) {
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    values.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            values.push(current.trim());
+            return values;
+        }
+
+        function detectTags(contact) {
+            const tags = [];
+            const company = (contact['Company'] || '').toLowerCase();
+            const position = (contact['Position'] || '').toLowerCase();
+            const firstName = (contact['First Name'] || '').toLowerCase();
+            const lastName = (contact['Last Name'] || '').toLowerCase();
+
+            // Ross alumni detection
+            if (company.includes('ross') || company.includes('michigan') ||
+                company.includes('university of michigan') ||
+                position.includes('ross') || position.includes('michigan')) {
+                tags.push('ross');
+            }
+
+            // Product people
+            if (position.includes('product') || position.includes(' pm') ||
+                position === 'pm' || position.includes('product manager')) {
+                tags.push('pm');
+            }
+
+            // Seniority
+            if (position.includes('director')) tags.push('director');
+            if (position.includes('vp') || position.includes('vice president')) tags.push('vp');
+            if (position.includes('chief') || position.includes('ceo') ||
+                position.includes('cto') || position.includes('cpo') || position.includes('coo')) {
+                tags.push('c-suite');
+            }
+            if (position.includes('head of')) tags.push('head');
+            if (position.includes('founder')) tags.push('founder');
+
+            // Recent connection
+            const connectedOn = contact['Connected On'];
+            if (connectedOn) {
+                const connDate = new Date(connectedOn);
+                const ninetyDaysAgo = new Date();
+                ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+                if (connDate > ninetyDaysAgo) tags.push('recent');
+            }
+
+            return tags;
+        }
+
+        function calculateScore(contact) {
+            let score = 0;
+            const tags = contact.tags || [];
+
+            // Scoring weights
+            if (tags.includes('ross')) score += 50; // Huge priority
+            if (tags.includes('pm')) score += 20;
+            if (tags.includes('director')) score += 15;
+            if (tags.includes('vp')) score += 25;
+            if (tags.includes('c-suite')) score += 30;
+            if (tags.includes('head')) score += 20;
+            if (tags.includes('founder')) score += 25;
+            if (tags.includes('recent')) score += 10;
+
+            // Company bonuses for target companies
+            const company = (contact['Company'] || '').toLowerCase();
+            const targetCompanies = ['stripe', 'openai', 'anthropic', 'figma', 'notion', 'airtable',
+                'ramp', 'brex', 'plaid', 'scale', 'databricks', 'snowflake', 'datadog'];
+            if (targetCompanies.some(t => company.includes(t))) score += 30;
+
+            return score;
+        }
+
+        function analyzeData() {
+            // Update stats
+            document.getElementById('total-connections').textContent = connections.length.toLocaleString();
+
+            const rossAlumni = connections.filter(c => c.tags.includes('ross'));
+            document.getElementById('ross-alumni').textContent = rossAlumni.length;
+
+            const productPeople = connections.filter(c => c.tags.includes('pm'));
+            document.getElementById('product-people').textContent = productPeople.length;
+
+            const seniorLeaders = connections.filter(c =>
+                c.tags.includes('director') || c.tags.includes('vp') ||
+                c.tags.includes('c-suite') || c.tags.includes('head')
+            );
+            document.getElementById('senior-leaders').textContent = seniorLeaders.length;
+
+            const recentConnections = connections.filter(c => c.tags.includes('recent'));
+            document.getElementById('recent-connections').textContent = recentConnections.length;
+
+            // Update export counts
+            document.getElementById('export-ross-count').textContent = rossAlumni.length;
+            document.getElementById('export-pm-count').textContent = productPeople.length;
+            document.getElementById('export-senior-count').textContent = seniorLeaders.length;
+            document.getElementById('export-recent-count').textContent = recentConnections.length;
+
+            // Render tables
+            renderPriorityTable();
+            renderCompanyAnalysis();
+            renderRossTable();
+            renderMessages();
+            renderInsights();
+        }
+
+        function renderPriorityTable() {
+            const sorted = [...connections].sort((a, b) => b.score - a.score).slice(0, 200);
+            const tbody = document.getElementById('priority-tbody');
+
+            tbody.innerHTML = sorted.map(c => {
+                const tags = c.tags.map(t => `<span class="tag tag-${t}">${t}</span>`).join('');
+                const priorityClass = c.score >= 50 ? 'priority-high' : c.score >= 30 ? 'priority-medium' : '';
+
+                return `<tr class="${priorityClass}">
+                    <td><strong>${c.score}</strong></td>
+                    <td>${c['First Name']} ${c['Last Name']}</td>
+                    <td>${c['Position'] || '-'}</td>
+                    <td>${c['Company'] || '-'}</td>
+                    <td>${tags}</td>
+                    <td>${c['Connected On'] || '-'}</td>
+                    <td>
+                        <a href="${c['URL']}" target="_blank" class="btn btn-primary" style="padding: 5px 10px; font-size: 0.85em;">LinkedIn</a>
+                        <button class="btn btn-success" style="padding: 5px 10px; font-size: 0.85em;" onclick="addToCRM('${c['First Name']}', '${c['Last Name']}', '${c['Company']}', '${c['Position']}', '${c['URL']}', '${c.tags.join(',')}')">+ CRM</button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function renderCompanyAnalysis() {
+            // Count by company
+            const companyCounts = {};
+            connections.forEach(c => {
+                const company = c['Company'] || 'Unknown';
+                companyCounts[company] = (companyCounts[company] || 0) + 1;
+            });
+
+            // Sort and get top 20
+            const topCompanies = Object.entries(companyCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 20);
+
+            const maxCount = topCompanies[0]?.[1] || 1;
+
+            const chartHtml = topCompanies.map(([company, count]) => {
+                const width = (count / maxCount) * 100;
+                return `<div class="chart-bar" style="width: ${width}%">${company}: ${count}</div>`;
+            }).join('');
+
+            document.getElementById('company-chart').innerHTML = chartHtml;
+
+            // Target companies analysis
+            const targetCompanies = ['Stripe', 'OpenAI', 'Anthropic', 'Figma', 'Notion', 'Airtable',
+                'Ramp', 'Brex', 'Plaid', 'Scale AI', 'Databricks', 'Snowflake', 'Datadog', 'Google',
+                'Meta', 'Apple', 'Amazon', 'Microsoft', 'Netflix', 'Intuit'];
+
+            const targetHtml = targetCompanies.map(target => {
+                const matches = connections.filter(c =>
+                    (c['Company'] || '').toLowerCase().includes(target.toLowerCase())
+                );
+                if (matches.length === 0) return '';
+
+                return `<div class="insight-card">
+                    <h4>${target} (${matches.length} connections)</h4>
+                    <ul style="margin-left: 20px; color: #ccc;">
+                        ${matches.slice(0, 5).map(m =>
+                            `<li>${m['First Name']} ${m['Last Name']} - ${m['Position'] || 'Unknown role'}</li>`
+                        ).join('')}
+                        ${matches.length > 5 ? `<li style="color: #888;">... and ${matches.length - 5} more</li>` : ''}
+                    </ul>
+                </div>`;
+            }).join('');
+
+            document.getElementById('target-companies').innerHTML = targetHtml || '<p style="color: #666;">No connections at target companies found.</p>';
+        }
+
+        function renderRossTable() {
+            const rossAlumni = connections.filter(c => c.tags.includes('ross'))
+                .sort((a, b) => b.score - a.score);
+
+            const tbody = document.getElementById('ross-tbody');
+            tbody.innerHTML = rossAlumni.map(c => `<tr>
+                <td>${c['First Name']} ${c['Last Name']}</td>
+                <td>${c['Position'] || '-'}</td>
+                <td>${c['Company'] || '-'}</td>
+                <td>${c['Connected On'] || '-'}</td>
+                <td>
+                    <a href="${c['URL']}" target="_blank" class="btn btn-primary" style="padding: 5px 10px; font-size: 0.85em;">LinkedIn</a>
+                    <button class="btn btn-success" style="padding: 5px 10px; font-size: 0.85em;" onclick="addToCRM('${c['First Name']}', '${c['Last Name']}', '${c['Company']}', '${c['Position']}', '${c['URL']}', 'ross-alumni')">+ CRM</button>
+                </td>
+            </tr>`).join('');
+        }
+
+        function renderMessages() {
+            if (messages.length === 0) {
+                document.getElementById('message-list').innerHTML = '<p style="color: #666;">No messages loaded. Upload messages.csv for conversation analysis.</p>';
+                return;
+            }
+
+            // Group by conversation and get unique contacts
+            const conversations = {};
+            messages.forEach(m => {
+                const from = m['FROM'] || m['From'];
+                const content = m['CONTENT'] || m['Content'];
+                const date = m['DATE'] || m['Date'];
+
+                if (!from || from === 'Luis Calderon') return;
+
+                if (!conversations[from]) {
+                    conversations[from] = { messages: [], lastDate: date };
+                }
+                conversations[from].messages.push({ content, date });
+                if (new Date(date) > new Date(conversations[from].lastDate)) {
+                    conversations[from].lastDate = date;
+                }
+            });
+
+            // Sort by recency
+            const sortedConvos = Object.entries(conversations)
+                .sort((a, b) => new Date(b[1].lastDate) - new Date(a[1].lastDate))
+                .slice(0, 50);
+
+            const html = sortedConvos.map(([name, data]) => `
+                <div class="message-preview">
+                    <div class="from">${name}</div>
+                    <div class="date">Last message: ${new Date(data.lastDate).toLocaleDateString()}</div>
+                    <div class="content">${data.messages[0]?.content?.substring(0, 200) || 'No content'}...</div>
+                </div>
+            `).join('');
+
+            document.getElementById('message-list').innerHTML = html;
+        }
+
+        function renderInsights() {
+            const rossCount = connections.filter(c => c.tags.includes('ross')).length;
+            const pmCount = connections.filter(c => c.tags.includes('pm')).length;
+            const seniorCount = connections.filter(c =>
+                c.tags.includes('director') || c.tags.includes('vp') || c.tags.includes('c-suite')
+            ).length;
+
+            // Network analysis
+            document.getElementById('network-analysis').innerHTML = `
+                <p>Your network has <strong>${connections.length.toLocaleString()}</strong> connections:</p>
+                <ul style="margin: 10px 0 0 20px; color: #ccc;">
+                    <li><strong>${rossCount}</strong> Ross alumni (${(rossCount/connections.length*100).toFixed(1)}%) - YOUR WARMEST LEADS</li>
+                    <li><strong>${pmCount}</strong> product professionals (${(pmCount/connections.length*100).toFixed(1)}%)</li>
+                    <li><strong>${seniorCount}</strong> senior leaders (Directors/VPs/C-Suite)</li>
+                </ul>
+            `;
+
+            // Outreach strategy
+            const highPriority = connections.filter(c => c.score >= 50).length;
+            document.getElementById('outreach-strategy').innerHTML = `
+                <p><strong>Recommended outreach order:</strong></p>
+                <ol style="margin: 10px 0 0 20px; color: #ccc;">
+                    <li>Ross alumni at target companies (${connections.filter(c => c.tags.includes('ross') && c.score >= 60).length} contacts) - Highest conversion</li>
+                    <li>All Ross alumni (${rossCount} contacts) - "Go Blue" connection</li>
+                    <li>Product leaders you've messaged before - Warm reconnection</li>
+                    <li>Senior leaders at target companies (${connections.filter(c => c.score >= 40 && !c.tags.includes('ross')).length} contacts)</li>
+                </ol>
+                <p style="margin-top: 15px;"><strong>You have ${highPriority} high-priority contacts</strong> (score 50+) to focus on first.</p>
+            `;
+
+            // Gap analysis
+            document.getElementById('gap-analysis').innerHTML = `
+                <p><strong>Network gaps to fill:</strong></p>
+                <ul style="margin: 10px 0 0 20px; color: #ccc;">
+                    <li>Consider connecting with more people at: Stripe, OpenAI, Anthropic, Scale AI</li>
+                    <li>Your Ross network is strong - leverage it for warm intros</li>
+                    <li>Focus outreach on Directors/VPs who can refer you to hiring managers</li>
+                </ul>
+            `;
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        // Filtering
+        function filterPriorityTable() {
+            const search = document.getElementById('priority-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#priority-tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+
+        function filterRossTable() {
+            const search = document.getElementById('ross-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#ross-tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+
+        function filterMessages() {
+            const search = document.getElementById('message-search').value.toLowerCase();
+            const items = document.querySelectorAll('.message-preview');
+
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+
+        // CRM Integration
+        function addToCRM(firstName, lastName, company, title, linkedin, source) {
+            const contacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+
+            // Check for duplicates
+            const exists = contacts.some(c =>
+                c.firstName === firstName && c.lastName === lastName && c.company === company
+            );
+
+            if (exists) {
+                alert('Contact already exists in CRM!');
+                return;
+            }
+
+            contacts.push({
+                id: Date.now().toString(),
+                firstName,
+                lastName,
+                company,
+                title,
+                linkedin,
+                source: source.includes('ross') ? 'ross-alumni' : 'linkedin',
+                status: 'new',
+                createdAt: new Date().toISOString(),
+                notes: `Imported from LinkedIn data. Tags: ${source}`
+            });
+
+            localStorage.setItem('jobSearchContacts', JSON.stringify(contacts));
+            // Trigger cloud sync
+            if (typeof SyncManager !== 'undefined') SyncManager.triggerSync();
+            alert(`Added ${firstName} ${lastName} to CRM!`);
+        }
+
+        function exportToCRM() {
+            let toExport = [];
+
+            if (document.getElementById('export-ross').checked) {
+                toExport.push(...connections.filter(c => c.tags.includes('ross')));
+            }
+            if (document.getElementById('export-pm').checked) {
+                toExport.push(...connections.filter(c => c.tags.includes('pm') && !c.tags.includes('ross')));
+            }
+            if (document.getElementById('export-senior').checked) {
+                toExport.push(...connections.filter(c =>
+                    (c.tags.includes('director') || c.tags.includes('vp') || c.tags.includes('c-suite')) &&
+                    !c.tags.includes('ross') && !c.tags.includes('pm')
+                ));
+            }
+            if (document.getElementById('export-recent').checked) {
+                toExport.push(...connections.filter(c =>
+                    c.tags.includes('recent') &&
+                    !c.tags.includes('ross') && !c.tags.includes('pm') &&
+                    !c.tags.includes('director') && !c.tags.includes('vp') && !c.tags.includes('c-suite')
+                ));
+            }
+
+            // Remove duplicates
+            const seen = new Set();
+            toExport = toExport.filter(c => {
+                const key = `${c['First Name']}-${c['Last Name']}-${c['Company']}`;
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+
+            // Convert to CRM format
+            const crmContacts = toExport.map(c => ({
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                firstName: c['First Name'],
+                lastName: c['Last Name'],
+                company: c['Company'],
+                title: c['Position'],
+                linkedin: c['URL'],
+                source: c.tags.includes('ross') ? 'ross-alumni' : 'linkedin',
+                status: 'new',
+                createdAt: new Date().toISOString(),
+                notes: `Score: ${c.score}. Tags: ${c.tags.join(', ')}`
+            }));
+
+            // Merge with existing
+            const existing = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+            const merged = [...existing, ...crmContacts];
+            localStorage.setItem('jobSearchContacts', JSON.stringify(merged));
+            // Trigger cloud sync
+            if (typeof SyncManager !== 'undefined') SyncManager.triggerSync();
+
+            alert(`Exported ${crmContacts.length} contacts to CRM!\n\nGo to your dashboard to see them.`);
+        }
+
+        function exportToCSV() {
+            const sorted = [...connections].sort((a, b) => b.score - a.score);
+            const headers = ['Score', 'First Name', 'Last Name', 'Company', 'Position', 'Tags', 'Connected On', 'LinkedIn URL'];
+            const rows = sorted.map(c => [
+                c.score,
+                c['First Name'],
+                c['Last Name'],
+                c['Company'],
+                c['Position'],
+                c.tags.join('; '),
+                c['Connected On'],
+                c['URL']
+            ]);
+
+            const csv = [headers, ...rows].map(row => row.map(cell => `"${cell || ''}"`).join(',')).join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'linkedin-connections-analyzed.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

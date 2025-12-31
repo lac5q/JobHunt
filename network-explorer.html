@@ -1,0 +1,2860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Explorer - 3D Spatial Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(15, 15, 25, 0.95);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            width: 320px;
+            backdrop-filter: blur(20px);
+            max-height: calc(100vh - 60px);
+            overflow-y: scroll !important;
+            overflow-x: hidden;
+            padding-bottom: 40px;
+        }
+
+        .control-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .control-panel::-webkit-scrollbar-track {
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px;
+        }
+
+        .control-panel::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 4px;
+        }
+
+        .control-panel::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+
+        .scroll-indicator {
+            text-align: center;
+            padding: 10px;
+            color: #6366f1;
+            font-size: 0.75rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .control-panel h1 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .control-panel .subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-box .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .stat-box .label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            margin: 15px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Info tooltip */
+        .info-tip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .info-tip:hover {
+            background: rgba(99, 102, 241, 0.5);
+            transform: scale(1.1);
+        }
+
+        /* Tooltip popup */
+        .tooltip-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15, 15, 25, 0.98);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 450px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 300;
+            display: none;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .tooltip-popup.visible {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .tooltip-popup h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #a5b4fc;
+        }
+
+        .tooltip-popup p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .tooltip-popup .tier-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .tooltip-popup .tier-badge {
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .tooltip-popup .close-tip {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .tooltip-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 250;
+            display: none;
+        }
+
+        .tooltip-overlay.visible {
+            display: block;
+        }
+
+        /* Company Filter Styles */
+        .company-filter-container {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .company-filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .company-filter-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .company-filter-actions button {
+            padding: 4px 8px;
+            font-size: 0.65rem;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .company-filter-actions button:hover {
+            background: rgba(99, 102, 241, 0.4);
+        }
+
+        .company-search {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .company-search::placeholder {
+            color: #64748b;
+        }
+
+        .company-list {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .company-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .company-list::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 3px;
+        }
+
+        .company-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .company-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .company-item input[type="checkbox"] {
+            accent-color: #6366f1;
+            width: 14px;
+            height: 14px;
+        }
+
+        .company-item label {
+            flex: 1;
+            font-size: 0.75rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .company-item .company-count {
+            font-size: 0.65rem;
+            color: #64748b;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .company-item .tier-indicator {
+            font-size: 0.6rem;
+            padding: 2px 5px;
+            border-radius: 4px;
+            margin-left: 4px;
+        }
+
+        .tier-1 { background: rgba(236, 72, 153, 0.3); color: #f472b6; }
+        .tier-2 { background: rgba(139, 92, 246, 0.3); color: #c4b5fd; }
+        .tier-3 { background: rgba(99, 102, 241, 0.3); color: #a5b4fc; }
+        .tier-4 { background: rgba(59, 130, 246, 0.3); color: #93c5fd; }
+        .tier-5 { background: rgba(100, 116, 139, 0.3); color: #94a3b8; }
+
+        .company-filter-stats {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-align: center;
+            padding-top: 8px;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            margin-top: 8px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(99, 102, 241, 0.1);
+            color: #a5b4fc;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .filter-btn.active {
+            background: #6366f1;
+            color: white;
+            border-color: #6366f1;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .search-box::placeholder {
+            color: #64748b;
+        }
+
+        .view-modes {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .view-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(99, 102, 241, 0.1);
+            color: #a5b4fc;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .view-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .view-btn.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            border: 2px dashed rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-section:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-section.loaded {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(15, 15, 25, 0.95);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            width: 350px;
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+
+        .info-panel.visible {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .info-panel .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .contact-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .contact-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .contact-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .contact-title {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .contact-company {
+            font-size: 0.9rem;
+            color: #a5b4fc;
+        }
+
+        .contact-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 15px 0;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .tag.priority { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .tag.vp { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+        .tag.director { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .tag.pm { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .tag.ross { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .tag.target { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+
+        .contact-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn.primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+        }
+
+        /* Legend - moved to bottom right */
+        .legend {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(15, 15, 25, 0.9);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .legend.hidden {
+            transform: translateX(calc(100% + 20px));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .legend-toggle {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            z-index: 99;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #a5b4fc;
+            font-size: 0.75rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-toggle:hover {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        .legend-toggle.legend-visible {
+            transform: translateX(-280px);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* Reset Button */
+        .reset-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 10px 16px;
+            color: #fca5a5;
+            font-size: 0.8rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .reset-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Instructions */
+        .instructions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(15, 15, 25, 0.9);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.75rem;
+            color: #64748b;
+            backdrop-filter: blur(10px);
+        }
+
+        .instructions kbd {
+            background: rgba(99, 102, 241, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #a5b4fc;
+        }
+
+        /* Help Modal */
+        .help-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .help-modal.visible {
+            display: flex;
+        }
+
+        .help-content {
+            background: rgba(15, 15, 25, 0.98);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .help-content h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .help-content h3 {
+            font-size: 1rem;
+            color: #a5b4fc;
+            margin: 20px 0 10px;
+        }
+
+        .help-content p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .help-content .view-example {
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .help-content .view-example strong {
+            color: #6366f1;
+        }
+
+        .help-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .help-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .help-btn:hover {
+            background: rgba(99, 102, 241, 0.3);
+        }
+
+        /* Priority Slider */
+        .slider-container {
+            margin-bottom: 15px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .slider-value {
+            background: rgba(99, 102, 241, 0.2);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #a5b4fc;
+            font-weight: 600;
+        }
+
+        .priority-slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, #64748b 0%, #6366f1 50%, #ef4444 100%);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .priority-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            border: 2px solid #6366f1;
+            transition: transform 0.2s;
+        }
+
+        .priority-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .priority-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            border: 2px solid #6366f1;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(99, 102, 241, 0.2);
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Priority Score Display */
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .score-high { background: linear-gradient(135deg, #ef4444, #f97316); }
+        .score-medium { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .score-low { background: linear-gradient(135deg, #64748b, #475569); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 3px;
+        }
+    </style>
+    <script src="sync-manager.js"></script>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+        <div>Initializing Network Explorer...</div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <h1>Network Explorer <span style="font-size: 1rem; cursor: pointer; opacity: 0.7; float: right;" onclick="document.getElementById('configModal').classList.add('visible')" title="Configure Scoring">⚙️</span></h1>
+        <div class="subtitle">3D Spatial Navigation</div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="value" id="totalCount">0</div>
+                <div class="label">Connections</div>
+            </div>
+            <div class="stat-box">
+                <div class="value" id="visibleCount">0</div>
+                <div class="label">Visible</div>
+            </div>
+            <div class="stat-box">
+                <div class="value" id="priorityCount">0</div>
+                <div class="label">High Priority</div>
+            </div>
+            <div class="stat-box">
+                <div class="value" id="companyCount">0</div>
+                <div class="label">Companies</div>
+            </div>
+        </div>
+
+        <div class="upload-section" id="uploadSection" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📁</div>
+            <div>Drop Connections.csv or click to upload</div>
+            <input type="file" id="fileInput" accept=".csv" style="display: none">
+        </div>
+
+        <input type="text" class="search-box" id="searchBox" placeholder="Search name, company, or title...">
+
+        <div class="section-title">View Mode</div>
+        <div class="view-modes">
+            <button class="view-btn active" data-view="galaxy">Galaxy</button>
+            <button class="view-btn" data-view="cluster">Cluster</button>
+            <button class="view-btn" data-view="hierarchy">Hierarchy</button>
+        </div>
+
+        <div class="section-title">Filter by Role</div>
+        <div class="filter-group" id="roleFilters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="vp">VP+</button>
+            <button class="filter-btn" data-filter="director">Directors</button>
+            <button class="filter-btn" data-filter="pm">Product</button>
+            <button class="filter-btn" data-filter="ceo">CEO/Founder</button>
+            <button class="filter-btn" data-filter="ross">Ross Alumni</button>
+        </div>
+
+        <div class="section-title">Minimum Priority Score <span class="info-tip" onclick="showTooltip('priority')">?</span></div>
+        <div class="slider-container">
+            <div class="slider-header">
+                <span>Show contacts with score:</span>
+                <span class="slider-value" id="sliderValue">0+</span>
+            </div>
+            <input type="range" min="0" max="100" value="0" class="priority-slider" id="prioritySlider">
+            <div class="slider-labels">
+                <span>All</span>
+                <span>Medium (40+)</span>
+                <span>High (70+)</span>
+            </div>
+        </div>
+
+        <div class="section-title">Service Potential <span class="info-tip" onclick="showTooltip('service')">?</span></div>
+        <div class="slider-container">
+            <div class="slider-header">
+                <span>Min Potential:</span>
+                <span class="slider-value" id="serviceValue">All</span>
+            </div>
+            <input type="range" min="0" max="3" value="0" class="priority-slider" id="serviceSlider" style="background: linear-gradient(to right, #64748b 0%, #34d399 100%);">
+            <div class="slider-labels">
+                <span>All</span>
+                <span>Low</span>
+                <span>Med</span>
+                <span>High</span>
+            </div>
+        </div>
+
+        <div class="section-title">Target Company Tier <span class="info-tip" onclick="showTooltip('tier')">?</span></div>
+        <div class="slider-container">
+            <div class="slider-header">
+                <span>Prioritize companies:</span>
+                <span class="slider-value" id="companyTierValue">All Tiers</span>
+            </div>
+            <input type="range" min="1" max="5" value="5" class="priority-slider" id="companyTierSlider" style="background: linear-gradient(to right, #ec4899 0%, #8b5cf6 25%, #6366f1 50%, #3b82f6 75%, #64748b 100%);">
+            <div class="slider-labels">
+                <span>Tier 1</span>
+                <span>Tier 2</span>
+                <span>Tier 3</span>
+                <span>Tier 4</span>
+                <span>All</span>
+            </div>
+            <div style="font-size: 0.65rem; color: #64748b; margin-top: 8px; line-height: 1.4;">
+                <strong style="color: #ec4899;">T1:</strong> OpenAI, Anthropic, Stripe, Figma<br>
+                <strong style="color: #8b5cf6;">T2:</strong> Datadog, Plaid, Notion, Vercel<br>
+                <strong style="color: #6366f1;">T3:</strong> HubSpot, Asana, Rippling<br>
+                <strong style="color: #3b82f6;">T4:</strong> Google, Meta, Amazon, Apple
+            </div>
+        </div>
+
+        <div class="section-title">Connection Degree</div>
+        <div class="filter-group" id="degreeFilters">
+            <button class="filter-btn active" data-degree="all">All</button>
+            <button class="filter-btn" data-degree="1">1st Degree</button>
+            <button class="filter-btn" data-degree="2">2nd Degree+</button>
+        </div>
+
+        <div class="section-title">Review Status</div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+            <input type="checkbox" id="showReviewed" style="accent-color: #6366f1; width: 16px; height: 16px; cursor: pointer;">
+            <label for="showReviewed" style="font-size: 0.8rem; color: #94a3b8; cursor: pointer;">Show Reviewed Contacts</label>
+        </div>
+
+        <div class="section-title">Filter Companies <span class="info-tip" onclick="showTooltip('companies')">?</span></div>
+        <div class="company-filter-container">
+            <div class="company-filter-header">
+                <span style="font-size: 0.7rem; color: #94a3b8;">Include/Exclude</span>
+                <div class="company-filter-actions">
+                    <button onclick="selectAllCompanies()">Select All</button>
+                    <button onclick="deselectAllCompanies()">Deselect All</button>
+                </div>
+            </div>
+            <input type="text" class="company-search" id="companySearch" placeholder="Search companies...">
+            <div class="company-list" id="companyList">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="company-filter-stats" id="companyFilterStats">
+                Loading companies...
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tooltip Overlay -->
+    <div class="tooltip-overlay" id="tooltipOverlay" onclick="hideTooltip()"></div>
+
+    <!-- Priority Score Tooltip -->
+    <div class="tooltip-popup" id="tooltipPriority">
+        <button class="close-tip" onclick="hideTooltip()">&times;</button>
+        <h3>Priority Score Explained</h3>
+        <p>Each contact is scored based on how valuable they might be for your job search:</p>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: #fbbf24; color: #000;">+50</span>
+            <span>Ross Alumni - Your strongest network connections</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: #ef4444;">+30</span>
+            <span>CEO/Founder - Decision makers and founders</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: #ec4899;">+30</span>
+            <span>Target Company - Works at a company you're targeting</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: #8b5cf6;">+25</span>
+            <span>VP/Vice President - Senior leadership</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: #6366f1;">+20</span>
+            <span>Product Manager - Your peer network</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: #3b82f6;">+15</span>
+            <span>Director - Mid-senior leadership</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: #64748b;">+15</span>
+            <span>Big Tech - Google, Meta, Amazon, Apple, Microsoft</span>
+        </div>
+        <p style="margin-top: 15px;"><strong>Color coding:</strong> Red (70+), Purple (40-69), Gray (&lt;40)</p>
+    </div>
+
+    <!-- Service Potential Tooltip -->
+    <div class="tooltip-popup" id="tooltipService">
+        <button class="close-tip" onclick="hideTooltip()">&times;</button>
+        <h3>Service Potential</h3>
+        <p>How much value can you offer them?</p>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">High</span>
+            <span><strong>Founders & Early Stage</strong> - Need strategic advice, scaling help.</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;">Medium</span>
+            <span><strong>Mid-Level PMs</strong> - Need mentorship and coaching.</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge" style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc;">Low</span>
+            <span><strong>Recruiters & Talent</strong> - Transactional relationship.</span>
+        </div>
+    </div>
+
+    <!-- Company Tier Tooltip -->
+    <div class="tooltip-popup" id="tooltipTier">
+        <button class="close-tip" onclick="hideTooltip()">&times;</button>
+        <h3>Company Tier System</h3>
+        <p>Companies are ranked based on how well they match your ideal target profile (AI/ML + Product-Led Growth + E-commerce/Fintech):</p>
+        <div class="tier-row">
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span><strong>Perfect Match (100 pts)</strong> - OpenAI, Anthropic, Stripe, Figma, Notion, Shopify, Klaviyo</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span><strong>Strong Match (80 pts)</strong> - Datadog, Snowflake, Plaid, Coinbase, Atlassian, NVIDIA</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge tier-3">Tier 3</span>
+            <span><strong>Good Match (60 pts)</strong> - Intuit, Adobe, Salesforce, PayPal, LinkedIn, ServiceNow</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge tier-4">Tier 4</span>
+            <span><strong>Decent Match (40 pts)</strong> - Google, Meta, Amazon, Apple, Microsoft, Uber</span>
+        </div>
+        <div class="tier-row">
+            <span class="tier-badge tier-5">Tier 5</span>
+            <span><strong>In Network (20 pts)</strong> - Other companies where you have connections</span>
+        </div>
+        <p style="margin-top: 15px;"><strong>Node size:</strong> Larger nodes = higher tier companies</p>
+    </div>
+
+    <!-- Company Filter Tooltip -->
+    <div class="tooltip-popup" id="tooltipCompanies">
+        <button class="close-tip" onclick="hideTooltip()">&times;</button>
+        <h3>Company Filter</h3>
+        <p>Use this filter to include or exclude specific companies from the visualization:</p>
+        <p><strong>Select All:</strong> Show contacts from all companies</p>
+        <p><strong>Deselect All:</strong> Hide all contacts (then select specific companies)</p>
+        <p><strong>Search:</strong> Type to quickly find and toggle specific companies</p>
+        <p><strong>Checkboxes:</strong> Check/uncheck to include/exclude that company's contacts</p>
+        <p style="margin-top: 15px;">Companies are sorted by number of connections, with tier indicators showing their match level.</p>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="info-panel" id="infoPanel">
+        <button class="close-btn" onclick="closeInfoPanel()">&times;</button>
+        <div class="contact-header">
+            <div class="contact-avatar" id="contactAvatar">JD</div>
+            <div>
+                <div class="contact-name" id="contactName">John Doe</div>
+                <div class="contact-title" id="contactTitle">VP of Product</div>
+                <div class="contact-company" id="contactCompany">Stripe</div>
+            </div>
+        </div>
+        <div class="contact-tags" id="contactTags"></div>
+        <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+            <span style="color: #64748b; font-size: 0.8rem;">Priority Score:</span>
+            <span class="score-badge score-high" id="contactScore">85</span>
+        </div>
+        <div style="margin: 15px 0; border-top: 1px solid rgba(99, 102, 241, 0.2); padding-top: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 0.8rem; color: #a5b4fc; text-transform: uppercase; letter-spacing: 1px;">Intelligence</span>
+            </div>
+            
+            <div id="aiInsightsPlaceholder" style="display: block;">
+                <button onclick="analyzeContact()" style="width: 100%; padding: 8px; background: rgba(99, 102, 241, 0.1); border: 1px border: 1px dashed rgba(99, 102, 241, 0.4); color: #a5b4fc; border-radius: 8px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+                    <span>✨</span> Analyze Contact & Company
+                </button>
+            </div>
+
+            <div id="aiInsightsResult" style="display: none; font-size: 0.85rem; color: #cbd5e1;">
+                <div style="margin-bottom: 12px;">
+                    <div style="color: #818cf8; font-weight: 600; margin-bottom: 4px;">Why Reach Out?</div>
+                    <div id="insightHook" style="line-height: 1.4;"></div>
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <div style="color: #818cf8; font-weight: 600; margin-bottom: 4px;">Talking Points</div>
+                    <ul id="insightPoints" style="margin: 0; padding-left: 20px; color: #94a3b8;"></ul>
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                    <a id="newsLinkCompany" href="#" target="_blank" style="flex: 1; text-align: center; padding: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; color: #cbd5e1; text-decoration: none; font-size: 0.75rem; border: 1px solid rgba(255, 255, 255, 0.1);">📰 Company News</a>
+                    <a id="newsLinkPerson" href="#" target="_blank" style="flex: 1; text-align: center; padding: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; color: #cbd5e1; text-decoration: none; font-size: 0.75rem; border: 1px solid rgba(255, 255, 255, 0.1);">🔍 Person Search</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">
+            Connected: <span id="contactConnected">Dec 2025</span>
+        </div>
+        <div class="contact-actions">
+            <a class="action-btn primary" id="linkedinLink" href="#" target="_blank">LinkedIn</a>
+            <button class="action-btn secondary" onclick="addToCRM()">+ CRM</button>
+            <button class="action-btn secondary" onclick="generateEmail()" style="background: linear-gradient(135deg, #667eea, #764ba2);">✉ Email</button>
+            <button class="action-btn secondary" onclick="toggleReviewed()" id="reviewBtn" style="background: rgba(255, 255, 255, 0.1);">👁️ Mark Reviewed</button>
+        </div>
+    </div>
+
+    <!-- Legend with toggle -->
+    <button class="legend-toggle" id="legendToggle" onclick="toggleLegend()">
+        <span id="legendToggleIcon">◀</span> Legend
+    </button>
+    <div class="legend" id="legend">
+        <div style="font-weight: 600; margin-bottom: 8px; font-size: 0.8rem;">Color = Priority Score</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #ef4444;"></div> High Priority (70+)</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #6366f1;"></div> Medium Priority (40+)</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #64748b;"></div> Standard</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #fbbf24;"></div> Ross Alumni</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #ec4899;"></div> Target Company</div>
+        <div style="font-weight: 600; margin: 12px 0 8px; font-size: 0.8rem;">Size = Company Tier</div>
+        <div class="legend-item"><div class="legend-dot" style="width: 16px; height: 16px; background: #a5b4fc;"></div> Tier 1 (Perfect)</div>
+        <div class="legend-item"><div class="legend-dot" style="width: 13px; height: 13px; background: #a5b4fc;"></div> Tier 2 (Strong)</div>
+        <div class="legend-item"><div class="legend-dot" style="width: 10px; height: 10px; background: #a5b4fc;"></div> Tier 3-4</div>
+        <div class="legend-item"><div class="legend-dot" style="width: 7px; height: 7px; background: #a5b4fc;"></div> Tier 5 / Other</div>
+    </div>
+
+    <!-- Reset Button -->
+    <button class="reset-btn" onclick="resetFilters()">↺ Reset All Filters</button>
+
+    <!-- Help Button -->
+    <button class="help-btn" onclick="document.getElementById('helpModal').classList.add('visible')">? How to Use</button>
+
+    <!-- Instructions -->
+    <div class="instructions">
+        <kbd>Drag</kbd> Rotate view &nbsp; <kbd>Scroll</kbd> Zoom &nbsp; <kbd>Click</kbd> Select node
+    </div>
+
+    <!-- Help Modal -->
+    <div class="help-modal" id="helpModal" onclick="if(event.target === this) this.classList.remove('visible')">
+        <div class="help-content">
+            <h2>How to Navigate Your Network</h2>
+
+            <h3>Basic Controls</h3>
+            <p><strong>Drag</strong> anywhere to rotate the 3D view around your network.</p>
+            <p><strong>Scroll</strong> to zoom in and out.</p>
+            <p><strong>Click</strong> on any dot (node) to see that person's details and LinkedIn profile.</p>
+
+            <h3>View Modes Explained</h3>
+
+            <div class="view-example">
+                <strong>Galaxy View (Default)</strong>
+                <p>Your network displayed as a spiral galaxy. High-priority contacts (VPs, Directors at target companies) are pulled toward the center, making them easier to spot. Lower priority contacts orbit further out. Great for finding your most valuable connections quickly.</p>
+            </div>
+
+            <div class="view-example">
+                <strong>Cluster View</strong>
+                <p>Groups contacts by company. Each cluster represents a company (Intuit, Google, Meta, etc.). Use this to see which companies you have the most connections at, and identify potential referral paths. Contacts at the same company will be grouped together.</p>
+            </div>
+
+            <div class="view-example">
+                <strong>Hierarchy View</strong>
+                <p>Stacks contacts by seniority level. CEOs and Founders at the top, VPs in the middle, Directors below, and others at the bottom. Perfect for identifying senior leaders in your network who could be hiring managers or referral sources.</p>
+            </div>
+
+            <h3>Priority Scoring</h3>
+            <p>Each contact is automatically scored based on:</p>
+            <p>• <strong>Ross Alumni:</strong> +50 points (your strongest network)</p>
+            <p>• <strong>CEO/Founder:</strong> +30 points</p>
+            <p>• <strong>Target Companies:</strong> +30 points (Stripe, OpenAI, Anthropic, etc.)</p>
+            <p>• <strong>VP/Vice President:</strong> +25 points</p>
+            <p>• <strong>Product Manager:</strong> +20 points</p>
+            <p>• <strong>Director:</strong> +15 points</p>
+            <p>• <strong>Big Tech:</strong> +15 points (Google, Meta, Amazon, Apple, Microsoft)</p>
+
+            <h3>Filters</h3>
+            <p>Use the left panel to filter by role (VP+, Directors, Product, etc.), company, or priority level. The visualization updates in real-time.</p>
+
+            <h3>Taking Action</h3>
+            <p>Click any node to see details. From there you can:</p>
+            <p>• <strong>View LinkedIn</strong> - Opens their profile to reconnect</p>
+            <p>• <strong>Add to CRM</strong> - Saves them to your job search dashboard for tracking</p>
+
+            <button onclick="document.getElementById('helpModal').classList.remove('visible')" style="margin-top: 20px; padding: 12px 24px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Config Modal -->
+    <div class="help-modal" id="configModal" onclick="if(event.target === this) this.classList.remove('visible')">
+        <div class="help-content" style="max-width: 500px;">
+            <h2>Scoring Configuration</h2>
+            <p>Adjust the points assigned to each criteria for the Priority Score.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 80px; gap: 10px; align-items: center; margin-bottom: 20px;">
+                <label>Ross Alumni</label> <input type="number" id="weight-ross" value="50" style="padding: 5px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 1px solid #444; color: white;">
+                <label>CEO/Founder</label> <input type="number" id="weight-ceo" value="30" style="padding: 5px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 1px solid #444; color: white;">
+                <label>Target Company (Tier 1-2)</label> <input type="number" id="weight-target" value="30" style="padding: 5px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 1px solid #444; color: white;">
+                <label>VP Level</label> <input type="number" id="weight-vp" value="25" style="padding: 5px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 1px solid #444; color: white;">
+                <label>Product Manager</label> <input type="number" id="weight-pm" value="20" style="padding: 5px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 1px solid #444; color: white;">
+                <label>Director Level</label> <input type="number" id="weight-director" value="15" style="padding: 5px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 1px solid #444; color: white;">
+                <label>Big Tech</label> <input type="number" id="weight-bigtech" value="15" style="padding: 5px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 1px solid #444; color: white;">
+                <label>Service Potential (1=Low, 2=Med, 3=High)</label> <input type="number" id="weight-service" value="10" style="padding: 5px; border-radius: 5px; background: rgba(255,255,255,0.1); border: 1px solid #444; color: white;">
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button onclick="document.getElementById('configModal').classList.remove('visible')" style="padding: 10px 20px; background: transparent; color: #94a3b8; border: 1px solid #444; border-radius: 8px; cursor: pointer;">Cancel</button>
+                <button onclick="saveConfig()" style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer;">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="connections-data.js"></script>
+    <script src="target-companies.js"></script>
+    <script>
+        // Global state
+        let contacts = [];
+        let nodes = [];
+        let scene, camera, renderer, raycaster, mouse;
+        let currentFilter = 'all';
+        let currentCompanyFilter = 'all';
+        let currentPriorityFilter = 0;
+        let currentCompanyTier = 5; // 1-5, where 5 means "all tiers"
+        let currentDegreeFilter = 'all';
+        let currentServiceFilter = 0; // 0=All, 1=Low, 2=Med, 3=High
+        let showReviewedContacts = false;
+        let reviewedContacts = new Set(JSON.parse(localStorage.getItem('reviewedContacts') || '[]'));
+        let currentView = 'galaxy';
+        let selectedNode = null;
+        let isRotating = true;
+        let rotationSpeed = 0.0005;
+
+        // Configurable Weights - Company-Focused Prioritization
+        let SCORING_WEIGHTS = {
+            tier1_company: 60,  // AI-first companies (Series B-D)
+            tier2_company: 40,  // Traditional companies adding AI
+            ross: 45,           // Ross connection still valuable
+            director: 30,       // Director/Head of Product (sweet spot)
+            vp: 25,             // VP at smaller companies
+            ceo: 25,            // CEO/Founder access
+            target: 25,         // General target company
+            pm: 15,             // Principal/Sr PM roles
+            bigtech: 10,        // De-prioritized (harder to get in)
+            service: 1          // Service potential multiplier
+        };
+
+        // Initialize Three.js scene
+        function initScene() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0f);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.z = 400;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Add ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            // Add point light
+            const pointLight = new THREE.PointLight(0x6366f1, 1, 1000);
+            pointLight.position.set(0, 0, 200);
+            scene.add(pointLight);
+
+            // Add stars background
+            addStars();
+
+            // Event listeners
+            window.addEventListener('resize', onWindowResize);
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+            renderer.domElement.addEventListener('click', onClick);
+            renderer.domElement.addEventListener('wheel', onWheel);
+            renderer.domElement.addEventListener('mousedown', onMouseDown);
+            renderer.domElement.addEventListener('mouseup', onMouseUp);
+
+            animate();
+        }
+
+        function addStars() {
+            const starGeometry = new THREE.BufferGeometry();
+            const starCount = 2000;
+            const positions = new Float32Array(starCount * 3);
+
+            for (let i = 0; i < starCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 2000;
+                positions[i + 1] = (Math.random() - 0.5) * 2000;
+                positions[i + 2] = (Math.random() - 0.5) * 2000;
+            }
+
+            starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const starMaterial = new THREE.PointsMaterial({ color: 0x444466, size: 1 });
+            const stars = new THREE.Points(starGeometry, starMaterial);
+            scene.add(stars);
+        }
+        
+        // Calculate Service Potential Score (How much can I help them?)
+        function calculateServiceScore(contact) {
+            let score = 0; // 0=None/Unknown, 1=Low, 2=Med, 3=High
+            
+            const position = (contact.Position || '').toLowerCase();
+            const companyInfo = contact.companyInfo;
+            
+            // High Potential: Founders/CEOs (need strategy), Early Stage Companies
+            if (contact.isCEO || contact.isFounder) {
+                score = 3;
+            } else if (companyInfo && companyInfo.tier <= 2) { 
+                // Tier 1/2 companies are often high growth/tech focus
+                score = 3;
+            }
+            
+            // Medium Potential: PMs/Directors (need mentoring/coaching)
+            else if (contact.isPM || contact.isDirector || contact.isVP) {
+                score = 2;
+            }
+            
+            // Low Potential: Recruiters (transactional), Big Corps (hard to influence)
+            else if (position.includes('recruiter') || position.includes('talent')) {
+                score = 1;
+            }
+            
+            contact.serviceScore = score;
+            return score;
+        }
+
+        // Calculate priority score for a contact
+        function calculateScore(contact) {
+            let score = 0;
+            const position = (contact.Position || '').toLowerCase();
+            const company = (contact.Company || '').toLowerCase();
+
+            // Ross/Michigan bonus
+            if (company.includes('michigan') || company.includes('ross') ||
+                position.includes('michigan') || position.includes('ross')) {
+                score += SCORING_WEIGHTS.ross;
+                contact.isRoss = true;
+            }
+
+            // Title bonuses
+            if (position.includes('vp') || position.includes('vice president')) {
+                score += SCORING_WEIGHTS.vp;
+                contact.isVP = true;
+            }
+            if (position.includes('director')) {
+                score += SCORING_WEIGHTS.director;
+                contact.isDirector = true;
+            }
+            if (position.includes('ceo') || position.includes('chief executive') ||
+                position.includes('founder') || position.includes('co-founder')) {
+                score += SCORING_WEIGHTS.ceo;
+                contact.isCEO = true;
+                contact.isFounder = true; // Helper
+            }
+            if (position.includes('product') && (position.includes('manager') ||
+                position.includes('management') || position.includes('lead'))) {
+                score += SCORING_WEIGHTS.pm;
+                contact.isPM = true;
+            }
+
+            // Company Tier Detection (Company-Focused Search)
+            contact.companyMatchScore = 0;
+            contact.companyInfo = null;
+            contact.companyTier = null;
+
+            // Tier 1: AI-First Companies (Series B-D)
+            const tier1Companies = [
+                'jasper', 'character.ai', 'perplexity', 'harvey', 'typeface',
+                'anthropic', 'openai', 'cohere', 'stability', 'midjourney',
+                'runway', 'adept', 'inflection', 'glean', 'copy.ai'
+            ];
+
+            // Tier 2: Traditional Companies Adding AI
+            const tier2Companies = [
+                'shopify', 'salesforce', 'adobe', 'intuit', 'servicenow',
+                'stripe', 'plaid', 'square', 'twilio', 'segment',
+                'hubspot', 'zendesk', 'atlassian', 'notion', 'airtable',
+                'figma', 'canva', 'miro', 'linear', 'vercel'
+            ];
+
+            // Big Tech (de-prioritized but still tracked)
+            const bigTech = ['google', 'meta', 'amazon', 'apple', 'microsoft', 'netflix'];
+
+            if (tier1Companies.some(t => company.includes(t))) {
+                score += SCORING_WEIGHTS.tier1_company;
+                contact.isTarget = true;
+                contact.companyTier = 'Tier 1: AI-First';
+                contact.companyMatchScore = 90;
+            } else if (tier2Companies.some(t => company.includes(t))) {
+                score += SCORING_WEIGHTS.tier2_company;
+                contact.isTarget = true;
+                contact.companyTier = 'Tier 2: AI Transformation';
+                contact.companyMatchScore = 75;
+            } else if (bigTech.some(t => company.includes(t))) {
+                score += SCORING_WEIGHTS.bigtech;
+                contact.companyTier = 'Big Tech';
+                contact.companyMatchScore = 40;
+            } else if (typeof TARGET_COMPANIES !== 'undefined') {
+                // Use comprehensive database if available
+                const companyInfo = getCompanyInfo(company);
+                if (companyInfo) {
+                    contact.companyMatchScore = companyInfo.score;
+                    contact.companyInfo = companyInfo;
+                    contact.isTarget = companyInfo.score >= 70;
+                    if (contact.isTarget) score += SCORING_WEIGHTS.target;
+                }
+            }
+            
+            // Calculate Service Score (Secondary)
+            calculateServiceScore(contact);
+            score += (contact.serviceScore || 0) * SCORING_WEIGHTS.service; // Integrate service potential
+
+            contact.score = score;
+            return score;
+        }
+
+        function saveConfig() {
+            SCORING_WEIGHTS.ross = parseInt(document.getElementById('weight-ross').value) || 0;
+            SCORING_WEIGHTS.ceo = parseInt(document.getElementById('weight-ceo').value) || 0;
+            SCORING_WEIGHTS.target = parseInt(document.getElementById('weight-target').value) || 0;
+            SCORING_WEIGHTS.vp = parseInt(document.getElementById('weight-vp').value) || 0;
+            SCORING_WEIGHTS.pm = parseInt(document.getElementById('weight-pm').value) || 0;
+            SCORING_WEIGHTS.director = parseInt(document.getElementById('weight-director').value) || 0;
+            SCORING_WEIGHTS.bigtech = parseInt(document.getElementById('weight-bigtech').value) || 0;
+            
+            // Recalculate
+            contacts.forEach(c => calculateScore(c));
+            createNodes();
+            document.getElementById('configModal').classList.remove('visible');
+        }
+
+        // Get color based on contact properties
+        function getNodeColor(contact) {
+            if (contact.isRoss) return 0xfbbf24; // Yellow for Ross
+            if (contact.isTarget) return 0xec4899; // Pink for target companies
+            if (contact.score >= 70) return 0xef4444; // Red for high priority
+            if (contact.score >= 40) return 0x6366f1; // Purple for medium
+            return 0x64748b; // Gray for standard
+        }
+
+        // Get node size based on company tier (bigger = higher tier)
+        function getNodeSize(contact) {
+            if (contact.companyInfo) {
+                switch (contact.companyInfo.tier) {
+                    case 1: return 5.5;  // Perfect match - largest
+                    case 2: return 4.5;  // Strong match
+                    case 3: return 3.8;  // Good match
+                    case 4: return 3.2;  // Decent match
+                    case 5: return 2.5;  // In network - smallest
+                }
+            }
+            return 2.5; // Default for unknown companies
+        }
+
+        // Create nodes from contacts
+        function createNodes() {
+            // Clear existing nodes
+            nodes.forEach(node => scene.remove(node));
+            nodes = [];
+
+            const filteredContacts = contacts.filter(contact => {
+                // Role filter
+                if (currentFilter !== 'all') {
+                    if (currentFilter === 'vp' && !contact.isVP) return false;
+                    if (currentFilter === 'director' && !contact.isDirector) return false;
+                    if (currentFilter === 'pm' && !contact.isPM) return false;
+                    if (currentFilter === 'ceo' && !contact.isCEO) return false;
+                    if (currentFilter === 'ross' && !contact.isRoss) return false;
+                }
+
+                // Company filter
+                if (currentCompanyFilter !== 'all') {
+                    const company = (contact.Company || '').toLowerCase();
+                    if (currentCompanyFilter === 'target' && !contact.isTarget) return false;
+                    if (currentCompanyFilter !== 'target' && !company.includes(currentCompanyFilter)) return false;
+                }
+
+                // Priority filter (now uses slider value as minimum score)
+                if (typeof currentPriorityFilter === 'number' && contact.score < currentPriorityFilter) return false;
+
+                // Service Potential Filter
+                if (currentServiceFilter > 0) {
+                    if ((contact.serviceScore || 0) < currentServiceFilter) return false;
+                }
+
+                // Target company filter - show only contacts at companies within selected tier
+                if (currentCompanyTier < 5) {
+                    // Must have company info and be within selected tier threshold
+                    if (!contact.companyInfo) return false;
+                    if (contact.companyInfo.tier > currentCompanyTier) return false;
+                }
+
+                // Connection Degree Filter
+                if (currentDegreeFilter !== 'all') {
+                    // Heuristic: Connections.csv usually contains only 1st degree.
+                    // But if data comes from other sources, check 'Connected On'.
+                    const isFirstDegree = !!contact['Connected On'];
+                    if (currentDegreeFilter === '1' && !isFirstDegree) return false;
+                    if (currentDegreeFilter === '2' && isFirstDegree) return false;
+                }
+
+                // Reviewed Status Filter
+                const contactId = `${contact['First Name']}-${contact['Last Name']}-${contact.Company}`;
+                const isReviewed = reviewedContacts.has(contactId);
+
+                // If "Show Reviewed" is CHECKED, show only reviewed contacts
+                if (showReviewedContacts && !isReviewed) return false;
+
+                // Search filter
+                const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+                if (searchTerm) {
+                    const name = `${contact['First Name']} ${contact['Last Name']}`.toLowerCase();
+                    const company = (contact.Company || '').toLowerCase();
+                    const position = (contact.Position || '').toLowerCase();
+                    if (!name.includes(searchTerm) && !company.includes(searchTerm) && !position.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            // Position nodes based on view mode
+            filteredContacts.forEach((contact, index) => {
+                const contactId = `${contact['First Name']}-${contact['Last Name']}-${contact.Company}`;
+                const isReviewed = reviewedContacts.has(contactId);
+
+                const geometry = new THREE.SphereGeometry(getNodeSize(contact), 16, 16);
+
+                // Create transparent material for reviewed contacts
+                const material = new THREE.MeshPhongMaterial({
+                    color: getNodeColor(contact),
+                    emissive: getNodeColor(contact),
+                    emissiveIntensity: isReviewed ? 0.1 : 0.3,
+                    shininess: 100,
+                    transparent: isReviewed,
+                    opacity: isReviewed ? 0.3 : 1.0  // Changed from 0.0 to 0.3 so reviewed contacts are visible
+                });
+                const node = new THREE.Mesh(geometry, material);
+
+                // Add dotted outline for reviewed contacts
+                if (isReviewed) {
+                    const edgesGeometry = new THREE.EdgesGeometry(geometry);
+                    const edgesMaterial = new THREE.LineDashedMaterial({
+                        color: getNodeColor(contact),
+                        linewidth: 1,
+                        scale: 1,
+                        dashSize: 2,
+                        gapSize: 2,
+                        transparent: true,
+                        opacity: 0.6
+                    });
+                    const outline = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+                    outline.computeLineDistances();
+                    node.add(outline);
+                }
+
+                // Position based on view mode
+                const pos = getNodePosition(contact, index, filteredContacts.length);
+                node.position.set(pos.x, pos.y, pos.z);
+
+                node.userData = contact;
+                scene.add(node);
+                nodes.push(node);
+            });
+
+            updateStats(filteredContacts.length);
+        }
+
+        // Get node position based on view mode
+        function getNodePosition(contact, index, total) {
+            switch (currentView) {
+                case 'galaxy':
+                    return getGalaxyPosition(contact, index, total);
+                case 'cluster':
+                    return getClusterPosition(contact, index, total);
+                case 'hierarchy':
+                    return getHierarchyPosition(contact, index, total);
+                default:
+                    return getGalaxyPosition(contact, index, total);
+            }
+        }
+
+        // Galaxy spiral view
+        function getGalaxyPosition(contact, index, total) {
+            const angle = (index / total) * Math.PI * 20;
+            const radius = 50 + (index / total) * 250;
+            const heightVar = (Math.random() - 0.5) * 50;
+
+            // High priority contacts closer to center
+            const priorityRadius = contact.score >= 70 ? radius * 0.5 : radius;
+
+            return {
+                x: Math.cos(angle) * priorityRadius,
+                y: heightVar + (contact.score / 100) * 50,
+                z: Math.sin(angle) * priorityRadius
+            };
+        }
+
+        // Cluster by company view
+        function getClusterPosition(contact, index, total) {
+            const company = (contact.Company || 'Other').toLowerCase();
+            let clusterIndex = 0;
+
+            const majorCompanies = ['intuit', 'google', 'meta', 'amazon', 'microsoft', 'apple'];
+            const companyIndex = majorCompanies.findIndex(c => company.includes(c));
+
+            if (companyIndex >= 0) {
+                clusterIndex = companyIndex;
+            } else if (contact.isTarget) {
+                clusterIndex = 6;
+            } else {
+                clusterIndex = 7 + (index % 5);
+            }
+
+            const clusterAngle = (clusterIndex / 12) * Math.PI * 2;
+            const clusterRadius = 150;
+            const spread = 60;
+
+            return {
+                x: Math.cos(clusterAngle) * clusterRadius + (Math.random() - 0.5) * spread,
+                y: (Math.random() - 0.5) * spread,
+                z: Math.sin(clusterAngle) * clusterRadius + (Math.random() - 0.5) * spread
+            };
+        }
+
+        // Hierarchy by seniority view
+        function getHierarchyPosition(contact, index, total) {
+            let tier = 0;
+            if (contact.isCEO) tier = 3;
+            else if (contact.isVP) tier = 2;
+            else if (contact.isDirector) tier = 1;
+
+            const tierY = tier * 80 - 80;
+            const angle = (index / total) * Math.PI * 8;
+            const radius = 100 + Math.random() * 100;
+
+            return {
+                x: Math.cos(angle) * radius,
+                y: tierY + (Math.random() - 0.5) * 30,
+                z: Math.sin(angle) * radius
+            };
+        }
+
+        // Parse CSV file
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            // Find header line (skip notes)
+            let headerIndex = lines.findIndex(line => line.startsWith('First Name'));
+            if (headerIndex === -1) return [];
+
+            const headers = lines[headerIndex].split(',').map(h => h.trim().replace(/"/g, ''));
+            const data = [];
+
+            for (let i = headerIndex + 1; i < lines.length; i++) {
+                const line = lines[i];
+                if (!line.trim()) continue;
+
+                // Parse CSV properly handling quoted fields
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+
+                for (let char of line) {
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+
+                if (values.length >= headers.length - 1) {
+                    const obj = {};
+                    headers.forEach((header, idx) => {
+                        obj[header] = values[idx] || '';
+                    });
+                    if (obj['First Name']) {
+                        calculateScore(obj);
+                        data.push(obj);
+                    }
+                }
+            }
+
+            return data;
+        }
+
+        // File upload handler
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                contacts = parseCSV(e.target.result);
+                createNodes();
+                document.getElementById('uploadSection').classList.add('loaded');
+                document.getElementById('uploadSection').innerHTML = `
+                    <div class="upload-icon">✅</div>
+                    <div>${contacts.length} contacts loaded</div>
+                `;
+            };
+            reader.readAsText(file);
+        });
+
+        // Filter handlers
+        document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                createNodes();
+            });
+        });
+
+        document.querySelectorAll('.filter-btn[data-company]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn[data-company]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCompanyFilter = this.dataset.company;
+                createNodes();
+            });
+        });
+
+        // Degree Filter
+        document.querySelectorAll('.filter-btn[data-degree]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn[data-degree]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentDegreeFilter = this.dataset.degree;
+                createNodes();
+            });
+        });
+
+        // Reviewed Checkbox
+        document.getElementById('showReviewed').addEventListener('change', function() {
+            showReviewedContacts = this.checked;
+            createNodes();
+        });
+
+        // Toggle Reviewed Status
+        function toggleReviewed() {
+            if (!selectedNode) return;
+            const contact = selectedNode.userData;
+            const contactId = `${contact['First Name']}-${contact['Last Name']}-${contact.Company}`;
+            
+            if (reviewedContacts.has(contactId)) {
+                reviewedContacts.delete(contactId);
+                document.getElementById('reviewBtn').textContent = '👁️ Mark Reviewed';
+                document.getElementById('reviewBtn').style.background = 'rgba(255, 255, 255, 0.1)';
+            } else {
+                reviewedContacts.add(contactId);
+                document.getElementById('reviewBtn').textContent = '✅ Reviewed';
+                document.getElementById('reviewBtn').style.background = 'rgba(16, 185, 129, 0.2)';
+                document.getElementById('reviewBtn').style.color = '#34d399';
+            }
+            
+            localStorage.setItem('reviewedContacts', JSON.stringify([...reviewedContacts]));
+            // Trigger cloud sync
+            if (typeof SyncManager !== 'undefined') SyncManager.triggerSync();
+
+            if (!showReviewedContacts) {
+               createNodes();
+               closeInfoPanel();
+            }
+        }
+
+        // Priority slider handler
+        const prioritySlider = document.getElementById('prioritySlider');
+        const sliderValue = document.getElementById('sliderValue');
+
+        prioritySlider.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            sliderValue.textContent = value === 0 ? 'All' : value + '+';
+            currentPriorityFilter = value;
+            createNodes();
+        });
+
+        // Service Potential slider handler
+        const serviceSlider = document.getElementById('serviceSlider');
+        const serviceValue = document.getElementById('serviceValue');
+
+        serviceSlider.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            const labels = {0: 'All', 1: 'Low+', 2: 'Med+', 3: 'High Only'};
+            serviceValue.textContent = labels[value];
+            currentServiceFilter = value;
+            createNodes();
+        });
+
+        // Company tier slider handler - filter contacts by company tier
+        const companyTierSlider = document.getElementById('companyTierSlider');
+        const companyTierValue = document.getElementById('companyTierValue');
+
+        companyTierSlider.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            currentCompanyTier = value;
+
+            const tierLabels = {
+                1: 'Tier 1 Only (Perfect)',
+                2: 'Tier 1-2 (Strong+)',
+                3: 'Tier 1-3 (Good+)',
+                4: 'Tier 1-4 (Decent+)',
+                5: 'All Companies'
+            };
+            companyTierValue.textContent = tierLabels[value];
+            createNodes();
+        });
+
+
+        // View mode handlers
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentView = this.dataset.view;
+                createNodes();
+            });
+        });
+
+        // Search handler
+        document.getElementById('searchBox').addEventListener('input', function() {
+            createNodes();
+        });
+
+        // Update stats
+        function updateStats(visible) {
+            document.getElementById('totalCount').textContent = contacts.length.toLocaleString();
+            document.getElementById('visibleCount').textContent = visible.toLocaleString();
+            document.getElementById('priorityCount').textContent = contacts.filter(c => c.score >= 70).length;
+
+            const companies = new Set(contacts.map(c => c.Company).filter(c => c));
+            document.getElementById('companyCount').textContent = companies.size;
+        }
+
+        // Mouse interactions
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        function onMouseDown(e) {
+            isDragging = true;
+            isRotating = false;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            setTimeout(() => isRotating = true, 2000);
+        }
+
+        function onMouseMove(e) {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+            if (isDragging) {
+                const deltaMove = {
+                    x: e.clientX - previousMousePosition.x,
+                    y: e.clientY - previousMousePosition.y
+                };
+
+                // Rotate the entire scene
+                scene.rotation.y += deltaMove.x * 0.005;
+                scene.rotation.x += deltaMove.y * 0.005;
+
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+        }
+
+        function onWheel(e) {
+            camera.position.z += e.deltaY * 0.5;
+            camera.position.z = Math.max(100, Math.min(800, camera.position.z));
+        }
+
+        function onClick(e) {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(nodes);
+
+            if (intersects.length > 0) {
+                const contact = intersects[0].object.userData;
+                showContactInfo(contact);
+
+                // Highlight selected node
+                if (selectedNode) {
+                    selectedNode.material.emissiveIntensity = 0.3;
+                }
+                selectedNode = intersects[0].object;
+                selectedNode.material.emissiveIntensity = 0.8;
+            }
+        }
+
+        // Show contact info panel
+        function showContactInfo(contact) {
+            const panel = document.getElementById('infoPanel');
+            
+            // Reset Analysis Panel
+            document.getElementById('aiInsightsPlaceholder').style.display = 'block';
+            document.getElementById('aiInsightsResult').style.display = 'none';
+            document.querySelector('#aiInsightsPlaceholder button').innerHTML = '<span>✨</span> Analyze Contact & Company';
+
+            const initials = `${(contact['First Name'] || 'U')[0]}${(contact['Last Name'] || 'N')[0]}`;
+
+            document.getElementById('contactAvatar').textContent = initials;
+            // ... (rest of function remains same, I will target the start to inject this reset logic at the top of showContactInfo)
+
+            document.getElementById('contactAvatar').style.background = `linear-gradient(135deg, #${getNodeColor(contact).toString(16).padStart(6, '0')}, #8b5cf6)`;
+            document.getElementById('contactName').textContent = `${contact['First Name']} ${contact['Last Name']}`;
+            document.getElementById('contactTitle').textContent = contact.Position || 'No title';
+            document.getElementById('contactCompany').textContent = contact.Company || 'No company';
+            document.getElementById('contactConnected').textContent = contact['Connected On'] || 'Unknown';
+            document.getElementById('linkedinLink').href = contact.URL || '#';
+
+            // Score badge
+            const scoreBadge = document.getElementById('contactScore');
+            scoreBadge.textContent = contact.score;
+            scoreBadge.className = 'score-badge ' + (contact.score >= 70 ? 'score-high' : contact.score >= 40 ? 'score-medium' : 'score-low');
+
+            // Tags
+            const tagsContainer = document.getElementById('contactTags');
+            tagsContainer.innerHTML = '';
+
+            if (contact.score >= 70) tagsContainer.innerHTML += '<span class="tag priority">High Priority</span>';
+            if (contact.isVP) tagsContainer.innerHTML += '<span class="tag vp">VP+</span>';
+            if (contact.isDirector) tagsContainer.innerHTML += '<span class="tag director">Director</span>';
+            if (contact.isPM) tagsContainer.innerHTML += '<span class="tag pm">Product</span>';
+            if (contact.isRoss) tagsContainer.innerHTML += '<span class="tag ross">Ross Alumni</span>';
+            if (contact.isTarget) tagsContainer.innerHTML += '<span class="tag target">Target Co</span>';
+            if (contact.isCEO) tagsContainer.innerHTML += '<span class="tag vp">CEO/Founder</span>';
+
+            // Add company match tier info
+            if (contact.companyInfo) {
+                const tierColors = {
+                    1: '#ec4899', // Pink - Perfect
+                    2: '#8b5cf6', // Purple - Strong
+                    3: '#6366f1', // Indigo - Good
+                    4: '#3b82f6', // Blue - Decent
+                    5: '#64748b'  // Gray - General
+                };
+                const tierLabels = {
+                    1: 'Perfect Match',
+                    2: 'Strong Match',
+                    3: 'Good Match',
+                    4: 'Decent Match',
+                    5: 'General Tech'
+                };
+                tagsContainer.innerHTML += `<span class="tag" style="background: ${tierColors[contact.companyInfo.tier]}22; color: ${tierColors[contact.companyInfo.tier]};">Tier ${contact.companyInfo.tier}: ${tierLabels[contact.companyInfo.tier]}</span>`;
+                if (contact.companyInfo.category) {
+                    tagsContainer.innerHTML += `<span class="tag" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">${contact.companyInfo.category}</span>`;
+                }
+            }
+
+            // Check reviewed status
+            const contactId = `${contact['First Name']}-${contact['Last Name']}-${contact.Company}`;
+            const isReviewed = reviewedContacts.has(contactId);
+            const reviewBtn = document.getElementById('reviewBtn');
+            
+            if (isReviewed) {
+                reviewBtn.textContent = '✅ Reviewed';
+                reviewBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+                reviewBtn.style.color = '#34d399';
+            } else {
+                reviewBtn.textContent = '👁️ Mark Reviewed';
+                reviewBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+                reviewBtn.style.color = '#a5b4fc';
+            }
+
+            panel.classList.add('visible');
+        }
+
+        // Simulate AI Analysis
+        function analyzeContact() {
+            if (!selectedNode) return;
+            const contact = selectedNode.userData;
+            const btn = document.querySelector('#aiInsightsPlaceholder button');
+            
+            btn.innerHTML = '<span>⏳</span> Analyzing...';
+            
+            setTimeout(() => {
+                // Generate Content
+                const firstName = contact['First Name'] || 'Use';
+                const company = contact.Company || 'their company';
+                const title = contact.Position || 'Role';
+                
+                let hook = "";
+                let points = [];
+
+                // 1. Generate Hook
+                if (contact.isRoss) {
+                    hook = `Fellow <strong>Ross Alumni</strong> at ${company}. Leverage the Michigan connection to ask for a warm intro or coffee chat.`;
+                } else if (contact.isTarget) {
+                    hook = `Key contact at <strong>${company}</strong> (Target Tier ${contact.companyInfo?.tier || '?'}). ${title} role aligns with your PLG/AI focus.`;
+                } else if (contact.score >= 70) {
+                    hook = `High priority contact (${title}) at ${company}. Strong potential for referral or hiring authority.`;
+                } else {
+                    hook = `${title} at ${company}. Good for informational interview or industry insights.`;
+                }
+
+                // 2. Generate Points
+                if (company.toLowerCase().includes('intuit')) {
+                    points.push("Discuss your 3+ years driving PLG at TurboTax.");
+                    points.push("Ask about recent AI integration in their products.");
+                } else if (title.toLowerCase().includes('product')) {
+                    points.push("Share your experience scaling products to $900M.");
+                    points.push("Ask about their current product roadmap challenges.");
+                } else if (title.toLowerCase().includes('founder') || title.toLowerCase().includes('ceo')) {
+                    points.push("Mention your success scaling SketchPop to $3M.");
+                    points.push("Discuss AI operational efficiency strategies.");
+                } else {
+                    points.push("Ask about company culture and recent shifts.");
+                    points.push("Inquire about their team structure.");
+                }
+                
+                // 3. Update UI
+                document.getElementById('insightHook').innerHTML = hook;
+                
+                const pointsHtml = points.map(p => `<li>${p}</li>`).join('');
+                document.getElementById('insightPoints').innerHTML = pointsHtml;
+
+                document.getElementById('newsLinkCompany').href = `https://www.google.com/search?q=${encodeURIComponent(company)}+news&tbm=nws`;
+                document.getElementById('newsLinkPerson').href = `https://www.google.com/search?q=${encodeURIComponent(firstName + ' ' + contact['Last Name'] + ' ' + company)}`;
+
+                // Show Results
+                document.getElementById('aiInsightsPlaceholder').style.display = 'none';
+                document.getElementById('aiInsightsResult').style.display = 'block';
+                
+            }, 800); // Fake delay
+        }
+
+        function closeInfoPanel() {
+            document.getElementById('infoPanel').classList.remove('visible');
+            if (selectedNode) {
+                selectedNode.material.emissiveIntensity = 0.3;
+                selectedNode = null;
+            }
+        }
+
+        // Add to CRM - Uses the dashboard's storage key (jobSearchContacts)
+        function addToCRM() {
+            if (!selectedNode) return;
+            const contact = selectedNode.userData;
+
+            // Get existing contacts from dashboard CRM (jobSearchContacts)
+            let crmContacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+
+            // Check if already exists
+            const exists = crmContacts.some(c =>
+                c.firstName === contact['First Name'] && c.lastName === contact['Last Name'] && c.company === contact.Company
+            );
+
+            if (exists) {
+                const searchName = encodeURIComponent(`${contact['First Name']} ${contact['Last Name']}`);
+                window.open(`job-search-dashboard.html?search=${searchName}#contacts`, '_blank');
+                return;
+            }
+
+            // Build notes with all relevant info
+            let notes = `Imported from Network Explorer.\n`;
+            notes += `Connected on LinkedIn: ${contact['Connected On'] || 'Unknown'}\n`;
+            notes += `Priority Score: ${contact.score}\n`;
+            if (contact.companyInfo) {
+                notes += `Company Tier: ${contact.companyInfo.tier} (${contact.companyInfo.category || 'General'})\n`;
+            }
+            if (contact.isRoss) notes += `🎓 Ross Alumni\n`;
+            if (contact.isTarget) notes += `🎯 Target Company\n`;
+            if (contact.isPM) notes += `📦 Product Manager\n`;
+            if (contact.isVP) notes += `👔 VP Level\n`;
+            if (contact.isDirector) notes += `📊 Director Level\n`;
+            if (contact.isCEO) notes += `🏆 CEO/Founder\n`;
+
+            // Add new contact matching dashboard's data structure
+            const newContact = {
+                id: Date.now().toString(),
+                firstName: contact['First Name'] || '',
+                lastName: contact['Last Name'] || '',
+                company: contact.Company || '',
+                title: contact.Position || '',
+                email: contact['Email Address'] || '',
+                phone: '',
+                linkedin: contact.URL || '',
+                source: contact.isRoss ? 'ross-alumni' : 'linkedin',
+                status: 'new',
+                lastContacted: '',
+                followUp: '',
+                notes: notes,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            crmContacts.push(newContact);
+            localStorage.setItem('jobSearchContacts', JSON.stringify(crmContacts));
+            // Trigger cloud sync
+            if (typeof SyncManager !== 'undefined') SyncManager.triggerSync();
+
+            // Show success with option to view dashboard
+            const viewDashboard = confirm(`${contact['First Name']} ${contact['Last Name']} added to CRM!\n\nClick OK to open the Dashboard and see them, or Cancel to stay here.`);
+            if (viewDashboard) {
+                const searchName = encodeURIComponent(`${contact['First Name']} ${contact['Last Name']}`);
+                window.open(`job-search-dashboard.html?search=${searchName}#contacts`, '_blank');
+            }
+        }
+
+        // Generate personalized email - opens AI tools with contact pre-filled
+        function generateEmail() {
+            if (!selectedNode) return;
+            const contact = selectedNode.userData;
+
+            // Store contact data for the AI tools page to pick up
+            const emailContext = {
+                name: `${contact['First Name']} ${contact['Last Name']}`,
+                title: contact.Position || '',
+                company: contact.Company || '',
+                linkedinUrl: contact.URL || '',
+                connectionType: contact.isRoss ? 'ross-alumni' : '2nd-degree',
+                additionalContext: '',
+                score: contact.score,
+                companyTier: contact.companyInfo?.tier || 5,
+                companyCategory: contact.companyInfo?.category || ''
+            };
+
+            // Add relevant context
+            const contextParts = [];
+            if (contact.isRoss) contextParts.push('Ross Alumni connection');
+            if (contact.isTarget) contextParts.push(`Target company (Tier ${contact.companyInfo?.tier})`);
+            if (contact.companyInfo?.category) contextParts.push(`Industry: ${contact.companyInfo.category}`);
+            if (contact.isPM) contextParts.push('Fellow Product Manager');
+            if (contact.isVP) contextParts.push('VP-level executive');
+            if (contact.isCEO) contextParts.push('CEO/Founder');
+            emailContext.additionalContext = contextParts.join('. ');
+
+            // Store in localStorage for AI tools to read
+            localStorage.setItem('outreachContact', JSON.stringify(emailContext));
+
+            // Also add to CRM if not already there (with status 'contacted')
+            let crmContacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+            const exists = crmContacts.some(c =>
+                c.firstName === contact['First Name'] && c.lastName === contact['Last Name'] && c.company === contact.Company
+            );
+
+            if (!exists) {
+                // Auto-add to CRM when generating email
+                const newContact = {
+                    id: Date.now().toString(),
+                    firstName: contact['First Name'] || '',
+                    lastName: contact['Last Name'] || '',
+                    company: contact.Company || '',
+                    title: contact.Position || '',
+                    email: contact['Email Address'] || '',
+                    phone: '',
+                    linkedin: contact.URL || '',
+                    source: contact.isRoss ? 'ross-alumni' : 'linkedin',
+                    status: 'new',
+                    lastContacted: '',
+                    followUp: '',
+                    notes: `Added from Network Explorer while generating outreach email. Priority Score: ${contact.score}`,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                crmContacts.push(newContact);
+                localStorage.setItem('jobSearchContacts', JSON.stringify(crmContacts));
+                // Trigger cloud sync
+                if (typeof SyncManager !== 'undefined') SyncManager.triggerSync();
+            }
+
+            // Open AI tools page
+            window.open('ai-tools.html', '_blank');
+        }
+
+        // Window resize handler
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Auto-rotate when not dragging
+            if (isRotating) {
+                scene.rotation.y += rotationSpeed;
+            }
+
+            // Hover effect
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(nodes);
+
+            nodes.forEach(node => {
+                if (node !== selectedNode) {
+                    node.material.emissiveIntensity = 0.3;
+                }
+            });
+
+            if (intersects.length > 0 && intersects[0].object !== selectedNode) {
+                intersects[0].object.material.emissiveIntensity = 0.6;
+                document.body.style.cursor = 'pointer';
+            } else {
+                document.body.style.cursor = 'default';
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Load embedded connections data automatically
+        function loadDemoData() {
+            // Check for embedded connections data (loaded from connections-data.js)
+            if (typeof EMBEDDED_CONNECTIONS !== 'undefined' && EMBEDDED_CONNECTIONS.length > 0) {
+                contacts = EMBEDDED_CONNECTIONS;
+                contacts.forEach(c => calculateScore(c));
+                createNodes();
+                document.getElementById('uploadSection').classList.add('loaded');
+                document.getElementById('uploadSection').innerHTML = `
+                    <div class="upload-icon">✅</div>
+                    <div>${contacts.length} contacts loaded</div>
+                `;
+                return;
+            }
+
+            // Fallback: Check localStorage
+            const storedLinkedInData = localStorage.getItem('linkedinConnections');
+            if (storedLinkedInData) {
+                contacts = JSON.parse(storedLinkedInData);
+                contacts.forEach(c => calculateScore(c));
+                createNodes();
+                document.getElementById('uploadSection').classList.add('loaded');
+                document.getElementById('uploadSection').innerHTML = `
+                    <div class="upload-icon">✅</div>
+                    <div>${contacts.length} contacts loaded</div>
+                `;
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', function() {
+            initScene();
+            loadDemoData();
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        });
+
+        // Drag and drop support
+        document.addEventListener('dragover', e => e.preventDefault());
+        document.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    contacts = parseCSV(e.target.result);
+                    createNodes();
+                    document.getElementById('uploadSection').classList.add('loaded');
+                    document.getElementById('uploadSection').innerHTML = `
+                        <div class="upload-icon">✅</div>
+                        <div>${contacts.length} contacts loaded</div>
+                    `;
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // =====================
+        // TOOLTIP FUNCTIONS
+        // =====================
+        function showTooltip(type) {
+            const overlay = document.getElementById('tooltipOverlay');
+            const tooltips = {
+                'priority': document.getElementById('tooltipPriority'),
+                'tier': document.getElementById('tooltipTier'),
+                'companies': document.getElementById('tooltipCompanies'),
+                'service': document.getElementById('tooltipService')
+            };
+
+            // Hide all tooltips first
+            Object.values(tooltips).forEach(t => t.classList.remove('visible'));
+
+            // Show the requested tooltip
+            if (tooltips[type]) {
+                overlay.classList.add('visible');
+                tooltips[type].classList.add('visible');
+            }
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltipOverlay').classList.remove('visible');
+            document.getElementById('tooltipPriority').classList.remove('visible');
+            document.getElementById('tooltipTier').classList.remove('visible');
+            document.getElementById('tooltipCompanies').classList.remove('visible');
+        }
+
+        // =====================
+        // COMPANY FILTER FUNCTIONS
+        // =====================
+        let selectedCompanies = new Set(); // Track selected companies
+        let allCompaniesInNetwork = []; // Store all companies with their data
+
+        function populateCompanyFilter() {
+            // Build a list of all companies from contacts with connection counts
+            const companyMap = {};
+
+            contacts.forEach(contact => {
+                const company = (contact.Company || '').trim();
+                if (!company) return;
+
+                const normalizedCompany = company.toLowerCase();
+                if (!companyMap[normalizedCompany]) {
+                    companyMap[normalizedCompany] = {
+                        name: company,
+                        normalized: normalizedCompany,
+                        count: 0,
+                        tier: 5,
+                        category: ''
+                    };
+
+                    // Get tier info if available
+                    if (typeof TARGET_COMPANIES !== 'undefined') {
+                        const info = getCompanyInfo(company);
+                        if (info) {
+                            companyMap[normalizedCompany].tier = info.tier;
+                            companyMap[normalizedCompany].category = info.category || '';
+                        }
+                    }
+                }
+                companyMap[normalizedCompany].count++;
+            });
+
+            // Convert to array and sort by count (descending), then by tier (ascending)
+            allCompaniesInNetwork = Object.values(companyMap).sort((a, b) => {
+                if (a.tier !== b.tier) return a.tier - b.tier;
+                return b.count - a.count;
+            });
+
+            // Initialize all companies as selected
+            selectedCompanies = new Set(allCompaniesInNetwork.map(c => c.normalized));
+
+            // Render the list
+            renderCompanyList(allCompaniesInNetwork);
+            updateCompanyFilterStats();
+        }
+
+        function renderCompanyList(companies) {
+            const container = document.getElementById('companyList');
+            container.innerHTML = '';
+
+            companies.forEach(company => {
+                const isChecked = selectedCompanies.has(company.normalized);
+                const item = document.createElement('div');
+                item.className = 'company-item';
+                item.innerHTML = `
+                    <input type="checkbox" id="company_${company.normalized.replace(/[^a-z0-9]/g, '_')}"
+                           ${isChecked ? 'checked' : ''}
+                           onchange="toggleCompany('${company.normalized.replace(/'/g, "\\'")}')">
+                    <label for="company_${company.normalized.replace(/[^a-z0-9]/g, '_')}">
+                        <span>${company.name}</span>
+                        <span>
+                            <span class="tier-indicator tier-${company.tier}">T${company.tier}</span>
+                            <span class="company-count">${company.count}</span>
+                        </span>
+                    </label>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function toggleCompany(normalizedName) {
+            if (selectedCompanies.has(normalizedName)) {
+                selectedCompanies.delete(normalizedName);
+            } else {
+                selectedCompanies.add(normalizedName);
+            }
+            updateCompanyFilterStats();
+            createNodes();
+        }
+
+        function selectAllCompanies() {
+            selectedCompanies = new Set(allCompaniesInNetwork.map(c => c.normalized));
+            // Update checkboxes
+            document.querySelectorAll('#companyList input[type="checkbox"]').forEach(cb => cb.checked = true);
+            updateCompanyFilterStats();
+            createNodes();
+        }
+
+        function deselectAllCompanies() {
+            selectedCompanies.clear();
+            // Update checkboxes
+            document.querySelectorAll('#companyList input[type="checkbox"]').forEach(cb => cb.checked = false);
+            updateCompanyFilterStats();
+            createNodes();
+        }
+
+        function updateCompanyFilterStats() {
+            const total = allCompaniesInNetwork.length;
+            const selected = selectedCompanies.size;
+            document.getElementById('companyFilterStats').textContent = `${selected} of ${total} companies selected`;
+        }
+
+        // Company search functionality
+        document.getElementById('companySearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+
+            if (!searchTerm) {
+                renderCompanyList(allCompaniesInNetwork);
+                return;
+            }
+
+            const filtered = allCompaniesInNetwork.filter(c =>
+                c.name.toLowerCase().includes(searchTerm) ||
+                c.category.toLowerCase().includes(searchTerm)
+            );
+            renderCompanyList(filtered);
+        });
+
+        // Override createNodes to also filter by selected companies
+        const originalCreateNodes = createNodes;
+        createNodes = function() {
+            // Clear existing nodes
+            nodes.forEach(node => scene.remove(node));
+            nodes = [];
+
+            const filteredContacts = contacts.filter(contact => {
+                // Role filter
+                if (currentFilter !== 'all') {
+                    if (currentFilter === 'vp' && !contact.isVP) return false;
+                    if (currentFilter === 'director' && !contact.isDirector) return false;
+                    if (currentFilter === 'pm' && !contact.isPM) return false;
+                    if (currentFilter === 'ceo' && !contact.isCEO) return false;
+                    if (currentFilter === 'ross' && !contact.isRoss) return false;
+                }
+
+                // Company filter (old)
+                if (currentCompanyFilter !== 'all') {
+                    const company = (contact.Company || '').toLowerCase();
+                    if (currentCompanyFilter === 'target' && !contact.isTarget) return false;
+                    if (currentCompanyFilter !== 'target' && !company.includes(currentCompanyFilter)) return false;
+                }
+
+                // Priority filter
+                if (typeof currentPriorityFilter === 'number' && contact.score < currentPriorityFilter) return false;
+
+                // Target company tier filter
+                if (currentCompanyTier < 5) {
+                    if (!contact.companyInfo) return false;
+                    if (contact.companyInfo.tier > currentCompanyTier) return false;
+                }
+
+                // Company checkbox filter
+                const contactCompany = (contact.Company || '').toLowerCase().trim();
+                if (contactCompany && selectedCompanies.size > 0 && !selectedCompanies.has(contactCompany)) {
+                    return false;
+                }
+
+                // Search filter
+                const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+                if (searchTerm) {
+                    const name = `${contact['First Name']} ${contact['Last Name']}`.toLowerCase();
+                    const company = (contact.Company || '').toLowerCase();
+                    const position = (contact.Position || '').toLowerCase();
+                    if (!name.includes(searchTerm) && !company.includes(searchTerm) && !position.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            // Position nodes based on view mode
+            filteredContacts.forEach((contact, index) => {
+                const contactId = `${contact['First Name']}-${contact['Last Name']}-${contact.Company}`;
+                const isReviewed = reviewedContacts.has(contactId);
+
+                const geometry = new THREE.SphereGeometry(getNodeSize(contact), 16, 16);
+
+                // Create transparent material for reviewed contacts
+                const material = new THREE.MeshPhongMaterial({
+                    color: getNodeColor(contact),
+                    emissive: getNodeColor(contact),
+                    emissiveIntensity: isReviewed ? 0.1 : 0.3,
+                    shininess: 100,
+                    transparent: isReviewed,
+                    opacity: isReviewed ? 0.3 : 1.0  // Changed from 0.0 to 0.3 so reviewed contacts are visible
+                });
+                const node = new THREE.Mesh(geometry, material);
+
+                // Add dotted outline for reviewed contacts
+                if (isReviewed) {
+                    const edgesGeometry = new THREE.EdgesGeometry(geometry);
+                    const edgesMaterial = new THREE.LineDashedMaterial({
+                        color: getNodeColor(contact),
+                        linewidth: 1,
+                        scale: 1,
+                        dashSize: 2,
+                        gapSize: 2,
+                        transparent: true,
+                        opacity: 0.6
+                    });
+                    const outline = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+                    outline.computeLineDistances();
+                    node.add(outline);
+                }
+
+                const pos = getNodePosition(contact, index, filteredContacts.length);
+                node.position.set(pos.x, pos.y, pos.z);
+
+                node.userData = contact;
+                scene.add(node);
+                nodes.push(node);
+            });
+
+            updateStats(filteredContacts.length);
+        };
+
+        // Modify loadDemoData to populate company filter after loading
+        const originalLoadDemoData = loadDemoData;
+        loadDemoData = function() {
+            if (typeof EMBEDDED_CONNECTIONS !== 'undefined' && EMBEDDED_CONNECTIONS.length > 0) {
+                contacts = EMBEDDED_CONNECTIONS;
+                contacts.forEach(c => calculateScore(c));
+                populateCompanyFilter(); // Populate company filter
+                createNodes();
+                document.getElementById('uploadSection').classList.add('loaded');
+                document.getElementById('uploadSection').innerHTML = `
+                    <div class="upload-icon">✅</div>
+                    <div>${contacts.length} contacts loaded</div>
+                `;
+                return;
+            }
+
+            const storedLinkedInData = localStorage.getItem('linkedinConnections');
+            if (storedLinkedInData) {
+                contacts = JSON.parse(storedLinkedInData);
+                contacts.forEach(c => calculateScore(c));
+                populateCompanyFilter(); // Populate company filter
+                createNodes();
+                document.getElementById('uploadSection').classList.add('loaded');
+                document.getElementById('uploadSection').innerHTML = `
+                    <div class="upload-icon">✅</div>
+                    <div>${contacts.length} contacts loaded</div>
+                `;
+            }
+        };
+
+        // ============================================
+        // LEGEND TOGGLE
+        // ============================================
+
+        function toggleLegend() {
+            const legend = document.getElementById('legend');
+            const toggle = document.getElementById('legendToggle');
+            const icon = document.getElementById('legendToggleIcon');
+
+            legend.classList.toggle('hidden');
+            toggle.classList.toggle('legend-visible');
+
+            if (legend.classList.contains('hidden')) {
+                icon.textContent = '▶';
+            } else {
+                icon.textContent = '◀';
+            }
+
+            // Save preference
+            const legendVisible = !legend.classList.contains('hidden');
+            saveFilterSettings({ legendVisible });
+        }
+
+        // ============================================
+        // RESET FILTERS
+        // ============================================
+
+        function resetFilters() {
+            if (!confirm('Reset all filters to default settings?')) {
+                return;
+            }
+
+            // Reset priority slider
+            document.getElementById('prioritySlider').value = 0;
+            document.getElementById('sliderValue').textContent = 'All';
+
+            // Reset service slider
+            document.getElementById('serviceSlider').value = 0;
+            document.getElementById('serviceValue').textContent = 'All';
+
+            // Reset company tier slider
+            document.getElementById('companyTierSlider').value = 5;
+            document.getElementById('companyTierValue').textContent = 'All Tiers';
+            currentCompanyTier = 5;
+
+            // Reset role filters
+            document.querySelectorAll('#roleFilters .filter-btn').forEach(btn => {
+                if (btn.dataset.filter === 'all') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Reset degree filters
+            document.querySelectorAll('#degreeFilters .filter-btn').forEach(btn => {
+                if (btn.dataset.degree === 'all') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Reset reviewed checkbox
+            document.getElementById('showReviewed').checked = false;
+
+            // Reset view mode to galaxy
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                if (btn.dataset.view === 'galaxy') {
+                    btn.classList.add('active');
+                    currentViewMode = 'galaxy';
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Reset company filter
+            selectAllCompanies();
+
+            // Reset search
+            document.getElementById('searchBox').value = '';
+
+            // Clear saved settings
+            localStorage.removeItem('networkExplorerFilters');
+
+            // Recreate nodes with reset filters
+            createNodes();
+        }
+
+        // ============================================
+        // SAVE/LOAD FILTER SETTINGS
+        // ============================================
+
+        function saveFilterSettings(additionalSettings = {}) {
+            const settings = {
+                prioritySlider: document.getElementById('prioritySlider').value,
+                serviceSlider: document.getElementById('serviceSlider').value,
+                companyTierSlider: document.getElementById('companyTierSlider').value,
+                viewMode: currentViewMode,
+                showReviewed: document.getElementById('showReviewed').checked,
+                selectedCompanies: Array.from(selectedCompanies),
+                roleFilter: Array.from(document.querySelectorAll('#roleFilters .filter-btn.active')).map(btn => btn.dataset.filter),
+                degreeFilter: Array.from(document.querySelectorAll('#degreeFilters .filter-btn.active')).map(btn => btn.dataset.degree),
+                ...additionalSettings
+            };
+
+            localStorage.setItem('networkExplorerFilters', JSON.stringify(settings));
+
+            // Sync to cloud if available
+            if (typeof SyncManager !== 'undefined' && SyncManager.isConfigured()) {
+                const currentData = {
+                    contacts: JSON.parse(localStorage.getItem('jobSearchContacts') || '[]'),
+                    progress: JSON.parse(localStorage.getItem('jobSearchProgress') || '{}'),
+                    message_templates: JSON.parse(localStorage.getItem('jobSearchMessageTemplates') || '[]'),
+                    reviewed_contacts: JSON.parse(localStorage.getItem('reviewedContacts') || '[]'),
+                    network_explorer_filters: settings
+                };
+
+                clearTimeout(window.filterSyncTimeout);
+                window.filterSyncTimeout = setTimeout(() => {
+                    SyncManager.syncToCloud(currentData);
+                }, 1000);
+            }
+        }
+
+        function loadFilterSettings() {
+            const saved = localStorage.getItem('networkExplorerFilters');
+            if (!saved) return;
+
+            try {
+                const settings = JSON.parse(saved);
+
+                // Restore sliders
+                if (settings.prioritySlider !== undefined) {
+                    document.getElementById('prioritySlider').value = settings.prioritySlider;
+                    const value = parseInt(settings.prioritySlider);
+                    document.getElementById('sliderValue').textContent = value === 0 ? 'All' : value + '+';
+                }
+
+                if (settings.serviceSlider !== undefined) {
+                    document.getElementById('serviceSlider').value = settings.serviceSlider;
+                    const labels = {0: 'All', 1: 'Low+', 2: 'Med+', 3: 'High Only'};
+                    document.getElementById('serviceValue').textContent = labels[settings.serviceSlider] || 'All';
+                }
+
+                if (settings.companyTierSlider !== undefined) {
+                    document.getElementById('companyTierSlider').value = settings.companyTierSlider;
+                    currentCompanyTier = parseInt(settings.companyTierSlider);
+                    const tiers = {1: 'Tier 1 Only', 2: 'Tier 1-2', 3: 'Tier 1-3', 4: 'Tier 1-4', 5: 'All Tiers'};
+                    document.getElementById('companyTierValue').textContent = tiers[settings.companyTierSlider] || 'All Tiers';
+                }
+
+                // Restore view mode
+                if (settings.viewMode) {
+                    currentViewMode = settings.viewMode;
+                    document.querySelectorAll('.view-btn').forEach(btn => {
+                        if (btn.dataset.view === settings.viewMode) {
+                            btn.classList.add('active');
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+                }
+
+                // Restore reviewed checkbox
+                if (settings.showReviewed !== undefined) {
+                    document.getElementById('showReviewed').checked = settings.showReviewed;
+                }
+
+                // Restore company selection
+                if (settings.selectedCompanies) {
+                    selectedCompanies = new Set(settings.selectedCompanies);
+                }
+
+                // Restore legend visibility
+                if (settings.legendVisible === false) {
+                    document.getElementById('legend').classList.add('hidden');
+                    document.getElementById('legendToggle').classList.add('legend-visible');
+                    document.getElementById('legendToggleIcon').textContent = '▶';
+                }
+
+                console.log('Filter settings loaded from storage');
+            } catch (e) {
+                console.error('Error loading filter settings:', e);
+            }
+        }
+
+        // Auto-save filters whenever they change
+        document.getElementById('prioritySlider').addEventListener('change', () => saveFilterSettings());
+        document.getElementById('serviceSlider').addEventListener('change', () => saveFilterSettings());
+        document.getElementById('companyTierSlider').addEventListener('change', () => saveFilterSettings());
+        document.getElementById('showReviewed').addEventListener('change', () => saveFilterSettings());
+
+        // Save filters when role/degree buttons are clicked
+        document.querySelectorAll('#roleFilters .filter-btn, #degreeFilters .filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTimeout(() => saveFilterSettings(), 100); // Small delay to ensure active classes are updated
+            });
+        });
+
+        // Save view mode when changed
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTimeout(() => saveFilterSettings(), 100);
+            });
+        });
+
+        // Load settings on page load
+        loadFilterSettings();
+    </script>
+</body>
+</html>

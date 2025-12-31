@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Technical Skills Matrix Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            color: #1a1a1a;
+            background: #f0f0f0;
+        }
+
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+        }
+
+        .page {
+            padding: 0.5in;
+            min-height: 11in;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .header {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #00ff00;
+            object-fit: cover;
+        }
+
+        .header-text h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header-text .role {
+            font-size: 14px;
+            color: #00ff00;
+            margin-bottom: 8px;
+        }
+
+        .header-text .contact {
+            font-size: 11px;
+            color: #00ff00;
+        }
+
+        .skills-matrix {
+            background: #f8f9fa;
+            border: 2px solid #1a1a1a;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .matrix-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 8px;
+            border-radius: 3px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .skill-category {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 12px;
+            border-radius: 3px;
+        }
+
+        .skill-category-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 4px;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 10px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+        }
+
+        .skill-level {
+            display: flex;
+            gap: 2px;
+        }
+
+        .skill-bar {
+            width: 8px;
+            height: 8px;
+            background: #ddd;
+            border: 1px solid #999;
+        }
+
+        .skill-bar.filled {
+            background: #00ff00;
+        }
+
+        .section-title {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 12px 0;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        .experience-block {
+            background: #f8f9fa;
+            border-left: 4px solid #1a1a1a;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .exp-title {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .exp-dates {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .exp-company {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .tech-stack {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 8px;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        .tech-stack-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .achievements {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .achievements li {
+            margin-bottom: 6px;
+            padding-left: 15px;
+            position: relative;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .achievements li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .metric {
+            background: #00ff00;
+            color: #1a1a1a;
+            padding: 2px 5px;
+            border-radius: 2px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .subsection {
+            font-size: 11px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            text-decoration: underline;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            z-index: 1000;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .page {
+                padding: 0.5in;
+                page-break-after: always;
+            }
+
+            .print-button {
+                display: none;
+            }
+
+            .header, .skills-matrix, .tech-stack, .metric, .skill-bar.filled {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">PRINT</button>
+
+    <div class="container">
+        <!-- Page 1 -->
+        <div class="page">
+            <div class="header">
+                <div class="header-content">
+                    <img src="https://media.licdn.com/dms/image/v2/D5603AQFLhrcVCSYY8w/profile-displayphoto-shrink_800_800/B56ZX04IgtHQAg-/0/1743570110941?e=1766620800&v=beta&t=9KHaWvyX8UvAxH_yLT7FD15TObn3kZgtfQP1A3j7m1o" alt="Luis Calderon" class="profile-photo">
+                    <div class="header-text">
+                        <h1>$ LUIS_CALDERON</h1>
+                        <div class="role">>> AI/ML Product Leader | Technical Product Management</div>
+                        <div class="contact">san_diego@california.us | lcalderon@gmail.com | /in/luiscalderon</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-matrix">
+                <div class="matrix-title">Technical Skills Matrix</div>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <div class="skill-category-title">AI/ML Technologies</div>
+                        <div class="skill-item">
+                            <span class="skill-name">GPT-4/Claude/Gemini</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">LLM Integration</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">AI Agents</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">HITL Training</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">ML Models</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Prompt Engineering</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">OCR/NLP</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-category-title">Product & Growth</div>
+                        <div class="skill-item">
+                            <span class="skill-name">Product-Led Growth</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">0-1 Product Dev</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">A/B Testing</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Analytics/Metrics</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Conversion Optimization</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Product Strategy</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-category-title">Technical Stack</div>
+                        <div class="skill-item">
+                            <span class="skill-name">API Integration</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Data Pipelines</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">SQL/NoSQL</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar"></div>
+                                <div class="skill-bar"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Cloud Platforms</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">E-commerce Platforms</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-category-title">Leadership & Management</div>
+                        <div class="skill-item">
+                            <span class="skill-name">P&L Management</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Team Leadership</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Cross-functional</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Stakeholder Mgmt</span>
+                            <div class="skill-level">
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                                <div class="skill-bar filled"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">Technical Product Experience</div>
+
+            <!-- SketchPop -->
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Chief Product Officer</div>
+                    <div class="exp-dates">Jul 2025 - Present</div>
+                </div>
+                <div class="exp-company">SketchPop LLC • San Diego, CA</div>
+                
+                <div class="tech-stack">
+                    <div class="tech-stack-title">Tech Stack:</div>
+                    GPT-4, Claude, AI Chatbots, LLM Integration, ML Models, Shopify, API Integration, Data Pipelines
+                </div>
+
+                <div class="subsection">AI Implementation:</div>
+                <ul class="achievements">
+                    <li>Deployed AI chatbot: <span class="metric">40% cost reduction</span>, 4.8+ star satisfaction</li>
+                    <li>Integrated GPT-4/Claude LLM-powered tools for personalized communications, upsell</li>
+                    <li>AI demand forecasting: <span class="metric">30% reduction</span> in fulfillment delays</li>
+                    <li>Rebuilt backend with modern AI infrastructure for scalable deployment</li>
+                    <li>AI quality control system flagging issues before human review</li>
+                    <li>ML models for customer preference prediction and recommendations</li>
+                    <li>AI content generation for SEO, descriptions, marketing (10x speed)</li>
+                    <li>Data pipeline for continuous AI model improvement via feedback loops</li>
+                </ul>
+
+                <div class="subsection">Business Metrics:</div>
+                <ul class="achievements">
+                    <li>Revenue: <span class="metric">$3M annual</span> | Margins: <span class="metric">20%</span></li>
+                    <li>AI automation: <span class="metric">2x order volume</span> with same 30-person team</li>
+                </ul>
+            </div>
+
+            <!-- Growth Alchemy Lab -->
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Growth Management Consultant (Founder)</div>
+                    <div class="exp-dates">Sep 2024 - Present</div>
+                </div>
+                <div class="exp-company">Growth Alchemy Lab • San Diego, CA</div>
+                
+                <div class="tech-stack">
+                    <div class="tech-stack-title">Tech Stack:</div>
+                    GPT-4, Claude, Gemini, Llama, AI Agents, LLM Orchestration, Prompt Engineering
+                </div>
+
+                <ul class="achievements">
+                    <li>AI/ML product strategy, feature prioritization, roadmap development (ROI-focused)</li>
+                    <li>Guide AI ops: chatbots, agents, workflow automation (GPT-4, Claude, Gemini, Llama)</li>
+                    <li>Build vs. buy evaluation, vendor selection, AI metrics frameworks</li>
+                    <li>Prompt engineering, LLM orchestration, AI agent frameworks for production</li>
+                    <li>Ivo.AI: Product advisor - AI agent architecture, LLM integration strategy</li>
+                    <li>B2B SaaS: AI feature dev, roadmaps, cost-benefit, GTM</li>
+                    <li>E-commerce: AI chatbot deployment, customer service automation</li>
+                    <li>Client impact: <span class="metric">30-50% cost reduction</span>, <span class="metric">15-25% retention gains</span></li>
+                </ul>
+            </div>
+
+            <!-- Intuit -->
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Consumer Group Product Management Leader - Growth</div>
+                    <div class="exp-dates">Oct 2021 - Sep 2024</div>
+                </div>
+                <div class="exp-company">Intuit • San Diego, CA</div>
+                
+                <div class="tech-stack">
+                    <div class="tech-stack-title">Tech Stack:</div>
+                    ML Models, HITL, Predictive Analytics, OCR, NLP, Document Processing, Data Science
+                </div>
+
+                <div class="subsection">AI Products Shipped (4):</div>
+                <ul class="achievements">
+                    <li>Expense Categorization AI: ML auto-categorizing expenses, <span class="metric">60%+ manual entry reduction</span></li>
+                    <li>Deduction Finder ML: HITL algorithm finding missed deductions, <span class="metric">$1,200+ avg refund</span></li>
+                    <li>Audit Risk Predictor: ML predicting IRS audit risk, suggesting optimizations</li>
+                    <li>Document Extraction AI: OCR/AI extracting data from W-2s, 1099s, receipts</li>
+                    <li>Cross-BU AI coordination: consistent experiences, shared ML infrastructure</li>
+                </ul>
+
+                <div class="subsection">Business Metrics:</div>
+                <ul class="achievements">
+                    <li>P&L: <span class="metric">$900M-$1B</span> | Growth: <span class="metric">10-15% CAGR ($100-150M annual)</span></li>
+                    <li>Team: Managed 4 PMs | Users: Millions of self-employed</li>
+                    <li>Partner integrations, freemium acquisition, mobile improvements</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page">
+            <!-- Ancestry -->
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Director of (Growth) Product Management</div>
+                    <div class="exp-dates">Jan 2016 - 2017</div>
+                </div>
+                <div class="exp-company">Ancestry • San Francisco Bay Area</div>
+                
+                <div class="tech-stack">
+                    <div class="tech-stack-title">Tech Stack:</div>
+                    A/B Testing, Analytics, Mobile Product, Conversion Optimization
+                </div>
+
+                <ul class="achievements">
+                    <li>Led acquisition, conversion, growth for <span class="metric">$800M subscription business</span></li>
+                    <li>Abandon cart feature: <span class="metric">5% revenue lift</span></li>
+                    <li>Mobile initiative: <span class="metric">30% conversion lift</span></li>
+                    <li>Customer journey mapping, metrics definition, pricing strategy</li>
+                    <li>Cross-functional: Finance, Product, Marketing, Member Services</li>
+                    <li>GTM strategy, marketing planning, product roadmap influence</li>
+                </ul>
+            </div>
+
+            <!-- eBay -->
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Product Leader (North America BU + Global Analytics)</div>
+                    <div class="exp-dates">Mar 2013 - Apr 2015</div>
+                </div>
+                <div class="exp-company">eBay Marketplaces • San Francisco Bay Area</div>
+                
+                <div class="tech-stack">
+                    <div class="tech-stack-title">Tech Stack:</div>
+                    Payments Systems, Analytics, A/B Testing, SQL, Data Warehousing
+                </div>
+
+                <ul class="achievements">
+                    <li>Cross-functional teams: Payments (cart, checkout, installments) & Customer Connection</li>
+                    <li>Checkout conversion <span class="metric">+2%</span>, operational costs <span class="metric">-33% defects</span>, improved NPS</li>
+                    <li>A/B testing and launches: <span class="metric">$100M+ business lift</span></li>
+                    <li>Global Payments Analytics lead: strategic/analytical support for product insights</li>
+                    <li>UX design, business use cases, go-to-market coordination</li>
+                    <li>Hired, trained, mentored <span class="metric">6+ analysts and managers</span></li>
+                </ul>
+            </div>
+
+            <!-- Additional Roles -->
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Director of Product Management</div>
+                    <div class="exp-dates">Feb 2017 - May 2018</div>
+                </div>
+                <div class="exp-company">Doctor.com • San Francisco Bay Area</div>
+                
+                <ul class="achievements">
+                    <li>Product analytics, publisher operations, reporting platforms</li>
+                    <li>Personalized reporting platform: <span class="metric">15% engagement increase</span></li>
+                    <li>Core analytics metrics, dashboards, 2018 product OKRs</li>
+                    <li>Product analytics architecture, led/mentored analysts</li>
+                    <li>Enterprise-wide provider data integration with partners</li>
+                </ul>
+            </div>
+
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Growth Product Leader</div>
+                    <div class="exp-dates">Mar 2015 - Mar 2016</div>
+                </div>
+                <div class="exp-company">Tile • San Francisco Bay Area</div>
+                
+                <ul class="achievements">
+                    <li>Defined, launched subscription renewal program (strategy to operations)</li>
+                    <li>Business case, financials, GTM for hardware-as-a-service subscription</li>
+                    <li>GTM execution: market/product requirements, marketing plan, communications</li>
+                    <li>Extensive qualitative/quantitative A/B testing for customer insights</li>
+                </ul>
+            </div>
+
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Management Consultant / Senior Consultant</div>
+                    <div class="exp-dates">2000 - 2012</div>
+                </div>
+                <div class="exp-company">Accenture, Booz Allen Hamilton, Capgemini</div>
+                
+                <ul class="achievements">
+                    <li>Accenture: Marketing automation solutions, <span class="metric">$50-100M operational cost savings</span></li>
+                    <li>Accenture: Marketing process review, <span class="metric">10% cost efficiency gain</span></li>
+                    <li>Booz Allen Hamilton: IRS systems, <span class="metric">$15M contract</span>, managed <span class="metric">$100M project</span></li>
+                    <li>Capgemini: <span class="metric">$1B telecom billing system</span> analysis/testing for Nextel</li>
+                    <li>Technical lead for hardware testing; certification plan for go-live</li>
+                </ul>
+            </div>
+
+            <div class="experience-block">
+                <div class="exp-header">
+                    <div class="exp-title">Managing Partner</div>
+                    <div class="exp-dates">Sep 2018 - Present</div>
+                </div>
+                <div class="exp-company">Epilogue Capital • San Diego, CA</div>
+                
+                <ul class="achievements">
+                    <li>Investing and acquiring profitable small businesses</li>
+                </ul>
+            </div>
+
+            <div class="section-title">Education & Certifications</div>
+
+<div style="margin-bottom: 8px;">
+        <div style="display: flex; justify-content: space-between;">
+            <div style="font-weight: bold;">Master of Business Administration (MBA) & Master of Science (MS)</div>
+            <div>2009 - 2011</div>
+        </div>
+        <div style="font-size: 11px;">University of Michigan - Ross School of Business & School for Environment and Sustainability</div>
+    </div>
+    
+    <div>
+        <div style="display: flex; justify-content: space-between;">
+            <div style="font-weight: bold;">Bachelor of Science (BS), Electrical Engineering</div>
+            <div>1996 - 2000</div>
+        </div>
+        <div style="font-size: 11px;">University of Virginia</div>
+    </div>
+
+            <div class="section-title">Key Technical Achievements</div>
+
+            <div style="background: #1a1a1a; color: #00ff00; padding: 15px; border-radius: 5px; font-size: 11px; line-height: 1.8;">
+                <strong>AI Products Shipped:</strong> 4 major AI/ML products to production serving millions<br>
+                <strong>P&L Scale:</strong> Managed $900M+ business unit with 10-15% CAGR<br>
+                <strong>Revenue Growth:</strong> Scaled e-commerce business to $3M with 20% margins<br>
+                <strong>Cost Reduction:</strong> 40% via AI automation while maintaining quality<br>
+                <strong>Efficiency Gains:</strong> 60%+ manual data entry reduction through ML<br>
+                <strong>Team Leadership:</strong> Hired, mentored, and developed high-performing product teams<br>
+                <strong>Business Lift:</strong> $100M+ in incremental revenue through product optimization
+            </div>
+        </div>
+    </div>
+</body>
+</html>

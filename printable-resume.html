@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Resume</title>
+    <!-- Importing Fonts: PT Serif for Body, Instrument Serif for Headings -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Reset & Typography */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'PT Serif', serif;
+            background-color: #ffffff;
+            color: #1c1917; /* High contrast black/brown */
+            line-height: 1.6;
+            font-size: 11pt; /* Standard resume font size */
+            width: 8.5in; /* US Letter width */
+            margin: 0 auto;
+            padding: 0.5in 0.75in;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Instrument Serif', serif;
+            color: #000000;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            border-bottom: 2px solid #e7e5e4;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #44403c;
+            font-style: italic;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-info {
+            font-size: 0.95rem;
+            color: #57534e;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .contact-info span {
+             display: inline-block;
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid #e7e5e4;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.25rem;
+            color: #44403c;
+        }
+
+        /* Summary */
+        .summary p {
+            margin-bottom: 0.75rem;
+            text-align: justify;
+        }
+
+        /* Experience Items */
+        .experience-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.25rem;
+        }
+
+        .role-title {
+            font-size: 1.25rem;
+            font-weight: 700; /* Bold for readability */
+            color: #000;
+        }
+
+        .company-name {
+            font-size: 1.15rem;
+            font-style: italic;
+            color: #44403c;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-meta {
+            font-family: 'Instrument Serif', serif; /* Use heading font for dates to match style */
+            font-size: 1.1rem;
+            color: #57534e;
+            white-space: nowrap;
+        }
+
+        .job-description {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            color: #44403c;
+        }
+
+        ul {
+            list-style-type: none; /* Custom bullets */
+            padding-left: 0;
+        }
+
+        li {
+            position: relative;
+            padding-left: 1.25rem;
+            margin-bottom: 0.4rem;
+        }
+
+        li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #78716c;
+            font-size: 1.2em;
+            line-height: 1.4;
+        }
+
+        strong {
+            font-weight: 700;
+            color: #000;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .skill-category h4 {
+            font-size: 1.1rem;
+            border-bottom: 1px dashed #e7e5e4;
+            padding-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Education */
+        .education-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
+        
+        .degree { font-weight: 700; }
+        .school { font-style: italic; color: #44403c; }
+
+        /* Print Optimization */
+        @media print {
+            body { 
+                width: 100%; 
+                margin: 0; 
+                padding: 0; 
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+            }
+            a { text-decoration: none; color: inherit; }
+            @page {
+                margin: 0.5in 0.5in;
+                size: letter;
+            }
+        }
+        
+        /* Screen View Wrapper */
+        @media screen {
+            body {
+                background-color: #f5f5f4; /* Stone-100 background for contrast */
+                padding: 2rem;
+                width: auto;
+            }
+            .page-sheet {
+                background: white;
+                width: 8.5in;
+                margin: 0 auto;
+                padding: 0.75in;
+                box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
+                min-height: 11in;
+            }
+            .print-btn {
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                background: #000;
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 9999px;
+                text-decoration: none;
+                font-family: 'Instrument Serif', serif;
+                font-size: 1.2rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transition: transform 0.2s;
+                cursor: pointer;
+            }
+            .print-btn:hover {
+                transform: translateY(-2px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- On-screen Print Button -->
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+    <div class="page-sheet">
+        <header>
+            <h1>Luis Calderon</h1>
+            <div class="tagline">Product Leader | PLG Expert | AI Innovation</div>
+            <div class="contact-info">
+                <span>luis@calderon.com</span>
+                <span>•</span>
+                <span>703.786.7899</span>
+                <span>•</span>
+                <span>San Diego, CA</span>
+                <span>•</span>
+                <span>linkedin.com/in/luiscalderonmba</span>
+            </div>
+        </header>
+
+        <section class="summary">
+            <h3 class="section-title">Executive Summary</h3>
+            <p><strong>Data-Driven Product Leader with a proven track record</strong> across iconic brands including Intuit ($900M TurboTax), Ancestry ($800M), and eBay (Global Marketplace). Currently CEO of SketchPop ($3M e-commerce). Distinguished by shipping AI/ML products pre-ChatGPT and deep expertise in <strong>Product-Led Growth (PLG)</strong>, conversion optimization, and consumer scale.</p>
+            <p>Core superpower is analyzing user behavior to drive ruthless prioritization and measurable growth. Successfully led products serving 4M+ users and managed high-performing product teams. Seeking VP/Director Product roles in PLG, AI/ML, or Consumer Tech.</p>
+        </section>
+
+        <section class="experience">
+            <h3 class="section-title">Professional Experience</h3>
+
+            <!-- Intuit -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="role-title">Principal Product Manager (Group PM) - AI/ML</div>
+                    <div class="job-meta">2021 - 2024</div>
+                </div>
+                <div class="company-name">Intuit - TurboTax Self-Employed</div>
+                <div class="job-description">Led $900M business unit serving 4M+ solopreneurs. Managed 4 PMs. Delivered 10-15% CAGR ($100-150M annual growth).</div>
+                <ul>
+                    <li><strong>PLG Strategy:</strong> Drove pure PLG motion with zero sales team, optimizing freemium funnels and self-serve onboarding.</li>
+                    <li><strong>AI Innovation (Pre-ChatGPT):</strong> Shipped 4 major AI/ML products including Expense Categorization (60% less manual entry) and Deduction Finder (HITL).</li>
+                    <li><strong>Conversion Lift:</strong> Analyzed millions of sessions to identify friction points, shipping features that significantly increased freemium-to-paid conversion.</li>
+                    <li><strong>Audit Risk Predictor:</strong> Built ML model to predict audit risk, reducing user anxiety and improving retention.</li>
+                </ul>
+            </div>
+
+            <!-- SketchPop -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="role-title">CEO - AI Transformation</div>
+                    <div class="job-meta">2018 - Present</div>
+                </div>
+                <div class="company-name">SketchPop LLC</div>
+                <div class="job-description">Acquired and scaled consumer e-commerce business to $3M revenue with 20% margins.</div>
+                <ul>
+                    <li><strong>AI Operations:</strong> Deployed AI chatbots achieving 40% cost reduction while maintaining quality customer service.</li>
+                    <li><strong>Growth:</strong> Doubled order volume with same headcount through AI automation and funnel optimization.</li>
+                    <li><strong>Data-Driven Marketing:</strong> Used cohort analysis and A/B testing to optimize pricing, bundling, and retention strategies.</li>
+                </ul>
+            </div>
+
+            <!-- GrowthAlchemyLab -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="role-title">Founder & Principal Consultant</div>
+                    <div class="job-meta">2024 - Present</div>
+                </div>
+                <div class="company-name">GrowthAlchemyLab</div>
+                <ul>
+                    <li><strong>AI Strategy:</strong> Advise consumer/PLG companies on AI product strategy and LLM implementation for measurable ROI.</li>
+                    <li><strong>Impact:</strong> Helping clients achieve 30-50% cost reduction through operational AI deployment.</li>
+                </ul>
+            </div>
+
+            <!-- Epilogue Capital -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="role-title">Managing Partner</div>
+                    <div class="job-meta">2018 - Present</div>
+                </div>
+                <div class="company-name">Epilogue Capital</div>
+                <ul>
+                    <li><strong>Investment Thesis:</strong> Acquire and operate profitable consumer/SMB businesses where product improvements and AI can drive growth.</li>
+                </ul>
+            </div>
+
+            <!-- Ancestry -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="role-title">Director of Product - Growth</div>
+                    <div class="job-meta">2016 - 2017</div>
+                </div>
+                <div class="company-name">Ancestry</div>
+                <ul>
+                    <li><strong>Mobile Growth:</strong> Led mobile app conversion initiative achieving <strong>30% lift</strong> in subscriptions.</li>
+                    <li><strong>Revenue Lift:</strong> Built and rolled out abandon cart campaigns resulting in 5% revenue lift.</li>
+                    <li><strong>Optimization:</strong> Designed new shopping experiences improving top-of-funnel customer acquisition.</li>
+                </ul>
+            </div>
+
+            <!-- eBay -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="role-title">Product Leader - Payments & Customer Connection</div>
+                    <div class="job-meta">2013 - 2015</div>
+                </div>
+                <div class="company-name">eBay Marketplaces</div>
+                <ul>
+                    <li><strong>$100M+ Lift:</strong> Led checkout optimization initiatives achieving +2% conversion improvement at global scale.</li>
+                    <li><strong>Analytics Leadership:</strong> Led global payments analytics team providing strategic insights for product decisions.</li>
+                    <li><strong>Operational Excellence:</strong> Reduced checkout defects by 33% through improved quality processes.</li>
+                </ul>
+            </div>
+            
+            <!-- Early Career Summary -->
+             <div class="experience-item" style="margin-top: 2rem; border-top: 1px dashed #e7e5e4; padding-top: 1rem;">
+                <div class="role-title" style="font-size: 1.1rem; margin-bottom: 0.5rem;">Early Career History</div>
+                <ul style="font-size: 0.95rem;">
+                    <li><strong>Doctor.com (2017-2018):</strong> Director of Product Management. Launched provider platform increasing engagement 15%.</li>
+                    <li><strong>Tile (2015-2016):</strong> Growth Product Leader. Defined and launched hardware-as-a-service subscription program.</li>
+                    <li><strong>Accenture (2010-2012):</strong> Management Consultant. Strategy focused on Marketing, Sales, and CRM transformation.</li>
+                    <li><strong>Bebarang (2009-2011):</strong> Co-Founder. Built online e-commerce exchange platform from 0 to 1.</li>
+                </ul>
+            </div>
+
+        </section>
+
+        <section class="education">
+            <h3 class="section-title">Education</h3>
+            <div class="education-item">
+                <div>
+                    <span class="degree">MBA & MS (Dual Degree)</span>, <span class="school">University of Michigan - Ross School of Business</span>
+                </div>
+                <div class="job-meta">2011</div>
+            </div>
+            <div class="education-item">
+                <div>
+                    <span class="degree">BS Electrical Engineering</span>, <span class="school">University of Virginia</span>
+                </div>
+                <div class="job-meta">2003</div>
+            </div>
+        </section>
+
+        <section class="skills">
+            <h3 class="section-title">Skills</h3>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Product & Strategy</h4>
+                    <p>Product-Led Growth (PLG), Consumer Tech, Roadmap Strategy, A/B Testing, Conversion Optimization, Go-to-Market</p>
+                </div>
+                <div class="skill-category">
+                    <h4>AI & Technology</h4>
+                    <p>AI/ML Product Mgmt, LLMs (GPT-4, Claude), HITL, Prompt Engineering, Predictive Analytics</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

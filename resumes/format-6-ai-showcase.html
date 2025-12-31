@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - AI/ML Innovation Leader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+            line-height: 1.4;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+        }
+
+        .page {
+            padding: 0.5in;
+            min-height: 11in;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .profile-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 5px solid white;
+            object-fit: cover;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .header .tagline {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 12px;
+        }
+
+        .header .contact {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .ai-highlight-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .ai-highlight-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .ai-products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .ai-product-card {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .ai-product-name {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .ai-product-desc {
+            font-size: 11px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 25px 0 15px 0;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+        }
+
+        .experience-card {
+            background: #f8f9fa;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px 0 0 10px;
+        }
+
+        .exp-header {
+            margin-bottom: 12px;
+        }
+
+        .exp-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .exp-company {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .exp-dates {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .exp-intro {
+            font-size: 12px;
+            font-style: italic;
+            color: #4a5568;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .subsection-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 12px 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subsection-title::before {
+            content: '⚡';
+            font-size: 16px;
+        }
+
+        .exp-bullets {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .exp-bullets li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .exp-bullets li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .metric {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 10px;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #4c51bf;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .tech-stack {
+            margin-top: 10px;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .page {
+                padding: 0.5in;
+                page-break-after: always;
+            }
+
+            .print-button {
+                display: none;
+            }
+
+            .header, .ai-highlight-box, .section-title, .metric, .experience-card::before {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">Print AI Resume</button>
+
+    <div class="container">
+        <!-- Page 1 -->
+        <div class="page">
+            <div class="header">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFLhrcVCSYY8w/profile-displayphoto-shrink_800_800/B56ZX04IgtHQAg-/0/1743570110941?e=1766620800&v=beta&t=9KHaWvyX8UvAxH_yLT7FD15TObn3kZgtfQP1A3j7m1o" alt="Luis Calderon" class="profile-photo">
+                <h1>Luis Calderon</h1>
+                <div class="tagline">AI/ML Product Innovation Leader | Shipped 4+ AI Products at Scale</div>
+                <div class="contact">San Diego, CA • lcalderon@gmail.com • linkedin.com/in/luiscalderon</div>
+            </div>
+
+            <div class="ai-highlight-box">
+                <div class="ai-highlight-title">AI/ML Products Shipped to Production</div>
+                <div class="ai-products-grid">
+                    <div class="ai-product-card">
+                        <div class="ai-product-name">Expense Categorization AI</div>
+                        <div class="ai-product-desc">ML model auto-categorizing business expenses, 60%+ reduction in manual entry for millions of users</div>
+                    </div>
+                    <div class="ai-product-card">
+                        <div class="ai-product-name">Deduction Finder ML</div>
+                        <div class="ai-product-desc">HITL predictive algorithm identifying missed deductions, $1,200+ average refund increase</div>
+                    </div>
+                    <div class="ai-product-card">
+                        <div class="ai-product-name">Audit Risk Predictor</div>
+                        <div class="ai-product-desc">ML model predicting IRS audit risk and suggesting optimizations for tax compliance</div>
+                    </div>
+                    <div class="ai-product-card">
+                        <div class="ai-product-name">Document Extraction AI</div>
+                        <div class="ai-product-desc">OCR/AI extracting structured data from W-2s, 1099s, receipts with high accuracy</div>
+                    </div>
+                    <div class="ai-product-card">
+                        <div class="ai-product-name">AI Customer Service Bot</div>
+                        <div class="ai-product-desc">LLM-powered chatbot achieving 40% cost reduction while maintaining 4.8+ star satisfaction</div>
+                    </div>
+                    <div class="ai-product-card">
+                        <div class="ai-product-name">AI Quality Control System</div>
+                        <div class="ai-product-desc">ML flagging potential issues before human review, improving consistency and reducing rework</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">AI/ML Leadership Experience</div>
+
+            <!-- SketchPop -->
+            <div class="experience-card">
+                <div class="exp-header">
+                    <div class="exp-title">Chief Product Officer</div>
+                    <div class="exp-company">SketchPop LLC • San Diego, CA</div>
+                    <div class="exp-dates">July 2025 - Present</div>
+                </div>
+                <div class="exp-intro">
+                    Acquired and scaled custom art e-commerce business to $3M revenue with 30-person team and 20% margins through AI-powered operational transformation and product innovation.
+                </div>
+
+                <div class="subsection-title">AI Implementation & Operational Efficiency (2025)</div>
+                <ul class="exp-bullets">
+                    <li>Deployed AI chatbot for customer service automation achieving <span class="metric">40% cost reduction</span> while maintaining 4.8+ star customer satisfaction - early mover in applying post-ChatGPT LLM capabilities to e-commerce operations</li>
+                    <li>Integrated LLM-powered customer communication tools (GPT-4/Claude) for personalized order updates, revision requests, and upsell recommendations</li>
+                    <li>Leveraged AI for demand forecasting and inventory planning, reducing fulfillment delays by <span class="metric">30%</span></li>
+                </ul>
+
+                <div class="subsection-title">Product & Technology Innovation</div>
+                <ul class="exp-bullets">
+                    <li>Rebuilt entire backend tech stack with modern AI infrastructure to enable scalable AI feature deployment</li>
+                    <li>Developed AI-assisted quality control system that flags potential issues before artist review</li>
+                    <li>Implemented machine learning models to predict customer preferences and recommend personalized product options</li>
+                    <li>Created AI-powered content generation for product descriptions, SEO optimization, and marketing copy</li>
+                    <li>Built data pipeline for continuous AI model improvement using customer feedback and order data</li>
+                </ul>
+
+                <div class="subsection-title">Business Outcomes</div>
+                <ul class="exp-bullets">
+                    <li>Revenue: Scaled to <span class="metric">$3M annual revenue</span> post-acquisition</li>
+                    <li>Profitability: Achieved 20% EBITDA margins by reducing overhead with strategic changes and AI automation</li>
+                    <li>Operational Leverage: AI automation allowed <span class="metric">30-person team to handle 2x order volume</span></li>
+                </ul>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">GPT-4</span>
+                    <span class="tech-badge">Claude</span>
+                    <span class="tech-badge">AI Chatbots</span>
+                    <span class="tech-badge">LLM Integration</span>
+                    <span class="tech-badge">ML Models</span>
+                    <span class="tech-badge">Shopify</span>
+                </div>
+            </div>
+
+            <!-- Growth Alchemy Lab -->
+            <div class="experience-card">
+                <div class="exp-header">
+                    <div class="exp-title">Growth Management Consultant</div>
+                    <div class="exp-company">Growth Alchemy Lab • San Diego, CA</div>
+                    <div class="exp-dates">September 2024 - Present</div>
+                </div>
+                <div class="exp-intro">
+                    Founded AI/ML product consulting practice advising startups and growth-stage companies on AI strategy, implementation, and operational deployment. Specialize in helping companies leverage LLMs, AI agents, and operational AI to drive measurable business outcomes.
+                </div>
+
+                <div class="subsection-title">AI Product Consulting & Advisory</div>
+                <ul class="exp-bullets">
+                    <li>Advise companies on AI/ML product strategy, feature prioritization, and roadmap development with focus on ROI and practical implementation</li>
+                    <li>Guide AI operations deployment including chatbots, AI agents, and workflow automation using latest LLM capabilities (GPT-4, Claude, Gemini, Llama)</li>
+                    <li>Help companies evaluate build vs. buy decisions for AI features and select appropriate AI vendors/platforms</li>
+                    <li>Develop AI product metrics frameworks and success measurement strategies tied to business KPIs</li>
+                    <li>Consult on prompt engineering, LLM orchestration, and AI agent frameworks for production deployments</li>
+                </ul>
+
+                <div class="subsection-title">Notable Client Engagements</div>
+                <ul class="exp-bullets">
+                    <li><strong>Ivo.AI:</strong> Product advisor for AI-powered sales automation platform - advised on AI agent architecture, LLM integration strategy, and AI operations tools roadmap</li>
+                    <li><strong>Multiple B2B SaaS Companies:</strong> AI feature development, implementation roadmaps, cost-benefit analysis, and go-to-market strategy for AI products</li>
+                    <li><strong>E-commerce Platforms:</strong> Advised on AI chatbot deployment, customer service automation, and operational AI use cases</li>
+                    <li><strong>Early-Stage AI Startups:</strong> AI product-market fit validation, pricing models, competitive positioning in crowded AI market</li>
+                </ul>
+
+                <div class="subsection-title">Impact</div>
+                <ul class="exp-bullets">
+                    <li>Helped clients achieve measurable ROI from AI investments: cost reduction <span class="metric">30-50%</span>, revenue lift, efficiency gains</li>
+                    <li>Guided successful AI feature launches that improved customer retention <span class="metric">15-25%</span> and engagement</li>
+                    <li>Enabled companies to move faster with AI by providing hands-on implementation guidance vs. theoretical strategy</li>
+                </ul>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">GPT-4</span>
+                    <span class="tech-badge">Claude</span>
+                    <span class="tech-badge">Gemini</span>
+                    <span class="tech-badge">Llama</span>
+                    <span class="tech-badge">AI Agents</span>
+                    <span class="tech-badge">LLM Orchestration</span>
+                    <span class="tech-badge">Prompt Engineering</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page">
+            <!-- Intuit -->
+            <div class="experience-card">
+                <div class="exp-header">
+                    <div class="exp-title">Consumer Group Product Management Leader - Growth</div>
+                    <div class="exp-company">Intuit • San Diego, CA</div>
+                    <div class="exp-dates">October 2021 - September 2024</div>
+                </div>
+                <div class="exp-intro">
+                    Led $900M-$1B Self-Employed business unit as Principal/Group PM, managing team of 4 Product Managers and delivering 10-15% CAGR revenue growth ($100-150M annual growth) through AI-powered product innovation.
+                </div>
+
+                <div class="subsection-title">AI/ML Product Leadership (Shipped 4 Major AI Products)</div>
+                <ul class="exp-bullets">
+                    <li><strong>Expense Categorization AI:</strong> Shipped ML model that automatically categorizes business expenses from receipts and transactions, reducing manual data entry by <span class="metric">60%+</span> for millions of self-employed users</li>
+                    <li><strong>Deduction Finder ML:</strong> Developed predictive algorithm using Human-in-the-Loop (HITL) training that identifies missed deductions based on user profile, industry, and transaction patterns - helped users maximize refunds by average of <span class="metric">$1,200+</span></li>
+                    <li><strong>Audit Risk Predictor:</strong> Built ML model that predicts IRS audit risk and suggests optimizations to reduce risk while maximizing legitimate deductions</li>
+                    <li><strong>Document Extraction AI:</strong> Implemented OCR and AI to extract structured data from uploaded tax documents (W-2s, 1099s, receipts), improving accuracy and reducing user effort</li>
+                    <li><strong>Cross-BU AI Coordination:</strong> Led coordination across TurboTax business units to ensure consistent AI experiences and shared ML infrastructure</li>
+                </ul>
+
+                <div class="subsection-title">Product & Growth Achievements</div>
+                <ul class="exp-bullets">
+                    <li>Revenue Growth: Delivered <span class="metric">10-15% CAGR on $900M+</span> business through strategic AI/ML product initiatives</li>
+                    <li>Team Leadership: Hired, mentored, and developed team of 4 Product Managers supporting AI/ML roadmap</li>
+                    <li>Product Launches: Partner integrations, freemium acquisition model, mobile experience improvements</li>
+                    <li>Cross-Functional Leadership: Coordinated product strategy across multiple business units and engineering teams</li>
+                    <li>Customer Impact: AI products served millions of self-employed users (freelancers, gig workers, small business owners)</li>
+                </ul>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">Machine Learning</span>
+                    <span class="tech-badge">HITL</span>
+                    <span class="tech-badge">Predictive Analytics</span>
+                    <span class="tech-badge">OCR</span>
+                    <span class="tech-badge">NLP</span>
+                    <span class="tech-badge">Data Science</span>
+                </div>
+            </div>
+
+            <!-- Additional Experience -->
+            <div class="experience-card">
+                <div class="exp-header">
+                    <div class="exp-title">Director of (Growth) Product Management</div>
+                    <div class="exp-company">Ancestry • San Francisco Bay Area</div>
+                    <div class="exp-dates">January 2016 - 2017</div>
+                </div>
+                <ul class="exp-bullets">
+                    <li>Led acquisition, conversion & growth for <span class="metric">$800M subscription business</span></li>
+                    <li>Built abandon cart feature delivering <span class="metric">5% revenue lift</span></li>
+                    <li>Launched mobile initiative achieving <span class="metric">30% lift in mobile app conversion subscriptions</span></li>
+                    <li>Customer advocacy initiative documenting end-to-end journey, metrics, pricing</li>
+                    <li>Cross-functional collaboration: Finance, Product, Marketing, Member Services</li>
+                </ul>
+            </div>
+
+            <div class="experience-card">
+                <div class="exp-header">
+                    <div class="exp-title">Product Leader</div>
+                    <div class="exp-company">eBay Marketplaces • San Francisco Bay Area</div>
+                    <div class="exp-dates">March 2013 - April 2015</div>
+                </div>
+                <ul class="exp-bullets">
+                    <li>Managed cross-functional teams for eBay Payments & Customer Connection across mobile and web</li>
+                    <li>Improved checkout conversion <span class="metric">+2%</span>, lowered operational costs <span class="metric">-33% defects</span></li>
+                    <li>Shipped releases generating <span class="metric">$100M+ business lift</span></li>
+                    <li>Global Payments Analytics lead providing strategic/analytical support</li>
+                    <li>Hired, trained, mentored <span class="metric">6+ analysts and managers</span></li>
+                </ul>
+            </div>
+
+            <div class="experience-card">
+                <div class="exp-header">
+                    <div class="exp-title">Earlier Career: Consulting & Product Leadership</div>
+                    <div class="exp-company">Doctor.com, Tile, Accenture, Booz Allen Hamilton, Capgemini</div>
+                    <div class="exp-dates">2000 - 2018</div>
+                </div>
+                <ul class="exp-bullets">
+                    <li><strong>Doctor.com:</strong> Director of Product - Analytics platform increasing engagement <span class="metric">15%</span></li>
+                    <li><strong>Tile:</strong> Growth Product Leader - Launched subscription renewal program, hardware-as-a-service model</li>
+                    <li><strong>Accenture:</strong> Marketing automation solutions saving <span class="metric">$50-100M operational costs</span></li>
+                    <li><strong>Booz Allen Hamilton:</strong> Led IRS systems projects, managed <span class="metric">$100M project</span></li>
+                    <li><strong>Capgemini:</strong> Analyzed <span class="metric">$1B telecom billing system</span> for Nextel</li>
+                </ul>
+            </div>
+
+            <div class="section-title">Education & Additional</div>
+            <div style="display: flex; justify-content: space-between; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 13px;">
+<div class="education-item">
+            <div><strong>MBA & MS</strong><br>University of Michigan (Ross & SEAS)</div>
+            <div style="text-align: right; color: var(--text-secondary);">2009 - 2011</div>
+        </div>
+        <div class="education-item">
+            <div><strong>BS, Electrical Engineering</strong><br>University of Virginia</div>
+            <div style="text-align: right; color: var(--text-secondary);">1996 - 2000</div>
+        </div>
+                <div><strong>Managing Partner</strong><br>Epilogue Capital (2018-Present)</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

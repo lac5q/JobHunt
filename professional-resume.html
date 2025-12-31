@@ -1,0 +1,1498 @@
+<html lang="en" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Product Leader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <!-- Importing PT Serif (Headings) and Instrument Serif (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+    
+    <style>
+        /* Typography Mapping */
+        body { 
+            font-family: 'PT Serif', serif; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-optical-sizing: auto; /* Improve rendering */
+            letter-spacing: 0.03em;
+            font-size: 1.15rem; /* Slight bump */
+            color: #1c1917; /* High contrast black/brown */
+        }
+        h1, h2, h3, h4, h5, .font-heading { 
+            font-family: 'Instrument Serif', serif; 
+            letter-spacing: 0.02em;
+            color: #000000; /* Pure black for headings */
+        }
+        
+        /* High Contrast Overrides */
+        .text-stone-600 { color: #292524 !important; } /* Darker stone */
+        .text-stone-500 { color: #44403c !important; } /* Darker stone */
+        .text-stone-400 { color: #78716c !important; } /* Keep meta info slightly lighter but legible */
+        
+        /* Custom Scrollbar Stone */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f5f5f4; }
+        ::-webkit-scrollbar-thumb { background-color: #d6d3d1; border-radius: 20px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: #a8a29e; }
+
+        /* --- DRAMATIC HERO ANIMATIONS --- */
+        .hero-reveal {
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(80px) scale(0.9);
+            transition: all 1.2s cubic-bezier(0.165, 0.84, 0.44, 1); /* Custom ease-out-quart */
+            will-change: opacity, transform, filter;
+        }
+
+        .hero-reveal.is-visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0) scale(1);
+        }
+
+        .hero-delay-1 { transition-delay: 0.2s; }
+        .hero-delay-2 { transition-delay: 0.4s; }
+        .hero-delay-3 { transition-delay: 0.6s; }
+        .hero-delay-4 { transition-delay: 0.8s; }
+
+        /* --- UNVEILING ANIMATIONS (Standard) --- */
+
+        /* Base class for elements to be revealed */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(40px) scale(0.96) rotateX(10deg);
+            transform-origin: center top;
+            transition: opacity 0.8s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+            will-change: opacity, transform;
+            perspective: 1000px;
+        }
+
+        /* The visible state */
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0);
+        }
+
+        /* Stagger delays for grid items (handled via JS or CSS helper classes) */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* --- FLIP CARD SYSTEM --- */
+        
+        /* The container */
+        .flip-card {
+            perspective: 1000px;
+            position: relative;
+            height: 450px;
+            width: 100%;
+            margin-bottom: 3rem;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer; /* Clickable */
+        }
+
+        .flip-card.focused {
+            transform: scale(1.03); /* Subtle zoom on scroll focus */
+            z-index: 20;
+        }
+
+        /* The inner flipper */
+        .flipper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: left;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flipper {
+            transform: rotateY(180deg);
+        }
+
+        /* Front and Back commonalities */
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem; /* rounded-xl */
+            background-color: #ffffff;
+            border: 1px solid #e7e5e4;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        /* Front Specifics */
+        .card-front {
+            z-index: 2;
+            padding: 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-front:hover {
+            border-color: #a8a29e;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Secondary text on hover */
+        .hover-summary {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            padding: 0 2rem; /* Add side padding */
+        }
+        
+        .hover-summary p {
+            font-size: 2.25rem; /* Larger summary text */
+            line-height: 1.3;
+            color: #1c1917; /* Darker black */
+            font-weight: 500;
+        }
+
+        .hover-summary .tags {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hover-summary .tag {
+            font-size: 1rem;
+            color: #78716c;
+            background: transparent; /* No gray bg */
+            border-bottom: 1px solid #e7e5e4; /* Subtle underline instead */
+            padding-bottom: 2px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        .card-front:hover .hover-summary {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Newspaper Legibility */
+        body {
+            line-height: 1.8; /* Increased global line height */
+        }
+        
+        p, li {
+            letter-spacing: 0.01em; /* Slight letter spacing */
+        }
+
+        /* Back Specifics */
+        .card-back {
+            transform: rotateY(180deg);
+            z-index: 1;
+            padding: 2.5rem;
+            overflow-y: auto; /* Scrollable content */
+            background-color: #fafaf9; /* Slightly different bg for back? Or keep white. User said "same size". */
+            background-color: #ffffff;
+        }
+
+        /* Flip Toggle Button (Tap area) */
+        .flip-btn {
+            cursor: pointer;
+            padding: 0;
+            background: none;
+            border: none;
+            color: #a8a29e;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .flip-btn:hover {
+            color: #000;
+            transform: translateX(4px);
+        }
+
+        /* Close Button on Back */
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            padding: 0.5rem;
+            background-color: #f5f5f4;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+        .close-btn:hover {
+            background-color: #e7e5e4;
+        }
+
+        /* Hide scrollbar for cleaner look but allow scrolling */
+        .card-back::-webkit-scrollbar {
+            width: 6px;
+        }
+        .card-back::-webkit-scrollbar-thumb {
+            background-color: #d6d3d1;
+            border-radius: 4px;
+        }
+
+        /* Early Career Toggle Button */
+        .early-career-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border: 1px solid #e7e5e4;
+            border-radius: 1rem;
+            color: #57534e;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem; /* Bigger font */
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+        .early-career-toggle:hover {
+            border-color: #a8a29e;
+            background-color: #fafaf9;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800 antialiased overflow-x-hidden selection:bg-black selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-stone-100/90 backdrop-blur-md border-b border-stone-200 reveal-on-scroll">
+        <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="text-2xl font-heading font-semibold tracking-wide text-black">LC.</div>
+            <div class="hidden md:flex items-center gap-8 text-lg font-normal text-stone-500">
+                <a href="#about" class="hover:text-black transition-colors">About</a>
+                <a href="#experience" class="hover:text-black transition-colors">Experience</a>
+                <a href="#education" class="hover:text-black transition-colors">Education</a>
+                <a href="#competencies" class="hover:text-black transition-colors">Skills</a>
+                <button onclick="window.print()" class="bg-black text-white px-5 py-2 hover:bg-stone-800 transition-all flex items-center gap-2 text-base font-normal tracking-wide border border-transparent rounded-sm shadow-sm">
+                    <span>Resume</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="relative z-10 pt-32 pb-24 px-4 md:px-6">
+        <div class="max-w-3xl mx-auto space-y-12">
+
+            <!-- Hero Section -->
+            <section id="about" class="hero-card p-12 md:p-16 flex flex-col items-center text-center gap-8 rounded-xl overflow-hidden relative">
+                
+                <!-- 1. Image -->
+                <div class="relative w-32 h-32 md:w-40 md:h-40 shrink-0 hero-reveal">
+                    <img src="square-profile.png" alt="Luis Calderon" class="w-full h-full object-cover rounded-full border border-stone-200 shadow-sm">
+                </div>
+
+                <!-- 2. Content Stack -->
+                <div class="space-y-6 max-w-xl">
+                    <h1 class="text-5xl md:text-6xl font-heading font-semibold text-black tracking-wider leading-[1.1] hero-reveal hero-delay-1">
+                        Luis Calderon
+                    </h1>
+                    
+                    <h2 class="text-2xl md:text-3xl font-heading font-semibold text-stone-700 tracking-wide leading-snug hero-reveal hero-delay-2">
+                        Product Leader | PLG Expert | AI Innovation
+                    </h2>
+
+                    <!-- Socials -->
+                    <div class="flex flex-col items-center gap-6 pt-2 hero-reveal hero-delay-3">
+                        <div class="flex justify-center gap-4">
+                            <a href="mailto:luis@calderon.com" class="p-2 text-stone-500 hover:text-black transition-colors border border-transparent hover:border-stone-200 rounded-full" title="Email Me">
+                                <i data-lucide="mail" class="w-6 h-6" stroke-width="1.5"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/luiscalderonmba/" target="_blank" class="p-2 text-stone-500 hover:text-black transition-colors border border-transparent hover:border-stone-200 rounded-full" title="LinkedIn Profile">
+                                <i data-lucide="linkedin" class="w-6 h-6" stroke-width="1.5"></i>
+                            </a>
+                            <div class="relative group">
+                                <a href="https://www.google.com/maps/place/San+Diego,+CA" target="_blank" class="p-2 text-stone-500 hover:text-black transition-colors border border-transparent hover:border-stone-200 rounded-full block" title="San Diego, CA">
+                                    <i data-lucide="map-pin" class="w-6 h-6" stroke-width="1.5"></i>
+                                </a>
+                                <!-- Map Overlay Tooltip -->
+                                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 h-32 bg-white rounded-lg shadow-xl border border-stone-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pointer-events-none">
+                                    <img src="https://images.unsplash.com/photo-1534234828563-02531853a445?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="San Diego Map" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/10"></div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-white/90 px-2 py-1 text-center text-xs font-semibold text-stone-700">San Diego, CA</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Download Resume Link -->
+                        <a href="Luis-Calderon-Resume.pdf" download="Luis-Calderon-Resume.pdf" class="flex items-center gap-2 text-stone-400 hover:text-black transition-colors text-sm uppercase tracking-widest font-medium group" title="Download Resume PDF">
+                            <i data-lucide="download" class="w-4 h-4 group-hover:animate-bounce"></i>
+                            <span>Download Resume PDF</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 3. Bio -->
+                <div class="pt-8 border-t border-stone-100 w-full py-8 hero-reveal hero-delay-4">
+                    <p class="text-xl md:text-2xl leading-loose text-stone-600 font-normal">
+                        <span class="text-black italic">Data-driven product leader</span> with proven track record across <span class="text-black italic">$900M TurboTax, $800M Ancestry, and global eBay marketplace</span>. Currently CEO of $3M e-commerce business. Deep expertise in <span class="text-black italic">Product-Led Growth, AI/ML products, and conversion optimization</span>.
+                    </p>
+                </div>
+
+                <!-- 4. Seeking -->
+                <div class="w-full pt-4 hero-reveal hero-delay-4 flex justify-center items-center">
+                     <div class="text-center max-w-xl">
+                         <p class="text-xl md:text-2xl font-heading font-medium text-black tracking-wide leading-snug">
+                             <span class="text-stone-500 uppercase text-xs md:text-sm font-semibold tracking-widest block mb-1">Seeking Roles In:</span>
+                             Fractional, Consulting &amp; Full-Time VP/Director/Principal Product Leader for Established or Growth-Stage Companies Building with AI.
+                         </p>
+                     </div>
+                </div>
+            </section>
+
+            <!-- Metrics Grid -->
+            <section class="grid grid-cols-2 gap-4">
+                <div class="secondary-card p-6 text-center rounded-xl group reveal-on-scroll delay-100 relative overflow-hidden">
+                    <div class="text-4xl font-heading font-medium text-black mb-2">$100M+</div>
+                    <div class="text-sm font-normal text-stone-500 uppercase tracking-widest">Business Lift</div>
+                </div>
+                <div class="secondary-card p-6 text-center rounded-xl group reveal-on-scroll delay-200 relative overflow-hidden">
+                    <div class="text-4xl font-heading font-medium text-black mb-2">4+</div>
+                    <div class="text-sm font-normal text-stone-500 uppercase tracking-widest">AI Products</div>
+                </div>
+                <div class="secondary-card p-6 text-center rounded-xl group reveal-on-scroll delay-300 relative overflow-hidden">
+                    <div class="text-4xl font-heading font-medium text-black mb-2">40%</div>
+                    <div class="text-sm font-normal text-stone-500 uppercase tracking-widest">Cost Reduction</div>
+                </div>
+                <div class="secondary-card p-6 text-center rounded-xl group reveal-on-scroll delay-100 relative overflow-hidden">
+                    <div class="text-4xl font-heading font-medium text-black mb-2">30%</div>
+                    <div class="text-sm font-normal text-stone-500 uppercase tracking-widest">Mobile Lift</div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="space-y-8">
+                <div class="flex items-center justify-center gap-4 py-6 reveal-on-scroll">
+                    <div class="h-px bg-stone-300 w-16"></div>
+                    <h3 class="text-2xl font-heading font-semibold text-black tracking-wide">Professional Experience</h3>
+                    <div class="h-px bg-stone-300 w-16"></div>
+                </div>
+
+                <!-- Job Card 1: Intuit -->
+                <div class="flip-card reveal-on-scroll group">
+                    <div class="flipper">
+                        <!-- Front -->
+                        <div class="card-front">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Principal Product Manager - AI/ML</h4>
+                                        <div class="flex items-center gap-3 mt-2">
+                                            <img src="https://logo.clearbit.com/intuit.com" class="w-6 h-6 object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="Intuit" onerror="this.style.display='none'">
+                                            <div class="text-stone-400 text-lg italic">Intuit - TurboTax Self-Employed</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2021 - 2024</span>
+                                </div>
+                                
+                                <!-- Hover Summary -->
+                                <div class="hover-summary mt-8">
+                                    <p>Led $900M business serving 4M+ solopreneurs. Delivered 10-15% CAGR through AI innovation.</p>
+                                    <div class="tags">
+                                        <span class="tag">PLG Strategy</span>
+                                        <span class="tag">AI/ML Products</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Flip Button -->
+                            <div class="flex justify-end mt-auto">
+                                <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                    <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                    <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Back -->
+                        <div class="card-back">
+                            <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                            </button>
+                            
+                            <div class="pr-2">
+                                <h4 class="text-xl font-heading font-medium text-black mb-1">Intuit - Principal PM</h4>
+                                <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                <div class="space-y-6 text-stone-600">
+                                    <p class="italic text-lg border-l-2 border-stone-200 pl-4">Led $900M TurboTax Self-Employed business as Principal/Group PM serving 4M+ solopreneurs, freelancers, and gig workers. Managed team of 4 PMs and delivered 10-15% CAGR ($100-150M annual growth) through data-driven product decisions and AI-powered innovation.</p>
+                                    
+                                    <div>
+                                        <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="trending-up" class="w-4 h-4"></i> Product-Led Growth & Data-Driven Execution</h5>
+                                        <ul class="space-y-3">
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>PLG Motion:</strong> Pure PLG motion serving millions with zero sales team—freemium model, self-service onboarding, product-driven conversion.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Data Insights:</strong> Analyzed user behavior across millions of sessions using cohort analysis, funnel optimization, A/B testing to identify friction and drive decisions.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Conversion:</strong> Shipped features that increased freemium-to-paid conversion, reduced drop-off rates, improved completion rates using data insights.</span></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4"></i> Shipped 4 AI/ML Products for Growth</h5>
+                                        <ul class="space-y-3">
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Expense Categorization AI:</strong> ML model auto-categorizes expenses from receipts/transactions, reducing manual entry 60%+ and improving completion.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Deduction Finder ML:</strong> Predictive algorithm using HITL training identifies missed deductions—increased average refund $1,200+, drove upsell.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Audit Risk Predictor:</strong> ML model predicts IRS audit risk and suggests optimizations, reducing user anxiety and improving trust/retention.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Document Extraction AI:</strong> OCR/AI extracts data from tax documents (W-2s, 1099s, receipts), removing friction and improving conversion.</span></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="award" class="w-4 h-4"></i> Impact & Leadership</h5>
+                                        <ul class="space-y-3">
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Growth:</strong> Delivered 10-15% CAGR on $900M+ business through data-driven experimentation and AI features.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Team Building:</strong> Hired and mentored 4 Product Managers focused on PLG and AI/ML.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Cross-Functional:</strong> Coordinated with engineering, design, data science, marketing—hands-on PM leadership.</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Card 2: SketchPop -->
+                <div class="flip-card reveal-on-scroll group delay-100">
+                    <div class="flipper">
+                        <!-- Front -->
+                        <div class="card-front">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">CEO - AI Transformation</h4>
+                                        <div class="flex items-center gap-3 mt-2">
+                                            <img src="https://logo.clearbit.com/sketchpop.com" class="w-6 h-6 object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="SketchPop" onerror="this.style.display='none'">
+                                            <div class="text-stone-400 text-lg italic">SketchPop LLC</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2018 - Present</span>
+                                </div>
+                                
+                                <!-- Hover Summary -->
+                                <div class="hover-summary mt-8">
+                                    <p>CEO of $3M consumer e-commerce (20% margins). Doubled order volume through AI automation.</p>
+                                    <div class="tags">
+                                        <span class="tag">AI Operations</span>
+                                        <span class="tag">Growth</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Flip Button -->
+                            <div class="flex justify-end mt-auto">
+                                <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                    <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                    <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Back -->
+                        <div class="card-back">
+                            <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                            </button>
+                            
+                            <div class="pr-2">
+                                <h4 class="text-xl font-heading font-medium text-black mb-1">SketchPop - CEO</h4>
+                                <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                <div class="space-y-6 text-stone-600">
+                                    <p class="italic text-lg border-l-2 border-stone-200 pl-4">CEO of $3M consumer e-commerce (20% margins, 30-person artist network). Wear multiple hats: solo product leader, marketing, operations, finance. Use AI as decision-making partner for product, marketing, operations.</p>
+                                    
+                                    <div>
+                                        <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="bar-chart-2" class="w-4 h-4"></i> Data-Driven Consumer Growth</h5>
+                                        <ul class="space-y-3">
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Funnel Optimization:</strong> Analyzed user behavior to identify funnel drop-offs—shipped optimizations improving conversion.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Retention:</strong> Used cohort analysis for repeat purchase drivers—implemented campaigns reducing churn.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>A/B Testing:</strong> Ran A/B tests on pricing, bundling, upsells—data-informed decisions to optimize revenue.</span></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="bot" class="w-4 h-4"></i> AI-Powered Product & Operations</h5>
+                                        <ul class="space-y-3">
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>AI Thought Partner:</strong> Use AI (Claude, GPT-4) to analyze data, evaluate options, and pressure test ideas.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Experience Design:</strong> Design new customer experiences from concept to launch using AI to iterate on flows, copy, positioning.</span></li>
+                                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Chatbots:</strong> Deployed AI chatbots for customer service automation, achieving cost reduction while maintaining quality.</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Past Roles -->
+                <div class="space-y-6">
+                    
+                    <!-- GrowthAlchemyLab -->
+                    <div class="flip-card reveal-on-scroll group">
+                        <div class="flipper">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div>
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                <i data-lucide="microscope" class="w-5 h-5"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Founder & Principal Consultant</h4>
+                                                <div class="text-stone-400 text-base mt-0.5">GrowthAlchemyLab</div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2024 - Present</span>
+                                    </div>
+                                    
+                                    <!-- Hover Summary -->
+                                    <div class="hover-summary mt-8">
+                                        <p>Founded AI/ML product consulting practice. Helping consumer/PLG companies achieve 30-50% cost reduction via AI.</p>
+                                        <div class="tags">
+                                            <span class="tag">AI Strategy</span>
+                                            <span class="tag">LLM Implementation</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Flip Button -->
+                                <div class="flex justify-end mt-auto">
+                                    <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                        <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                        <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Back -->
+                            <div class="card-back">
+                                <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                    <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                </button>
+                                
+                                <div class="pr-2">
+                                    <h4 class="text-xl font-heading font-medium text-black mb-1">GrowthAlchemyLab - Founder</h4>
+                                    <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                    <div class="space-y-6 text-stone-600">
+                                        <p class="italic text-lg border-l-2 border-stone-200 pl-4">Founded AI/ML product consulting practice advising consumer, e-commerce, and PLG companies on AI strategy and implementation. Specialize in helping companies leverage LLMs and AI agents to drive measurable growth outcomes.</p>
+                                        
+                                        <div>
+                                            <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="compass" class="w-4 h-4"></i> AI Product Strategy & Implementation</h5>
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Strategic Advisory:</strong> Advise consumer/PLG companies on AI product strategy, feature prioritization, and roadmap development with focus on ROI.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>AI Operations:</strong> Guide deployment of chatbots, AI agents, and workflow automation using GPT-4, Claude, Gemini, Llama.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Build vs. Buy:</strong> Help companies evaluate build vs. buy decisions for AI features and select appropriate AI vendors/platforms.</span></li>
+                                            </ul>
+                                        </div>
+
+                                        <div>
+                                            <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="briefcase" class="w-4 h-4"></i> Client Engagements</h5>
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>E-commerce:</strong> AI chatbot deployment for customer service automation (40%+ cost reduction) and personalized recommendations.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Consumer Products:</strong> AI-driven user onboarding, conversion optimization, and retention tools using LLMs.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Ivo.AI:</strong> Product advisor for AI sales automation (SMB/solopreneur focus)—AI agent architecture, LLM integration strategy.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Epilogue Capital -->
+                    <div class="flip-card reveal-on-scroll group delay-100">
+                        <div class="flipper">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div>
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                <i data-lucide="banknote" class="w-5 h-5"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Managing Partner</h4>
+                                                <div class="text-stone-400 text-base mt-0.5">Epilogue Capital</div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2018 - Present</span>
+                                    </div>
+                                    
+                                    <!-- Hover Summary -->
+                                    <div class="hover-summary mt-8">
+                                        <p>Investment firm acquiring and operating profitable consumer/SMB businesses. Hands-on product leadership.</p>
+                                        <div class="tags">
+                                            <span class="tag">M&A</span>
+                                            <span class="tag">Operations</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Flip Button -->
+                                <div class="flex justify-end mt-auto">
+                                    <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                        <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                        <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Back -->
+                            <div class="card-back">
+                                <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                    <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                </button>
+                                
+                                <div class="pr-2">
+                                    <h4 class="text-xl font-heading font-medium text-black mb-1">Epilogue Capital - Managing Partner</h4>
+                                    <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                    <div class="space-y-6 text-stone-600">
+                                        <p class="italic text-lg border-l-2 border-stone-200 pl-4">Founded investment firm focused on acquiring and operating profitable consumer/SMB businesses. Hands-on operator approach combining product leadership with business management.</p>
+                                        
+                                        <div>
+                                            <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4"></i> Portfolio Management & Operations</h5>
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>SketchPop Acquisition:</strong> Acquired custom art e-commerce business, scaled to $3M revenue with 20% margins through AI-powered product innovation.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Investment Thesis:</strong> Focus on consumer/SMB businesses with strong unit economics where product improvements and AI can drive growth.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Hands-On Leadership:</strong> Act as product leader/CEO for portfolio companies, applying product management expertise to drive growth.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Operational Improvements:</strong> Implement data analytics, AI automation, conversion optimization, and retention strategies across portfolio companies.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor.com -->
+                    <div class="flip-card reveal-on-scroll group delay-200">
+                        <div class="flipper">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div>
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                <i data-lucide="heart-pulse" class="w-5 h-5"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Director of Product Management</h4>
+                                                <div class="text-stone-400 text-base mt-0.5">Doctor.com</div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2017 - 2018</span>
+                                    </div>
+                                    
+                                    <!-- Hover Summary -->
+                                    <div class="hover-summary mt-8">
+                                        <p>Product analytics and publisher operations platform. Increased engagement 15%.</p>
+                                        <div class="tags">
+                                            <span class="tag">Analytics</span>
+                                            <span class="tag">HealthTech</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Flip Button -->
+                                <div class="flex justify-end mt-auto">
+                                    <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                        <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                        <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Back -->
+                            <div class="card-back">
+                                <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                    <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                </button>
+                                
+                                <div class="pr-2">
+                                    <h4 class="text-xl font-heading font-medium text-black mb-1">Doctor.com - Director of PM</h4>
+                                    <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                    <div class="space-y-6 text-stone-600">
+                                        <p class="italic text-lg border-l-2 border-stone-200 pl-4">Director of Product responsible for product analytics, publisher operations, and reporting platforms serving healthcare providers.</p>
+                                        
+                                        <div>
+                                            <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4"></i> Product Analytics & Reporting</h5>
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Provider Engagement:</strong> Conceptualized, designed, and launched personalized reporting platform increasing engagement 15% and improving retention.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Analytics Infrastructure:</strong> Developed core analytics metrics, dashboards, and product OKRs—defined reporting architecture and mentored analysts.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Product Strategy:</strong> Defined user personas and value propositions to improve product messaging and feature prioritization.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Enterprise Integration:</strong> Spearheaded enterprise-wide project integrating provider data with partners—improved data accuracy and insights.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ancestry -->
+                    <div class="flip-card reveal-on-scroll group delay-200">
+                        <div class="flipper">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div>
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                <i data-lucide="gem" class="w-5 h-5"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Director of Product - Growth</h4>
+                                                <div class="text-stone-400 text-base mt-0.5">Ancestry</div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2016 - 2017</span>
+                                    </div>
+                                    
+                                    <!-- Hover Summary -->
+                                    <div class="hover-summary mt-8">
+                                        <p>Led growth initiatives for $800M subscription business. Mobile lift of 30%.</p>
+                                        <div class="tags">
+                                            <span class="tag">Growth</span>
+                                            <span class="tag">Mobile</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Flip Button -->
+                                <div class="flex justify-end mt-auto">
+                                    <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                        <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                        <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Back -->
+                            <div class="card-back">
+                                <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                    <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                </button>
+                                
+                                <div class="pr-2">
+                                    <h4 class="text-xl font-heading font-medium text-black mb-1">Ancestry - Director of Growth</h4>
+                                    <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                    <div class="space-y-6 text-stone-600">
+                                        <p class="italic text-lg border-l-2 border-stone-200 pl-4">Director of Product for $800M consumer subscription business. Led acquisition, conversion, and growth initiatives for top-of-funnel product experiences and shopping cart optimization.</p>
+                                        
+                                        <div>
+                                            <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="trending-up" class="w-4 h-4"></i> Product-Led Growth & Conversion</h5>
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Abandon Cart:</strong> Built and rolled out abandon cart email campaign resulting in 5% revenue lift—data-driven approach to win-back users.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Mobile Growth:</strong> Led mobile app conversion initiative achieving 30% lift in subscriptions through improved onboarding and checkout.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Shopping Innovation:</strong> Designed and shipped new product shopping experiences that improved top-of-funnel conversion.</span></li>
+                                            </ul>
+                                        </div>
+
+                                        <div>
+                                            <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="users" class="w-4 h-4"></i> Cross-Functional Leadership</h5>
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Strategy:</strong> Defined go-to-market strategy and coordinated integrated marketing planning for subscription business.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Optimization:</strong> Used data analysis and A/B testing to optimize conversion funnel and maximize subscription revenue.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Early Career Section -->
+                <div>
+                    <button class="early-career-toggle" onclick="toggleEarlyCareer()">
+                        <span>Show Early Career History</span>
+                        <i data-lucide="chevron-down" id="early-career-icon" class="transition-transform duration-300"></i>
+                    </button>
+
+                    <div id="early-career-list" class="early-career-list space-y-4">
+                        
+                        <!-- Tile -->
+                        <div class="flip-card group relative">
+                            <div class="flipper">
+                                <!-- Front -->
+                                <div class="card-front">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                    <i data-lucide="grid" class="w-5 h-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Growth Product Leader</h4>
+                                                    <div class="text-stone-400 text-base mt-0.5">Tile</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2015 - 2016</span>
+                                        </div>
+                                        
+                                        <!-- Hover Summary -->
+                                        <div class="hover-summary mt-8">
+                                            <p>Defined and launched hardware-as-a-service subscription program.</p>
+                                            <div class="tags">
+                                                <span class="tag">IoT</span>
+                                                <span class="tag">Subscriptions</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flip Button -->
+                                    <div class="flex justify-end mt-auto">
+                                        <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                            <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                            <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Back -->
+                                <div class="card-back">
+                                    <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                        <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                    </button>
+                                    
+                                    <div class="pr-2">
+                                        <h4 class="text-xl font-heading font-medium text-black mb-1">Tile - Growth Lead</h4>
+                                        <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                        <div class="space-y-6 text-stone-600">
+                                            <p class="italic text-lg border-l-2 border-stone-200 pl-4">Growth product leader/advisor defining and launching innovative hardware-as-a-service subscription/renewal program for consumer IoT product.</p>
+                                            
+                                            <div>
+                                                <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Subscription Innovation</h5>
+                                                <ul class="space-y-3">
+                                                    <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Strategy:</strong> Developed business case, financial model, and go-to-market strategy for subscription launch.</span></li>
+                                                    <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Execution:</strong> Defined market requirements and managed creative for product collateral.</span></li>
+                                                    <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Testing:</strong> Conducted extensive qualitative and quantitative A/B testing to gather customer insights.</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- eBay -->
+                        <div class="flip-card group relative">
+                            <div class="flipper">
+                                <!-- Front -->
+                                <div class="card-front">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Product Leader - Payments</h4>
+                                                    <div class="text-stone-400 text-base mt-0.5">eBay Marketplaces</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2013 - 2015</span>
+                                        </div>
+                                        
+                                        <!-- Hover Summary -->
+                                        <div class="hover-summary mt-8">
+                                            <p>Led checkout optimization ($100M+ lift) and payments analytics team.</p>
+                                            <div class="tags">
+                                                <span class="tag">E-commerce</span>
+                                                <span class="tag">Payments</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flip Button -->
+                                    <div class="flex justify-end mt-auto">
+                                        <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                            <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                            <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Back -->
+                                <div class="card-back">
+                                    <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                        <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                    </button>
+                                    
+                                    <div class="pr-2">
+                                        <h4 class="text-xl font-heading font-medium text-black mb-1">eBay - Product Leader</h4>
+                                        <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                        <div class="space-y-6 text-stone-600">
+                                            <p class="italic text-lg border-l-2 border-stone-200 pl-4">Product leader for eBay Payments (checkout, cart, installments) and Customer Connection (My eBay, sign-in, registration) serving massive consumer marketplace at scale.</p>
+                                            
+                                            <div>
+                                                <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="trending-up" class="w-4 h-4"></i> Marketplace Scale</h5>
+                                                <ul class="space-y-3">
+                                                    <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>$100M+ Lift:</strong> Led checkout optimization initiatives achieving +2% conversion improvement.</span></li>
+                                                    <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Operational Excellence:</strong> Reduced checkout defects by 33% through improved quality processes.</span></li>
+                                                    <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Mobile & Site:</strong> Shipped features across mobile and web platforms serving millions of buyers.</span></li>
+                                                </ul>
+                                            </div>
+
+                                            <div>
+                                                <h5 class="text-lg font-semibold text-black mb-3 flex items-center gap-2"><i data-lucide="bar-chart" class="w-4 h-4"></i> Analytics Leadership</h5>
+                                                <ul class="space-y-3">
+                                                    <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Global Analytics:</strong> Led analytics team providing strategic insights for checkout/cart product decisions.</span></li>
+                                                    <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Team Management:</strong> Managed team of 6+ analysts supporting product releases and optimization initiatives.</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accenture -->
+                        <div class="flip-card group relative">
+                            <div class="flipper">
+                                <!-- Front -->
+                                <div class="card-front">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                    <i data-lucide="briefcase" class="w-5 h-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Management Consultant</h4>
+                                                    <div class="text-stone-400 text-base mt-0.5">Accenture</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2010 - 2012</span>
+                                        </div>
+                                        
+                                        <!-- Hover Summary -->
+                                        <div class="hover-summary mt-8">
+                                            <p>Strategy consultant focused on Marketing, Sales, and CRM transformation.</p>
+                                            <div class="tags">
+                                                <span class="tag">Strategy</span>
+                                                <span class="tag">CRM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flip Button -->
+                                    <div class="flex justify-end mt-auto">
+                                        <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                            <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                            <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Back -->
+                                <div class="card-back">
+                                    <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                        <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                    </button>
+                                    
+                                    <div class="pr-2">
+                                        <h4 class="text-xl font-heading font-medium text-black mb-1">Accenture - Consultant</h4>
+                                        <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                        <div class="space-y-6 text-stone-600">
+                                            <p class="italic text-lg border-l-2 border-stone-200 pl-4">Strategy consultant focused on Marketing, Sales, and CRM transformation for Tech & Media clients.</p>
+                                            
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Cost Efficiency:</strong> Designed marketing automation solution saving $50-100M in operational costs.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Process Improvement:</strong> Led worldwide marketing process review driving 10% efficiency gain.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>CRM Strategy:</strong> Led roadmap for Partner Lead Management CRM implementation.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bebarang -->
+                        <div class="flip-card group relative">
+                            <div class="flipper">
+                                <!-- Front -->
+                                <div class="card-front">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                    <i data-lucide="rocket" class="w-5 h-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Co-Founder & Director of Product</h4>
+                                                    <div class="text-stone-400 text-base mt-0.5">Bebarang.com</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2009 - 2011</span>
+                                        </div>
+                                        
+                                        <!-- Hover Summary -->
+                                        <div class="hover-summary mt-8">
+                                            <p>Co-founded innovative online e-commerce exchange platform.</p>
+                                            <div class="tags">
+                                                <span class="tag">Founder</span>
+                                                <span class="tag">Product</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flip Button -->
+                                    <div class="flex justify-end mt-auto">
+                                        <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                            <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                            <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Back -->
+                                <div class="card-back">
+                                    <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                        <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                    </button>
+                                    
+                                    <div class="pr-2">
+                                        <h4 class="text-xl font-heading font-medium text-black mb-1">Bebarang - Co-Founder</h4>
+                                        <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                        <div class="space-y-6 text-stone-600">
+                                            <p class="italic text-lg border-l-2 border-stone-200 pl-4">Co-founded innovative online e-commerce exchange platform.</p>
+                                            
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>0 to 1:</strong> Led conceptualization and launch of UI and back-end product platform.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Growth:</strong> Secured seed funding and grew to 20k+ monthly visitors via ROI-driven campaigns.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Irdeto -->
+                        <div class="flip-card group relative">
+                            <div class="flipper">
+                                <!-- Front -->
+                                <div class="card-front">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                    <i data-lucide="monitor" class="w-5 h-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Product Manager</h4>
+                                                    <div class="text-stone-400 text-base mt-0.5">Irdeto</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2006 - 2008</span>
+                                        </div>
+                                        
+                                        <!-- Hover Summary -->
+                                        <div class="hover-summary mt-8">
+                                            <p>Led implementation of billing support systems generating over $10M.</p>
+                                            <div class="tags">
+                                                <span class="tag">Billing Systems</span>
+                                                <span class="tag">Media</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flip Button -->
+                                    <div class="flex justify-end mt-auto">
+                                        <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                            <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                            <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Back -->
+                                <div class="card-back">
+                                    <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                        <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                    </button>
+                                    
+                                    <div class="pr-2">
+                                        <h4 class="text-xl font-heading font-medium text-black mb-1">Irdeto - Product Manager</h4>
+                                        <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                        <div class="space-y-6 text-stone-600">
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Revenue Generation:</strong> Led implementation of billing support systems generating over $10M.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Product Lifecycle:</strong> Guided key modules from use cases through to development and launch.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MedImpact -->
+                        <div class="flip-card group relative">
+                            <div class="flipper">
+                                <!-- Front -->
+                                <div class="card-front">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                    <i data-lucide="activity" class="w-5 h-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Product Manager</h4>
+                                                    <div class="text-stone-400 text-base mt-0.5">MedImpact</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2005 - 2006</span>
+                                        </div>
+                                        
+                                        <!-- Hover Summary -->
+                                        <div class="hover-summary mt-8">
+                                            <p>Designed billing software solution increasing revenues by $75M.</p>
+                                            <div class="tags">
+                                                <span class="tag">Healthcare</span>
+                                                <span class="tag">Billing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flip Button -->
+                                    <div class="flex justify-end mt-auto">
+                                        <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                            <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                            <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Back -->
+                                <div class="card-back">
+                                    <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                        <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                    </button>
+                                    
+                                    <div class="pr-2">
+                                        <h4 class="text-xl font-heading font-medium text-black mb-1">MedImpact - Product Manager</h4>
+                                        <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                        <div class="space-y-6 text-stone-600">
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Impact:</strong> Designed billing software solution increasing revenues by $75M in first year.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Execution:</strong> Managed multiple cross-functional teams to define MRDs/PRDs and ship.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Booz Allen -->
+                        <div class="flip-card group relative">
+                            <div class="flipper">
+                                <!-- Front -->
+                                <div class="card-front">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                    <i data-lucide="shield" class="w-5 h-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Senior Consultant</h4>
+                                                    <div class="text-stone-400 text-base mt-0.5">Booz Allen Hamilton</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2003 - 2005</span>
+                                        </div>
+                                        
+                                        <!-- Hover Summary -->
+                                        <div class="hover-summary mt-8">
+                                            <p>Led requirements/design for complex IRS system.</p>
+                                            <div class="tags">
+                                                <span class="tag">Consulting</span>
+                                                <span class="tag">Government</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flip Button -->
+                                    <div class="flex justify-end mt-auto">
+                                        <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                            <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                            <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Back -->
+                                <div class="card-back">
+                                    <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                        <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                    </button>
+                                    
+                                    <div class="pr-2">
+                                        <h4 class="text-xl font-heading font-medium text-black mb-1">Booz Allen - Senior Consultant</h4>
+                                        <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                        <div class="space-y-6 text-stone-600">
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Client Success:</strong> Led requirements/design for complex IRS system; secured $15M contract extension.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Project Mgmt:</strong> Managed resources (6-20 reports) for timely completion of $100M project.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Capgemini -->
+                        <div class="flip-card group relative">
+                            <div class="flipper">
+                                <!-- Front -->
+                                <div class="card-front">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 text-stone-500 border border-stone-100">
+                                                    <i data-lucide="code" class="w-5 h-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-2xl font-heading font-medium text-stone-500 tracking-wide">Senior Consultant</h4>
+                                                    <div class="text-stone-400 text-base mt-0.5">Capgemini</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-normal text-stone-300 uppercase tracking-wider">2000 - 2003</span>
+                                        </div>
+                                        
+                                        <!-- Hover Summary -->
+                                        <div class="hover-summary mt-8">
+                                            <p>Analyzed requirements and tested $1B billing system.</p>
+                                            <div class="tags">
+                                                <span class="tag">QA</span>
+                                                <span class="tag">Telecom</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Flip Button -->
+                                    <div class="flex justify-end mt-auto">
+                                        <button class="flip-btn group-hover:bg-stone-100" onclick="event.stopPropagation(); this.closest('.flip-card').classList.add('flipped')">
+                                            <span class="mr-2 text-sm text-stone-500 font-medium group-hover:text-black">View Details</span>
+                                            <i data-lucide="arrow-right" class="w-5 h-5 inline-block"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Back -->
+                                <div class="card-back">
+                                    <button class="close-btn" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                                        <i data-lucide="x" class="w-5 h-5 text-stone-500 hover:text-black"></i>
+                                    </button>
+                                    
+                                    <div class="pr-2">
+                                        <h4 class="text-xl font-heading font-medium text-black mb-1">Capgemini - Senior Consultant</h4>
+                                        <p class="text-sm text-stone-400 uppercase tracking-wider mb-6">Detailed Achievements</p>
+
+                                        <div class="space-y-6 text-stone-600">
+                                            <ul class="space-y-3">
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Telecom Systems:</strong> Analyzed requirements and tested $1B billing system for Nextel.</span></li>
+                                                <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-stone-400 mt-1 shrink-0"></i><span><strong>Launch Lead:</strong> Developed certification plans for go-live; led test teams.</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Competencies -->
+            <section id="competencies" class="space-y-8">
+                 <div class="flex items-center justify-center gap-4 py-6 reveal-on-scroll">
+                    <div class="h-px bg-stone-300 w-16"></div>
+                    <h3 class="text-2xl font-heading font-semibold text-black tracking-wide">Skills</h3>
+                    <div class="h-px bg-stone-300 w-16"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div class="secondary-card p-6 rounded-xl reveal-on-scroll relative overflow-hidden">
+                        <h5 class="text-xl font-heading font-medium text-black mb-3 flex items-center gap-2 tracking-wide">
+                            <i data-lucide="cpu" class="w-5 h-5 text-black" stroke-width="1.5"></i> AI/ML &amp; Tech
+                        </h5>
+                        <p class="text-lg text-stone-600">LLMs (GPT-4, Claude), HITL, AI Ops, Prompt Engineering, ML Product Mgmt.</p>
+                    </div>
+                    <div class="secondary-card p-6 rounded-xl reveal-on-scroll delay-100 relative overflow-hidden">
+                        <h5 class="text-xl font-heading font-medium text-black mb-3 flex items-center gap-2 tracking-wide">
+                            <i data-lucide="layers" class="w-5 h-5 text-black" stroke-width="1.5"></i> Strategy
+                        </h5>
+                        <p class="text-lg text-stone-600">PLG, Cross-Functional Leadership, P&amp;L Mgmt, GTM Strategy.</p>
+                    </div>
+                    <div class="secondary-card p-6 rounded-xl reveal-on-scroll delay-200 relative overflow-hidden">
+                        <h5 class="text-xl font-heading font-medium text-black mb-3 flex items-center gap-2 tracking-wide">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5 text-black" stroke-width="1.5"></i> Analytics
+                        </h5>
+                        <p class="text-lg text-stone-600">A/B Testing, Cohort Analysis, Funnel Optimization, SQL.</p>
+                    </div>
+                    <div class="secondary-card p-6 rounded-xl reveal-on-scroll delay-300 relative overflow-hidden">
+                        <h5 class="text-xl font-heading font-medium text-black mb-3 flex items-center gap-2 tracking-wide">
+                            <i data-lucide="users" class="w-5 h-5 text-black" stroke-width="1.5"></i> Consumer
+                        </h5>
+                        <p class="text-lg text-stone-600">Freemium Models, E-commerce, Subscriptions, Retention.</p>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div id="education" class="flex items-center justify-center gap-4 py-6 reveal-on-scroll">
+                    <div class="h-px bg-stone-300 w-16"></div>
+                    <h3 class="text-2xl font-heading font-semibold text-black tracking-wide">Education</h3>
+                    <div class="h-px bg-stone-300 w-16"></div>
+                </div>
+
+                <div class="secondary-card p-8 rounded-xl flex flex-col md:flex-row gap-8 justify-between items-center text-center md:text-left reveal-on-scroll relative overflow-hidden">
+                    <div>
+                        <h4 class="text-3xl font-heading font-medium text-black tracking-wide">MBA &amp; MS</h4>
+                        <div class="text-stone-500 text-lg">University of Michigan</div>
+                        <div class="text-stone-400 text-sm italic mt-1">Ross School of Business &amp; SEAS (Erb Institute)</div>
+                    </div>
+                    <div class="hidden md:block h-8 w-px bg-stone-300"></div>
+                     <div>
+                        <h4 class="text-3xl font-heading font-medium text-black tracking-wide">BS Electrical Engineering</h4>
+                        <div class="text-stone-500 text-lg">University of Virginia</div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Toggle Early Career Section
+        function toggleEarlyCareer() {
+            const list = document.getElementById('early-career-list');
+            const icon = document.getElementById('early-career-icon');
+
+            if (list.classList.contains('open')) {
+                list.classList.remove('open');
+                icon.classList.remove('rotate-180');
+                list.style.maxHeight = '0';
+                list.style.opacity = '0';
+                // Set display to none after transition completes
+                list.addEventListener('transitionend', function handler() {
+                    list.style.display = 'none';
+                    list.removeEventListener('transitionend', handler);
+                });
+            } else {
+                list.style.display = 'block'; // Show immediately for transition
+                // Force reflow to ensure display: block is applied before transition
+                list.offsetHeight; 
+                list.classList.add('open');
+                icon.classList.add('rotate-180');
+                list.style.maxHeight = list.scrollHeight + 'px';
+                list.style.opacity = '1';
+            }
+        }
+
+        // Set initial state for early career list
+        document.addEventListener("DOMContentLoaded", function() {
+            const earlyCareerList = document.getElementById('early-career-list');
+            if (earlyCareerList) {
+                earlyCareerList.style.maxHeight = '0';
+                earlyCareerList.style.opacity = '0';
+                earlyCareerList.style.display = 'none';
+            }
+
+            // 1. Reveal on scroll (Entrance)
+            const revealOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, revealOptions);
+
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            const heroElements = document.querySelectorAll('.hero-reveal');
+            heroElements.forEach(el => revealObserver.observe(el));
+
+            // 2. Focus on scroll (Scale effect)
+            const focusOptions = {
+                root: null,
+                rootMargin: '-20% 0px -20% 0px', // Active only in the middle 60% of viewport
+                threshold: 0.6
+            };
+
+            const focusObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('focused');
+                    } else {
+                        entry.target.classList.remove('focused');
+                    }
+                });
+            }, focusOptions);
+
+            const cards = document.querySelectorAll('.flip-card');
+            cards.forEach(card => {
+                focusObserver.observe(card);
+                
+                // Add click event for flipping
+                card.addEventListener('click', function(e) {
+                    // Avoid double toggling if clicking the button which also has a handler
+                    if (e.target.closest('.flip-btn')) return; // Button handles it or propagates?
+                    // Actually, let's let the card handle it generally.
+                    // If clicking close button, stop propagation is handled inline.
+                    
+                    if (!this.classList.contains('flipped')) {
+                        this.classList.add('flipped');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body></html>

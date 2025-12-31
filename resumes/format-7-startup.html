@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Startup Product Leader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.4;
+            color: #1a1a1a;
+            background: white;
+        }
+
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+        }
+
+        .page {
+            padding: 0.5in;
+            min-height: 11in;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #000;
+        }
+
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #000;
+        }
+
+        .header-text h1 {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .header-text .title {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .header-text .contact {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .tldr {
+            background: #000;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .tldr-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .tldr-content {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .metric-box {
+            text-align: center;
+            padding: 15px;
+            border: 2px solid #000;
+            border-radius: 8px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #000;
+        }
+
+        .job {
+            margin-bottom: 20px;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+
+        .job-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .job-dates {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .job-company {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .job-summary {
+            font-size: 12px;
+            font-style: italic;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .bullets {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .bullets li {
+            margin-bottom: 7px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .bullets li::before {
+            content: '▪';
+            position: absolute;
+            left: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .bold {
+            font-weight: 700;
+        }
+
+        .subsection {
+            font-size: 13px;
+            font-weight: 700;
+            margin: 12px 0 6px 0;
+        }
+
+        .skills-section {
+            margin-top: 20px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .skill-category {
+            font-size: 12px;
+        }
+
+        .skill-category strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            z-index: 1000;
+        }
+
+        @media print {
+            .page {
+                padding: 0.5in;
+            }
+
+            .print-button {
+                display: none;
+            }
+
+            .tldr {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">PRINT</button>
+
+    <div class="container">
+        <div class="page">
+            <div class="header">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFLhrcVCSYY8w/profile-displayphoto-shrink_800_800/B56ZX04IgtHQAg-/0/1743570110941?e=1766620800&v=beta&t=9KHaWvyX8UvAxH_yLT7FD15TObn3kZgtfQP1A3j7m1o" alt="Luis Calderon" class="profile-photo">
+                <div class="header-text">
+                    <h1>Luis Calderon</h1>
+                    <div class="title">AI/ML Product Leader • 0-1 Builder • Growth Expert</div>
+                    <div class="contact">San Diego, CA • lcalderon@gmail.com • linkedin.com/in/luiscalderon</div>
+                </div>
+            </div>
+
+            <div class="tldr">
+                <div class="tldr-title">TL;DR</div>
+                <div class="tldr-content">
+                    Product leader who's built and scaled products from 0-1 and 1-100M+. Currently CPO at $3M e-commerce business (20% margins) after acquisition. Previously led $900M+ P&L at Intuit shipping 4 AI products to millions. Expert in AI/ML product development (GPT-4, Claude, HITL, ML models), product-led growth, and turning complex problems into revenue-generating products. MBA/MS from University of Michigan. 20+ years experience across startups and Fortune 500s.
+                </div>
+            </div>
+
+            <div class="metrics-row">
+                <div class="metric-box">
+                    <div class="metric-value">$900M+</div>
+                    <div class="metric-label">P&L Managed</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">$3M</div>
+                    <div class="metric-label">Revenue Scaled</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">4</div>
+                    <div class="metric-label">AI Products</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">40%</div>
+                    <div class="metric-label">Cost Reduction</div>
+                </div>
+            </div>
+
+            <div class="section-title">Experience</div>
+
+            <!-- SketchPop -->
+            <div class="job">
+                <div class="job-header">
+                    <div class="job-title">Chief Product Officer</div>
+                    <div class="job-dates">Jul 2025 - Present</div>
+                </div>
+                <div class="job-company">SketchPop LLC • San Diego, CA</div>
+                <div class="job-summary">Acquired and scaled custom art e-commerce to $3M revenue with 20% margins through AI transformation</div>
+                
+                <div class="subsection">AI Implementation & Results</div>
+                <ul class="bullets">
+                    <li>Deployed AI chatbot: <span class="bold">40% cost reduction</span>, 4.8+ star satisfaction (early adopter of ChatGPT-era LLMs)</li>
+                    <li>Integrated GPT-4/Claude for personalized communications, order updates, upsell recommendations</li>
+                    <li>AI demand forecasting reducing fulfillment delays <span class="bold">30%</span></li>
+                    <li>Rebuilt backend with modern AI infrastructure for scalable deployment</li>
+                    <li>AI quality control flagging issues before human review</li>
+                    <li>ML models for customer preference prediction and personalized product recommendations</li>
+                    <li>AI content generation for SEO, descriptions, marketing (10x speed increase)</li>
+                    <li>Data pipeline for continuous AI improvement via feedback loops</li>
+                    <li>Results: <span class="bold">$3M revenue, 20% margins, 2x order volume with same team size</span></li>
+                </ul>
+            </div>
+
+            <!-- Growth Alchemy Lab -->
+            <div class="job">
+                <div class="job-header">
+                    <div class="job-title">Growth Management Consultant (Founder)</div>
+                    <div class="job-dates">Sep 2024 - Present</div>
+                </div>
+                <div class="job-company">Growth Alchemy Lab • San Diego, CA</div>
+                <div class="job-summary">AI/ML product consulting for startups - strategy, implementation, operational deployment</div>
+                <ul class="bullets">
+                    <li>AI/ML product strategy, feature prioritization, roadmap development (ROI-focused)</li>
+                    <li>Guide AI ops: chatbots, agents, workflow automation (GPT-4, Claude, Gemini, Llama)</li>
+                    <li>Build vs. buy evaluation, vendor selection, AI metrics frameworks</li>
+                    <li>Prompt engineering, LLM orchestration, AI agent frameworks for production</li>
+                    <li><span class="bold">Ivo.AI:</span> Product advisor - AI agent architecture, LLM integration strategy</li>
+                    <li><span class="bold">B2B SaaS:</span> AI feature dev, roadmaps, cost-benefit, GTM</li>
+                    <li><span class="bold">E-commerce:</span> AI chatbot deployment, customer service automation</li>
+                    <li>Client impact: <span class="bold">30-50% cost reduction, 15-25% retention gains</span></li>
+                </ul>
+            </div>
+
+            <!-- Intuit -->
+            <div class="job">
+                <div class="job-header">
+                    <div class="job-title">Consumer Group Product Management Leader - Growth</div>
+                    <div class="job-dates">Oct 2021 - Sep 2024</div>
+                </div>
+                <div class="job-company">Intuit • San Diego, CA</div>
+                <div class="job-summary">Led $900M-$1B Self-Employed business, managed 4 PMs, shipped 4 AI products to millions</div>
+                
+                <div class="subsection">AI Products Shipped</div>
+                <ul class="bullets">
+                    <li><span class="bold">Expense Categorization AI:</span> ML auto-categorizing expenses, 60%+ manual entry reduction</li>
+                    <li><span class="bold">Deduction Finder ML:</span> HITL algorithm finding missed deductions, $1,200+ avg refund increase</li>
+                    <li><span class="bold">Audit Risk Predictor:</span> ML predicting IRS audit risk, suggesting optimizations</li>
+                    <li><span class="bold">Document Extraction AI:</strong> OCR/AI extracting data from W-2s, 1099s, receipts</li>
+                    <li>Cross-BU AI coordination ensuring consistent experiences, shared ML infrastructure</li>
+                </ul>
+                
+                <div class="subsection">Business Impact</div>
+                <ul class="bullets">
+                    <li><span class="bold">10-15% CAGR on $900M+</span> business ($100-150M annual growth)</li>
+                    <li>Team leadership: Hired, mentored 4 PMs supporting AI/ML roadmap</li>
+                    <li>Partner integrations, freemium acquisition, mobile improvements</li>
+                    <li>Coordinated strategy across multiple BUs and engineering teams</li>
+                    <li>Served millions of self-employed users (freelancers, gig workers, small businesses)</li>
+                </ul>
+            </div>
+
+            <!-- Ancestry -->
+            <div class="job">
+                <div class="job-header">
+                    <div class="job-title">Director of (Growth) Product Management</div>
+                    <div class="job-dates">Jan 2016 - 2017</div>
+                </div>
+                <div class="job-company">Ancestry • San Francisco Bay Area</div>
+                <ul class="bullets">
+                    <li>Led acquisition, conversion, growth for <span class="bold">$800M subscription business</span></li>
+                    <li>Abandon cart feature: <span class="bold">5% revenue lift</span></li>
+                    <li>Mobile initiative: <span class="bold">30% conversion lift</span></li>
+                    <li>Customer journey mapping, metrics definition, pricing strategy</li>
+                    <li>Cross-functional leadership: Finance, Product, Marketing, Member Services</li>
+                    <li>GTM strategy, marketing planning, product roadmap influence</li>
+                </ul>
+            </div>
+
+            <!-- eBay -->
+            <div class="job">
+                <div class="job-header">
+                    <div class="job-title">Product Leader (North America BU + Global Analytics)</div>
+                    <div class="job-dates">Mar 2013 - Apr 2015</div>
+                </div>
+                <div class="job-company">eBay Marketplaces • San Francisco Bay Area</div>
+                <ul class="bullets">
+                    <li>Cross-functional teams for Payments (cart, checkout, installments) & Customer Connection</li>
+                    <li>Checkout conversion <span class="bold">+2%</span>, operational costs <span class="bold">-33% defects</span>, improved NPS</li>
+                    <li>A/B testing and launches: <span class="bold">$100M+ business lift</span></li>
+                    <li>Global Payments Analytics lead: strategic/analytical support for product insights</li>
+                    <li>UX design, business use cases, go-to-market coordination</li>
+                    <li>Hired, trained, mentored <span class="bold">6+ analysts and managers</span></li>
+                </ul>
+            </div>
+
+            <!-- Other Roles -->
+            <div class="job">
+                <div class="job-header">
+                    <div class="job-title">Additional Experience</div>
+                    <div class="job-dates">2000 - 2018</div>
+                </div>
+                <div class="job-company">Doctor.com, Tile, Epilogue Capital, Accenture, Booz Allen, Capgemini</div>
+                <ul class="bullets">
+                    <li><span class="bold">Doctor.com (Dir Product):</span> Analytics platform, 15% engagement increase</li>
+                    <li><span class="bold">Tile (Growth Product):</span> Launched subscription renewal, hardware-as-a-service</li>
+                    <li><span class="bold">Epilogue Capital (Managing Partner):</span> Investing, acquiring profitable small businesses (2018-Present)</li>
+                    <li><span class="bold">Accenture:</span> Marketing automation solutions, $50-100M operational cost savings</li>
+                    <li><span class="bold">Booz Allen Hamilton:</span> IRS systems, $15M contract, managed $100M project</li>
+                    <li><span class="bold">Capgemini:</span> $1B telecom billing system analysis/testing for Nextel</li>
+                </ul>
+            </div>
+
+            <div class="section-title">Skills & Education</div>
+
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <strong>AI/ML</strong>
+                    GPT-4, Claude, Gemini, Llama, AI Agents, HITL, ML Models, Prompt Engineering, LLM Orchestration, OCR, NLP
+                </div>
+                <div class="skill-category">
+                    <strong>Product</strong>
+                    0-1 Products, PLG, Growth, Strategy, Roadmapping, A/B Testing, Analytics, Metrics, UX
+                </div>
+                <div class="skill-category">
+                    <strong>Leadership</strong>
+                    P&L Management, Team Building, Cross-functional, Hiring, Mentoring, Strategy
+                </div>
+            </div>
+
+            <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div><span class="bold">MBA & MS</span> - University of Michigan (Ross & SEAS)</div>
+                <div><span class="bold">BS Electrical Engineering</span> - University of Virginia</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

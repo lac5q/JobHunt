@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Job Search Tools - Luis Calderon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: white;
+        }
+        header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .tool-card {
+            background: #1e1e30;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .tool-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        .tool-card.active {
+            border-color: #667eea;
+            background: #252540;
+        }
+        .tool-card h3 {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tool-card p {
+            color: #aaa;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        .tool-number {
+            background: #667eea;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .workspace {
+            background: #1e1e30;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid #333;
+            min-height: 600px;
+        }
+        .workspace h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-weight: 500;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: #252540;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #333;
+            color: #e0e0e0;
+        }
+        .btn-secondary:hover {
+            background: #444;
+        }
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .output-box {
+            background: #151525;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 200px;
+            white-space: pre-wrap;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        .output-box.loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+        }
+        .output-box .placeholder {
+            color: #555;
+            font-style: italic;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+        .output-container {
+            position: relative;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: #252540;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #aaa;
+            transition: all 0.3s;
+        }
+        .tab:hover {
+            border-color: #667eea;
+            color: #e0e0e0;
+        }
+        .tab.active {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+        .api-key-section {
+            background: #252540;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #333;
+        }
+        .api-key-section h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .api-key-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .api-key-row input {
+            flex: 1;
+        }
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        .status-connected {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+        .status-disconnected {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+        .contact-selector {
+            background: #252540;
+            border: 1px solid #333;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .contact-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .contact-item:hover {
+            background: #333;
+        }
+        .contact-item.selected {
+            background: rgba(102, 126, 234, 0.2);
+            border-left: 3px solid #667eea;
+        }
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        .contact-item strong {
+            color: #e0e0e0;
+        }
+        .contact-item span {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .network-graph {
+            background: #151525;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 300px;
+        }
+        .path-result {
+            background: #252540;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #667eea;
+        }
+        .path-result h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .path-steps {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .path-node {
+            background: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .path-node.you {
+            background: #667eea;
+            color: white;
+        }
+        .path-node.target {
+            background: #4caf50;
+            color: white;
+        }
+        .path-arrow {
+            color: #667eea;
+            font-size: 1.2em;
+        }
+        .intel-section {
+            background: #252540;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .intel-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .intel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .intel-item {
+            background: #1e1e30;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .intel-item label {
+            color: #888;
+            font-size: 0.85em;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .intel-item value {
+            color: #e0e0e0;
+            font-size: 1em;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .metric-card {
+            background: #252540;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .metric-card h3 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        .metric-card p {
+            color: #888;
+            font-size: 0.85em;
+        }
+        .template-card {
+            background: #252540;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .template-card:hover {
+            border-color: #667eea;
+        }
+        .template-card.best {
+            border-color: #4caf50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        .template-card h4 {
+            color: #e0e0e0;
+            margin-bottom: 5px;
+        }
+        .template-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .template-stats span {
+            color: #888;
+            font-size: 0.85em;
+        }
+        .template-stats .good {
+            color: #4caf50;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="sync-manager.js"></script>
+    <script src="gmail-client.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1>AI Job Search Superpowers</h1>
+                    <p>Intelligent tools to accelerate your job search with AI</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button id="gmail-connect-btn" onclick="toggleGmailConnection()" style="background: rgba(255,255,255,0.1); color: white; padding: 12px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        <span id="gmail-status-icon">📧</span> <span id="gmail-status-text">Connect Gmail</span>
+                    </button>
+                    <a href="network-explorer.html" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">🌐 Network Explorer</a>
+                    <a href="job-search-dashboard.html" style="background: rgba(255,255,255,0.1); color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">← Dashboard</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Tool Selection -->
+        <div class="tools-grid">
+            <div class="tool-card active" onclick="selectTool('outreach')">
+                <h3><span class="tool-number">1</span> Personalized Outreach</h3>
+                <p>Generate custom messages for any contact based on their profile, company, and your value prop.</p>
+            </div>
+            <div class="tool-card" onclick="selectTool('network')">
+                <h3><span class="tool-number">2</span> Network Path Finder</h3>
+                <p>Find connection paths to target companies through your existing network.</p>
+            </div>
+            <div class="tool-card" onclick="selectTool('intel')">
+                <h3><span class="tool-number">3</span> Company Intelligence</h3>
+                <p>Get deep intel on any company - problems they're solving, tech stack, hiring needs.</p>
+            </div>
+            <div class="tool-card" onclick="selectTool('optimize')">
+                <h3><span class="tool-number">4</span> Response Optimization</h3>
+                <p>Analyze which messages work best and optimize your outreach strategy.</p>
+            </div>
+            <div class="tool-card" onclick="selectTool('interview')">
+                <h3><span class="tool-number">5</span> Interview Prep</h3>
+                <p>Auto-generate company research briefs, likely questions, and talking points.</p>
+            </div>
+        </div>
+
+        <!-- Workspace -->
+        <div class="workspace">
+            <!-- API Key Section -->
+            <div class="api-key-section">
+                <h4>AI Connection</h4>
+                <p style="color: #888; margin-bottom: 15px; font-size: 0.9em;">Enter your Claude or OpenAI API key to enable AI features. Your key is stored locally and never sent to any server except the AI provider.</p>
+                <div class="api-key-row">
+                    <select id="ai-provider" style="width: 150px;">
+                        <option value="claude">Claude</option>
+                        <option value="openai">OpenAI</option>
+                    </select>
+                    <input type="password" id="api-key" placeholder="Enter your API key...">
+                    <button class="btn btn-primary" onclick="saveApiKey()">Save</button>
+                    <span id="api-status" class="status-badge status-disconnected">Not Connected</span>
+                </div>
+                <p style="color: #666; margin-top: 10px; font-size: 0.85em;">
+                    Get API key: <a href="https://console.anthropic.com/" target="_blank" style="color: #667eea;">Claude</a> |
+                    <a href="https://platform.openai.com/api-keys" target="_blank" style="color: #667eea;">OpenAI</a>
+                </p>
+            </div>
+
+            <!-- Tool 1: Personalized Outreach -->
+            <div id="tool-outreach" class="tool-content">
+                <h2>Personalized Outreach Generator</h2>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="setOutreachMode('manual')">Manual Entry</button>
+                    <button class="tab" onclick="setOutreachMode('crm')">From CRM</button>
+                    <button class="tab" onclick="setOutreachMode('linkedin')">Paste LinkedIn</button>
+                </div>
+
+                <div id="outreach-manual">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Contact Name</label>
+                            <input type="text" id="contact-name" placeholder="e.g., Sarah Chen">
+                        </div>
+                        <div class="form-group">
+                            <label>Their Title</label>
+                            <input type="text" id="contact-title" placeholder="e.g., VP of Product">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" id="contact-company" placeholder="e.g., Stripe">
+                        </div>
+                        <div class="form-group">
+                            <label>Email (for Gmail context)</label>
+                            <input type="email" id="contact-email" placeholder="e.g., sarah@stripe.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Connection Type</label>
+                            <select id="connection-type">
+                                <option value="ross-alumni">Ross Alumni</option>
+                                <option value="2nd-degree">2nd Degree Connection</option>
+                                <option value="cold">Cold Outreach</option>
+                                <option value="recruiter">Recruiter</option>
+                                <option value="referral">Referral</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="outreach-crm" class="hidden">
+                    <p style="color: #888; margin-bottom: 15px;">Select a contact from your CRM:</p>
+                    <div class="contact-selector" id="crm-contacts">
+                        <div class="contact-item" style="color: #666; text-align: center; padding: 30px;">
+                            Loading contacts from CRM...
+                        </div>
+                    </div>
+                </div>
+
+                <div id="outreach-linkedin" class="hidden">
+                    <div class="form-group">
+                        <label>Paste LinkedIn Profile Info</label>
+                        <textarea id="linkedin-paste" placeholder="Copy and paste the person's LinkedIn profile summary, headline, experience, etc."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Context (optional)</label>
+                    <textarea id="outreach-context" placeholder="Any specific angle you want to use? Recent company news? Mutual connection? Specific role you're targeting?"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Message Type</label>
+                        <select id="message-type">
+                            <option value="linkedin-dm">LinkedIn DM (Short)</option>
+                            <option value="linkedin-connection">Connection Request Note</option>
+                            <option value="email-intro">Email - Initial Outreach</option>
+                            <option value="email-followup">Email - Follow Up</option>
+                            <option value="warm-intro">Warm Intro Request</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tone</label>
+                        <select id="message-tone">
+                            <option value="professional-casual">Professional but Casual</option>
+                            <option value="formal">Formal</option>
+                            <option value="friendly">Friendly</option>
+                            <option value="direct">Direct & Concise</option>
+                            <option value="tech-bro">Super Informal Tech Bro Guy</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateOutreach()">Generate Personalized Message</button>
+                <button class="btn btn-secondary" onclick="generateVariations()">Generate 3 Variations</button>
+
+                <div class="output-container">
+                    <div class="output-box" id="outreach-output">
+                        <span class="placeholder">Your personalized message will appear here...</span>
+                    </div>
+                    <button class="copy-btn hidden" id="copy-outreach" onclick="copyOutput('outreach-output')">Copy</button>
+                    <button class="copy-btn hidden" id="send-email-btn" onclick="sendEmailDirect()" style="background: linear-gradient(135deg, #34c759 0%, #30a14e 100%); margin-left: 10px;">📧 Send Email</button>
+                </div>
+            </div>
+
+            <!-- Tool 2: Network Path Finder -->
+            <div id="tool-network" class="tool-content hidden">
+                <h2>Network Path Finder</h2>
+                <p style="color: #888; margin-bottom: 20px;">Find the shortest path to your target company through your existing connections.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Target Company</label>
+                        <input type="text" id="target-company" placeholder="e.g., Stripe, OpenAI, Figma">
+                    </div>
+                    <div class="form-group">
+                        <label>Target Role (optional)</label>
+                        <input type="text" id="target-role" placeholder="e.g., VP Product, Engineering Manager">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="findNetworkPaths()">Find Connection Paths</button>
+
+                <div id="network-results" style="margin-top: 20px;">
+                    <div class="output-box">
+                        <span class="placeholder">Connection paths will appear here. Make sure you've imported your LinkedIn connections first!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tool 3: Company Intelligence -->
+            <div id="tool-intel" class="tool-content hidden">
+                <h2>Company Intelligence</h2>
+                <p style="color: #888; margin-bottom: 20px;">Get comprehensive intel on any company for your outreach and interviews.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" id="intel-company" placeholder="e.g., Stripe">
+                    </div>
+                    <div class="form-group">
+                        <label>Role You're Targeting</label>
+                        <input type="text" id="intel-role" placeholder="e.g., Senior Product Manager">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>What do you already know? (optional)</label>
+                    <textarea id="intel-known" placeholder="Any context you have - job posting, news articles, insider info..."></textarea>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateIntel()">Generate Company Intel</button>
+
+                <div class="output-container">
+                    <div class="output-box" id="intel-output">
+                        <span class="placeholder">Company intelligence report will appear here...</span>
+                    </div>
+                    <button class="copy-btn hidden" id="copy-intel" onclick="copyOutput('intel-output')">Copy</button>
+                </div>
+            </div>
+
+            <!-- Tool 4: Response Optimization -->
+            <div id="tool-optimize" class="tool-content hidden">
+                <h2>Response Optimization</h2>
+                <p style="color: #888; margin-bottom: 20px;">Analyze your outreach performance and optimize your messaging strategy.</p>
+
+                <div class="metrics-grid" id="response-metrics">
+                    <div class="metric-card">
+                        <h3 id="metric-total">0</h3>
+                        <p>Total Outreach</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3 id="metric-responses">0</h3>
+                        <p>Responses</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3 id="metric-rate">0%</h3>
+                        <p>Response Rate</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3 id="metric-calls">0</h3>
+                        <p>Calls Booked</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #667eea; margin-bottom: 15px;">Message Templates Performance</h3>
+                <div id="template-analysis">
+                    <p style="color: #666;">Add message templates and track their performance to get optimization insights.</p>
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>Add a Message Template to Track</label>
+                    <textarea id="new-template" placeholder="Paste a message template you've been using..."></textarea>
+                </div>
+                <button class="btn btn-secondary" onclick="addTemplate()">Add Template</button>
+
+                <h3 style="color: #667eea; margin: 25px 0 15px;">AI Optimization Insights</h3>
+                <button class="btn btn-primary" onclick="analyzePerformance()">Analyze My Performance</button>
+
+                <div class="output-container">
+                    <div class="output-box" id="optimize-output">
+                        <span class="placeholder">Performance analysis and recommendations will appear here...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tool 5: Interview Prep -->
+            <div id="tool-interview" class="tool-content hidden">
+                <h2>Interview Prep Generator</h2>
+                <p style="color: #888; margin-bottom: 20px;">Generate comprehensive interview preparation materials.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" id="interview-company" placeholder="e.g., Stripe">
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input type="text" id="interview-role" placeholder="e.g., Senior Product Manager, Payments">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Job Posting (paste full description)</label>
+                    <textarea id="job-posting" placeholder="Paste the full job description here for best results..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Interview Stage</label>
+                    <select id="interview-stage">
+                        <option value="recruiter">Recruiter Screen</option>
+                        <option value="hiring-manager">Hiring Manager</option>
+                        <option value="technical">Technical/Case Study</option>
+                        <option value="executive">Executive Round</option>
+                        <option value="final">Final Round</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Any specific concerns or topics to address?</label>
+                    <textarea id="interview-concerns" placeholder="e.g., Gap in employment, career transition, specific skills they're looking for..."></textarea>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateInterviewPrep()">Generate Interview Prep</button>
+
+                <div class="output-container">
+                    <div class="output-box" id="interview-output">
+                        <span class="placeholder">Your personalized interview prep will appear here...</span>
+                    </div>
+                    <button class="copy-btn hidden" id="copy-interview" onclick="copyOutput('interview-output')">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+
+        let currentTool = 'outreach';
+        let outreachMode = 'manual';
+        let selectedContact = null;
+        let messageTemplates = JSON.parse(localStorage.getItem('messageTemplates') || '[]');
+
+        // ============================================
+        // API KEY MANAGEMENT
+        // ============================================
+
+        function saveApiKey() {
+            const provider = document.getElementById('ai-provider').value;
+            const key = document.getElementById('api-key').value.trim();
+
+            if (!key) {
+                alert('Please enter an API key');
+                return;
+            }
+
+            localStorage.setItem('aiProvider', provider);
+            localStorage.setItem('aiApiKey', key);
+
+            document.getElementById('api-status').textContent = 'Connected';
+            document.getElementById('api-status').className = 'status-badge status-connected';
+
+            alert('API key saved! You can now use AI features.');
+        }
+
+        function loadApiKey() {
+            const provider = localStorage.getItem('aiProvider');
+            const key = localStorage.getItem('aiApiKey');
+
+            if (provider) {
+                document.getElementById('ai-provider').value = provider;
+            }
+            if (key) {
+                document.getElementById('api-key').value = key;
+                document.getElementById('api-status').textContent = 'Connected';
+                document.getElementById('api-status').className = 'status-badge status-connected';
+            }
+        }
+
+        function getApiConfig() {
+            const provider = localStorage.getItem('aiProvider') || 'claude';
+            const key = localStorage.getItem('aiApiKey');
+
+            if (!key) {
+                alert('Please add your API key first!');
+                return null;
+            }
+
+            return { provider, key };
+        }
+
+        // ============================================
+        // TOOL NAVIGATION
+        // ============================================
+
+        function selectTool(tool) {
+            currentTool = tool;
+
+            // Update tool cards
+            document.querySelectorAll('.tool-card').forEach(card => card.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tool-content').forEach(content => content.classList.add('hidden'));
+            document.getElementById(`tool-${tool}`).classList.remove('hidden');
+
+            // Load tool-specific data
+            if (tool === 'network') {
+                loadCRMContactsForNetwork();
+            } else if (tool === 'optimize') {
+                loadOptimizationMetrics();
+            }
+        }
+
+        function setOutreachMode(mode) {
+            outreachMode = mode;
+
+            document.querySelectorAll('#tool-outreach .tab').forEach(tab => tab.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            document.getElementById('outreach-manual').classList.add('hidden');
+            document.getElementById('outreach-crm').classList.add('hidden');
+            document.getElementById('outreach-linkedin').classList.add('hidden');
+            document.getElementById(`outreach-${mode}`).classList.remove('hidden');
+
+            if (mode === 'crm') {
+                loadCRMContacts();
+            }
+        }
+
+        // ============================================
+        // CRM INTEGRATION
+        // ============================================
+
+        function loadCRMContacts() {
+            const contacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+            const container = document.getElementById('crm-contacts');
+
+            if (contacts.length === 0) {
+                container.innerHTML = '<div class="contact-item" style="color: #666; text-align: center; padding: 30px;">No contacts in CRM. Add contacts in your dashboard first!</div>';
+                return;
+            }
+
+            container.innerHTML = contacts.map(c => `
+                <div class="contact-item ${selectedContact?.id === c.id ? 'selected' : ''}" onclick="selectCRMContact('${c.id}')">
+                    <strong>${c.firstName} ${c.lastName}</strong><br>
+                    <span>${c.title || 'No title'} at ${c.company || 'Unknown company'}</span>
+                </div>
+            `).join('');
+        }
+
+        function selectCRMContact(id) {
+            const contacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+            selectedContact = contacts.find(c => c.id === id);
+
+            // Update UI
+            document.querySelectorAll('.contact-item').forEach(item => item.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+
+            // Pre-fill manual fields
+            if (selectedContact) {
+                document.getElementById('contact-name').value = `${selectedContact.firstName} ${selectedContact.lastName}`;
+                document.getElementById('contact-title').value = selectedContact.title || '';
+                document.getElementById('contact-company').value = selectedContact.company || '';
+                document.getElementById('connection-type').value = selectedContact.source === 'ross-alumni' ? 'ross-alumni' : 'cold';
+            }
+        }
+
+        function loadCRMContactsForNetwork() {
+            // This would analyze contacts for network path finding
+            const contacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+            console.log('Loaded', contacts.length, 'contacts for network analysis');
+        }
+
+        // ============================================
+        // AI API CALLS
+        // ============================================
+
+        async function callAI(prompt, systemPrompt = '') {
+            const config = getApiConfig();
+            if (!config) return null;
+
+            const outputId = currentTool === 'outreach' ? 'outreach-output' :
+                            currentTool === 'intel' ? 'intel-output' :
+                            currentTool === 'interview' ? 'interview-output' :
+                            currentTool === 'optimize' ? 'optimize-output' : 'outreach-output';
+
+            const outputBox = document.getElementById(outputId);
+            outputBox.innerHTML = '<span class="placeholder">Generating with AI... This may take a few seconds.</span>';
+            outputBox.classList.add('loading');
+
+            try {
+                let response;
+
+                if (config.provider === 'claude') {
+                    response = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': config.key,
+                            'anthropic-version': '2023-06-01',
+                            'anthropic-dangerous-direct-browser-access': 'true'
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-sonnet-4-20250514',
+                            max_tokens: 2000,
+                            system: systemPrompt || "You are an expert job search coach helping a senior product leader find VP/Director level roles. Be specific, actionable, and personalized.",
+                            messages: [{ role: 'user', content: prompt }]
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) {
+                        throw new Error(data.error.message);
+                    }
+                    return data.content[0].text;
+
+                } else if (config.provider === 'openai') {
+                    response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${config.key}`
+                        },
+                        body: JSON.stringify({
+                            model: 'gpt-4o',
+                            messages: [
+                                { role: 'system', content: systemPrompt || "You are an expert job search coach helping a senior product leader find VP/Director level roles. Be specific, actionable, and personalized." },
+                                { role: 'user', content: prompt }
+                            ],
+                            max_tokens: 2000
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) {
+                        throw new Error(data.error.message);
+                    }
+                    return data.choices[0].message.content;
+                }
+
+            } catch (error) {
+                console.error('AI API Error:', error);
+                outputBox.classList.remove('loading');
+                outputBox.innerHTML = `<span style="color: #f44336;">Error: ${error.message}</span>`;
+                return null;
+            }
+        }
+
+        // ============================================
+        // TOOL 1: PERSONALIZED OUTREACH
+        // ============================================
+
+        async function generateOutreach() {
+            let contactInfo = '';
+            let name = '';
+            let email = '';
+
+            if (outreachMode === 'linkedin') {
+                const linkedinText = document.getElementById('linkedin-paste').value;
+                if (!linkedinText) {
+                    alert('Please paste LinkedIn profile information');
+                    return;
+                }
+                contactInfo = `LinkedIn Profile Info:\n${linkedinText}`;
+            } else {
+                name = document.getElementById('contact-name').value;
+                const title = document.getElementById('contact-title').value;
+                const company = document.getElementById('contact-company').value;
+                email = document.getElementById('contact-email')?.value || '';
+
+                if (!name || !company) {
+                    alert('Please enter at least name and company');
+                    return;
+                }
+                contactInfo = `Name: ${name}\nTitle: ${title}\nCompany: ${company}`;
+            }
+
+            const connectionType = document.getElementById('connection-type').value;
+            let context = document.getElementById('outreach-context').value;
+            const messageType = document.getElementById('message-type').value;
+            const tone = document.getElementById('message-tone').value;
+
+            // Try to fetch Gmail context if we have an email
+            let gmailContext = '';
+            if (email && GmailClient.accessToken) {
+                document.getElementById('outreach-output').classList.add('loading');
+                document.getElementById('outreach-output').textContent = 'Searching your Gmail history...';
+
+                try {
+                    const history = await GmailClient.getContactHistory(email, name);
+                    gmailContext = '\n\nEMAIL HISTORY WITH CONTACT:\n' + GmailClient.summarizeForAI(history);
+                    console.log('Gmail context loaded:', history.count, 'emails found');
+                } catch (error) {
+                    console.warn('Could not fetch Gmail history:', error);
+                    // Continue without Gmail context
+                }
+            }
+
+            const myBackground = `
+Luis Calderon - Ross MBA '11
+- Led $900M P&L at Intuit (TurboTax)
+- Shipped AI products before ChatGPT (ML-driven tax recommendations)
+- Recently cut costs 40% with AI chatbots
+- 15+ years product leadership
+- Target: VP/Director/Principal PM roles, $200-280K+
+- Location: San Diego, open to remote
+- Phone: 703.786.7899
+`;
+
+            const prompt = `Generate a personalized outreach message.
+
+MY BACKGROUND:
+${myBackground}
+
+CONTACT INFO:
+${contactInfo}
+
+CONNECTION TYPE: ${connectionType}
+MESSAGE TYPE: ${messageType}
+TONE: ${tone}
+${context ? `ADDITIONAL CONTEXT: ${context}` : ''}
+${gmailContext}
+
+Requirements:
+1. If Ross Alumni, lead with "Go Blue" connection
+2. Reference something specific about their company/role
+3. Clear ask (15 min call, coffee chat, etc.)
+4. Keep LinkedIn DMs under 300 characters for connection requests
+5. Show genuine interest in THEIR work, not just asking for help
+6. Include my phone number if appropriate for the message type
+${gmailContext ? '7. Reference past conversations naturally - don\'t over-explain the relationship' : ''}
+
+Generate the message:`;
+
+            const result = await callAI(prompt);
+            if (result) {
+                document.getElementById('outreach-output').classList.remove('loading');
+                document.getElementById('outreach-output').textContent = result;
+                document.getElementById('copy-outreach').classList.remove('hidden');
+
+                // Show Send Email button if we have email and Gmail is connected
+                const sendBtn = document.getElementById('send-email-btn');
+                if (email && GmailClient.accessToken && messageType.includes('email')) {
+                    sendBtn.classList.remove('hidden');
+                } else {
+                    sendBtn.classList.add('hidden');
+                }
+            }
+        }
+
+        async function generateVariations() {
+            // Similar to generateOutreach but asks for 3 variations
+            const name = document.getElementById('contact-name').value;
+            const company = document.getElementById('contact-company').value;
+
+            if (!name || !company) {
+                alert('Please enter at least name and company');
+                return;
+            }
+
+            const prompt = `Generate 3 different variations of an outreach message for:
+Name: ${name}
+Company: ${company}
+Connection Type: ${document.getElementById('connection-type').value}
+Message Type: ${document.getElementById('message-type').value}
+
+My background: Ross MBA '11, led $900M TurboTax, AI/ML product expertise, seeking VP/Director PM roles.
+
+Generate 3 distinctly different approaches:
+1. VARIATION A (lead with shared background):
+2. VARIATION B (lead with their company's challenges):
+3. VARIATION C (lead with mutual value):
+
+For each, explain briefly why this approach might work.`;
+
+            const result = await callAI(prompt);
+            if (result) {
+                document.getElementById('outreach-output').classList.remove('loading');
+                document.getElementById('outreach-output').textContent = result;
+                document.getElementById('copy-outreach').classList.remove('hidden');
+            }
+        }
+
+        // ============================================
+        // TOOL 2: NETWORK PATH FINDER
+        // ============================================
+
+        async function findNetworkPaths() {
+            const targetCompany = document.getElementById('target-company').value;
+            const targetRole = document.getElementById('target-role').value;
+
+            if (!targetCompany) {
+                alert('Please enter a target company');
+                return;
+            }
+
+            const contacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+
+            // Find direct connections at target company
+            const directConnections = contacts.filter(c =>
+                c.company?.toLowerCase().includes(targetCompany.toLowerCase())
+            );
+
+            // Find connections who might know someone there
+            const potentialIntros = contacts.filter(c => {
+                const title = (c.title || '').toLowerCase();
+                return (
+                    title.includes('director') ||
+                    title.includes('vp') ||
+                    title.includes('head of') ||
+                    title.includes('ceo') ||
+                    c.source === 'ross-alumni'
+                );
+            }).slice(0, 10);
+
+            let resultsHTML = `
+                <h3 style="color: #667eea; margin-bottom: 15px;">Paths to ${targetCompany}</h3>
+            `;
+
+            if (directConnections.length > 0) {
+                resultsHTML += `
+                    <div class="path-result">
+                        <h4>🎯 Direct Connections (${directConnections.length})</h4>
+                        ${directConnections.map(c => `
+                            <div class="path-steps">
+                                <span class="path-node you">You</span>
+                                <span class="path-arrow">→</span>
+                                <span class="path-node target">${c.firstName} ${c.lastName} (${c.title || 'Unknown role'})</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (potentialIntros.length > 0) {
+                resultsHTML += `
+                    <div class="path-result">
+                        <h4>🔗 Potential Intro Sources</h4>
+                        <p style="color: #888; margin-bottom: 10px;">These senior contacts might know someone at ${targetCompany}:</p>
+                        ${potentialIntros.map(c => `
+                            <div class="path-steps" style="margin-bottom: 10px;">
+                                <span class="path-node you">You</span>
+                                <span class="path-arrow">→</span>
+                                <span class="path-node">${c.firstName} ${c.lastName}</span>
+                                <span class="path-arrow">→</span>
+                                <span class="path-node target">? at ${targetCompany}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (directConnections.length === 0 && potentialIntros.length === 0) {
+                resultsHTML += `
+                    <div class="output-box">
+                        <p>No direct paths found in your CRM. Try:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Import more LinkedIn connections</li>
+                            <li>Search LinkedIn for Ross alumni at ${targetCompany}</li>
+                            <li>Ask your network for intros</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // Use AI to suggest outreach strategy
+            if (directConnections.length > 0 || potentialIntros.length > 0) {
+                const prompt = `I'm trying to get connected to ${targetCompany}${targetRole ? ` for a ${targetRole} role` : ''}.
+
+My connections:
+- Direct: ${directConnections.map(c => `${c.firstName} ${c.lastName} (${c.title})`).join(', ') || 'None'}
+- Potential intros: ${potentialIntros.map(c => `${c.firstName} ${c.lastName} at ${c.company}`).join(', ') || 'None'}
+
+Give me a specific outreach strategy - who to contact first and what to say.`;
+
+                const strategy = await callAI(prompt);
+                if (strategy) {
+                    resultsHTML += `
+                        <div class="path-result" style="border-left-color: #4caf50;">
+                            <h4>🤖 AI Recommended Strategy</h4>
+                            <div style="white-space: pre-wrap;">${strategy}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            document.getElementById('network-results').innerHTML = resultsHTML;
+        }
+
+        // ============================================
+        // TOOL 3: COMPANY INTELLIGENCE
+        // ============================================
+
+        async function generateIntel() {
+            const company = document.getElementById('intel-company').value;
+            const role = document.getElementById('intel-role').value;
+            const known = document.getElementById('intel-known').value;
+
+            if (!company) {
+                alert('Please enter a company name');
+                return;
+            }
+
+            const prompt = `Generate a comprehensive company intelligence brief for job searching.
+
+COMPANY: ${company}
+TARGET ROLE: ${role || 'Product Leadership'}
+${known ? `WHAT I ALREADY KNOW: ${known}` : ''}
+
+Generate a detailed brief covering:
+
+## 1. COMPANY OVERVIEW
+- What they do, business model, market position
+- Recent funding/valuation/public status
+- Key products and revenue streams
+
+## 2. PRODUCT & TECH
+- Main product challenges they're likely facing
+- Tech stack and engineering culture
+- AI/ML initiatives (if any)
+
+## 3. HIRING CONTEXT
+- Why they might be hiring for this role
+- What problems they need solved
+- Red flags or concerns to be aware of
+
+## 4. YOUR POSITIONING
+- How Luis's background (TurboTax $900M P&L, AI/ML pre-ChatGPT, hands-on coding) maps to their needs
+- Key talking points to emphasize
+- Potential concerns they might have about his background
+
+## 5. OUTREACH ANGLES
+- Best way to approach them
+- Who to target for networking
+- Specific hooks to use in outreach
+
+## 6. INTERVIEW PREP HOOKS
+- Questions they'll likely ask
+- Questions to ask them
+- Topics to research more deeply
+
+Be specific and actionable. Include any recent news or context that would be relevant.`;
+
+            const result = await callAI(prompt);
+            if (result) {
+                document.getElementById('intel-output').classList.remove('loading');
+                document.getElementById('intel-output').textContent = result;
+                document.getElementById('copy-intel').classList.remove('hidden');
+            }
+        }
+
+        // ============================================
+        // TOOL 4: RESPONSE OPTIMIZATION
+        // ============================================
+
+        function loadOptimizationMetrics() {
+            const contacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+
+            const total = contacts.filter(c => c.status !== 'new').length;
+            const responses = contacts.filter(c => !['new', 'contacted', 'no-response'].includes(c.status)).length;
+            const calls = contacts.filter(c => ['call-scheduled', 'call-completed', 'referral', 'interviewing', 'offer'].includes(c.status)).length;
+            const rate = total > 0 ? Math.round((responses / total) * 100) : 0;
+
+            document.getElementById('metric-total').textContent = total;
+            document.getElementById('metric-responses').textContent = responses;
+            document.getElementById('metric-rate').textContent = rate + '%';
+            document.getElementById('metric-calls').textContent = calls;
+
+            renderTemplates();
+        }
+
+        function renderTemplates() {
+            const container = document.getElementById('template-analysis');
+
+            if (messageTemplates.length === 0) {
+                container.innerHTML = '<p style="color: #666;">Add message templates and track their performance to get optimization insights.</p>';
+                return;
+            }
+
+            container.innerHTML = messageTemplates.map((t, i) => `
+                <div class="template-card ${t.responseRate > 30 ? 'best' : ''}">
+                    <h4>Template ${i + 1}</h4>
+                    <p style="color: #888; font-size: 0.9em;">${t.text.substring(0, 100)}...</p>
+                    <div class="template-stats">
+                        <span>Sent: ${t.sent || 0}</span>
+                        <span>Responses: ${t.responses || 0}</span>
+                        <span class="${t.responseRate > 30 ? 'good' : ''}">Rate: ${t.responseRate || 0}%</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addTemplate() {
+            const text = document.getElementById('new-template').value.trim();
+            if (!text) {
+                alert('Please enter a template');
+                return;
+            }
+
+            messageTemplates.push({
+                text,
+                sent: 0,
+                responses: 0,
+                responseRate: 0,
+                createdAt: new Date().toISOString()
+            });
+
+            localStorage.setItem('messageTemplates', JSON.stringify(messageTemplates));
+            document.getElementById('new-template').value = '';
+            renderTemplates();
+            // Trigger cloud sync
+            if (typeof SyncManager !== 'undefined') SyncManager.triggerSync();
+        }
+
+        async function analyzePerformance() {
+            const contacts = JSON.parse(localStorage.getItem('jobSearchContacts') || '[]');
+
+            const bySource = {};
+            contacts.forEach(c => {
+                const source = c.source || 'unknown';
+                if (!bySource[source]) bySource[source] = { total: 0, responses: 0 };
+                if (c.status !== 'new') bySource[source].total++;
+                if (!['new', 'contacted', 'no-response'].includes(c.status)) bySource[source].responses++;
+            });
+
+            const prompt = `Analyze my job search outreach performance and give specific recommendations.
+
+MY DATA:
+- Total contacts: ${contacts.length}
+- Outreach by source:
+${Object.entries(bySource).map(([source, data]) =>
+    `  - ${source}: ${data.total} sent, ${data.responses} responses (${data.total > 0 ? Math.round((data.responses/data.total)*100) : 0}%)`
+).join('\n')}
+
+My message templates:
+${messageTemplates.map((t, i) => `Template ${i+1}: "${t.text.substring(0, 150)}..." - ${t.sent} sent, ${t.responseRate}% response rate`).join('\n') || 'No templates tracked yet'}
+
+My background: Ross MBA '11, led $900M TurboTax, AI/ML product expertise, seeking VP/Director PM roles.
+
+Provide:
+1. What's working and what's not
+2. Specific changes to improve response rates
+3. Which sources to double down on
+4. Suggested A/B tests to run
+5. Optimal outreach volume and timing
+
+Be specific and actionable.`;
+
+            const result = await callAI(prompt);
+            if (result) {
+                document.getElementById('optimize-output').classList.remove('loading');
+                document.getElementById('optimize-output').textContent = result;
+            }
+        }
+
+        // ============================================
+        // TOOL 5: INTERVIEW PREP
+        // ============================================
+
+        async function generateInterviewPrep() {
+            const company = document.getElementById('interview-company').value;
+            const role = document.getElementById('interview-role').value;
+            const jobPosting = document.getElementById('job-posting').value;
+            const stage = document.getElementById('interview-stage').value;
+            const concerns = document.getElementById('interview-concerns').value;
+
+            if (!company || !role) {
+                alert('Please enter company and role');
+                return;
+            }
+
+            const prompt = `Generate comprehensive interview preparation for:
+
+COMPANY: ${company}
+ROLE: ${role}
+INTERVIEW STAGE: ${stage}
+${jobPosting ? `JOB POSTING:\n${jobPosting}\n` : ''}
+${concerns ? `SPECIFIC CONCERNS: ${concerns}` : ''}
+
+MY BACKGROUND:
+- Luis Calderon, Ross MBA '11
+- Led $900M P&L at Intuit (TurboTax) - owned full product lifecycle
+- Shipped AI products BEFORE ChatGPT (ML-driven tax recommendations, 2018-2020)
+- Recently cut support costs 40% with AI chatbots
+- 15+ years product leadership across B2C and B2B
+- Technical: Can code, ship, and review PRs (Python, SQL, built ML models)
+- Hands-on leader who also scales teams
+
+Generate a detailed interview prep document:
+
+## 1. COMPANY RESEARCH BRIEF
+- Key facts to know
+- Recent news/developments
+- Product challenges they're facing
+- Culture and values
+
+## 2. LIKELY QUESTIONS & ANSWERS
+For ${stage} interview, provide 8-10 likely questions with suggested answers that highlight my background.
+
+## 3. MY STORIES TO TELL
+Which specific experiences from my background to highlight, mapped to likely priorities.
+
+## 4. QUESTIONS TO ASK THEM
+10 thoughtful questions that show strategic thinking and genuine interest.
+
+## 5. POTENTIAL CONCERNS & RESPONSES
+What they might be worried about and how to address it.
+
+## 6. CLOSING STRONG
+How to end the interview memorably.
+
+Be specific, not generic. Reference actual details about ${company} and the ${role} role.`;
+
+            const result = await callAI(prompt);
+            if (result) {
+                document.getElementById('interview-output').classList.remove('loading');
+                document.getElementById('interview-output').textContent = result;
+                document.getElementById('copy-interview').classList.remove('hidden');
+            }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+
+        function copyOutput(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text);
+            alert('Copied to clipboard!');
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        loadApiKey();
+
+        // Check if we were sent here from Network Explorer with a contact to email
+        function checkForOutreachContact() {
+            const outreachData = localStorage.getItem('outreachContact');
+            if (outreachData) {
+                try {
+                    const contact = JSON.parse(outreachData);
+
+                    // Pre-fill the outreach form
+                    document.getElementById('contact-name').value = contact.name || '';
+                    document.getElementById('contact-title').value = contact.title || '';
+                    document.getElementById('contact-company').value = contact.company || '';
+                    document.getElementById('connection-type').value = contact.connectionType || '2nd-degree';
+                    document.getElementById('outreach-context').value = contact.additionalContext || '';
+
+                    // Set message type based on context
+                    if (contact.connectionType === 'ross-alumni') {
+                        document.getElementById('message-type').value = 'linkedin-dm';
+                        document.getElementById('message-tone').value = 'friendly';
+                    } else if (contact.companyTier <= 2) {
+                        document.getElementById('message-type').value = 'email-intro';
+                        document.getElementById('message-tone').value = 'professional-casual';
+                    }
+
+                    // Show a notification
+                    const notification = document.createElement('div');
+                    notification.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        padding: 15px 25px;
+                        border-radius: 10px;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                        z-index: 1000;
+                        animation: slideIn 0.3s ease;
+                    `;
+                    notification.innerHTML = `
+                        <strong>Contact loaded from Network Explorer!</strong><br>
+                        <span style="font-size: 0.9em;">${contact.name} at ${contact.company}</span>
+                    `;
+                    document.body.appendChild(notification);
+
+                    // Remove notification after 4 seconds
+                    setTimeout(() => {
+                        notification.style.opacity = '0';
+                        notification.style.transition = 'opacity 0.3s';
+                        setTimeout(() => notification.remove(), 300);
+                    }, 4000);
+
+                    // Clear the stored data so it doesn't persist
+                    localStorage.removeItem('outreachContact');
+
+                } catch (e) {
+                    console.error('Error loading outreach contact:', e);
+                }
+            }
+        }
+
+        // Run on page load
+        checkForOutreachContact();
+
+        // ============================================
+        // GMAIL CONNECTION
+        // ============================================
+
+        async function toggleGmailConnection() {
+            if (GmailClient.accessToken) {
+                // Already connected, show disconnect option
+                if (confirm('Disconnect from Gmail? You will need to reconnect to use email features.')) {
+                    localStorage.removeItem('gmailAccessToken');
+                    localStorage.removeItem('gmailTokenExpiry');
+                    GmailClient.accessToken = null;
+                    updateGmailStatus();
+                }
+            } else {
+                // Not connected - just authorize (client ID is hardcoded in dual-gmail-client.js)
+                await connectGmail();
+            }
+        }
+
+        async function connectGmail() {
+            try {
+                await GmailClient.authorize();
+                updateGmailStatus();
+                alert('Connected to Gmail! You can now search your email history when generating outreach messages.');
+            } catch (error) {
+                console.error('Gmail authorization failed:', error);
+                alert('Failed to connect to Gmail. Check console for details.');
+            }
+        }
+
+        function updateGmailStatus() {
+            const btn = document.getElementById('gmail-connect-btn');
+            const icon = document.getElementById('gmail-status-icon');
+            const text = document.getElementById('gmail-status-text');
+
+            if (GmailClient.accessToken) {
+                icon.textContent = '✅';
+                text.textContent = 'Gmail Connected';
+                btn.style.background = 'linear-gradient(135deg, #34c759 0%, #30a14e 100%)';
+            } else {
+                icon.textContent = '📧';
+                text.textContent = 'Connect Gmail';
+                btn.style.background = 'rgba(255,255,255,0.1)';
+            }
+        }
+
+        // Check Gmail status on load
+        if (GmailClient.init(localStorage.getItem('gmailClientId'))) {
+            updateGmailStatus();
+        }
+
+        // ============================================
+        // SEND EMAIL
+        // ============================================
+
+        async function sendEmailDirect() {
+            const email = document.getElementById('contact-email').value;
+            const name = document.getElementById('contact-name').value;
+            const message = document.getElementById('outreach-output').textContent;
+
+            if (!email) {
+                alert('Please enter an email address for this contact.');
+                return;
+            }
+
+            if (!GmailClient.accessToken) {
+                alert('Please connect Gmail first.');
+                return;
+            }
+
+            // Extract subject from message type
+            const messageType = document.getElementById('message-type').value;
+            let subject = 'Connecting';
+            if (messageType === 'email-intro') {
+                subject = `Introduction - ${name || 'Let\'s Connect'}`;
+            } else if (messageType === 'email-followup') {
+                subject = 'Following Up';
+            } else if (messageType === 'warm-intro') {
+                subject = 'Introduction Request';
+            }
+
+            // Ask for confirmation
+            if (!confirm(`Send this email to ${email}?\n\nSubject: ${subject}\n\nYou can review the message in the preview.`)) {
+                return;
+            }
+
+            try {
+                const sendBtn = document.getElementById('send-email-btn');
+                sendBtn.textContent = '📤 Sending...';
+                sendBtn.disabled = true;
+
+                await GmailClient.sendEmail(email, subject, message);
+
+                sendBtn.textContent = '✅ Sent!';
+                setTimeout(() => {
+                    sendBtn.textContent = '📧 Send Email';
+                    sendBtn.disabled = false;
+                }, 3000);
+
+                alert('Email sent successfully!');
+            } catch (error) {
+                console.error('Failed to send email:', error);
+                alert('Failed to send email: ' + error.message);
+                const sendBtn = document.getElementById('send-email-btn');
+                sendBtn.textContent = '📧 Send Email';
+                sendBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

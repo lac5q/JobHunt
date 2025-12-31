@@ -1,0 +1,151 @@
+# Claude Code Project Rules for JobHunt
+
+## 🚀 CRITICAL: Always Deploy to Vercel After HTML Updates
+
+**RULE #1: Whenever you update ANY HTML file in this project, you MUST deploy to Vercel.**
+
+This is not optional - it's a critical requirement because:
+- The job search dashboard is live on Vercel
+- Recruiters and hiring managers access the live site
+- Local changes are useless if they're not deployed
+- The user expects the live site to always be current
+
+---
+
+## 📋 Deployment Workflow (MANDATORY):
+
+### After ANY HTML file edit:
+
+1. **Test locally** (if needed)
+   ```bash
+   open <filename>.html
+   ```
+
+2. **Commit to git**
+   ```bash
+   git add <files>
+   git commit -m "Update: <description>"
+   git push origin master
+   ```
+
+3. **Deploy to Vercel** (REQUIRED)
+   ```bash
+   vercel --prod
+   ```
+
+4. **Verify deployment**
+   - Check the deployment succeeded
+   - Verify the live URL is updated
+
+---
+
+## 📁 HTML Files That Require Deployment:
+
+- `resume.html` - Main resume (most important!)
+- `job-search-dashboard.html` - Homepage
+- `network-explorer.html` - LinkedIn network visualization
+- `ai-tools.html` - AI tools page
+- `analyze-linkedin-data.html` - LinkedIn data analysis
+- `linkedin-import-converter.html` - Data import tool
+
+**Any time you edit these files → DEPLOY TO VERCEL**
+
+---
+
+## ✅ Deployment Checklist:
+
+When completing a task involving HTML files:
+- [ ] Make the edits
+- [ ] Commit changes (`git add`, `git commit`, `git push`)
+- [ ] Deploy to Vercel (`vercel --prod`)
+- [ ] Confirm deployment successful
+- [ ] Mark task as complete
+
+---
+
+## 🎯 Why This Rule Exists:
+
+The user maintains a live job search dashboard on Vercel that:
+- Showcases their resume to recruiters
+- Demonstrates their technical abilities
+- Is actively shared with hiring managers
+- Must always show the most current information
+
+**Failing to deploy means the live site shows outdated information - unacceptable!**
+
+---
+
+## 📝 Additional Project Rules:
+
+### Resume Content:
+- Keep all LinkedIn copy under character limits (About: 2,600, Experience: 2,000)
+- Maintain "Consumer product leader since 2013" positioning (accurate timeline)
+- Emphasize data-driven decision making, conversion metrics, PLG experience
+- Highlight major brands: TurboTax, Ancestry, eBay
+- Use "30-person team" (not "artist network") for SketchPop
+
+### File Management:
+- Keep resume-backup.html as backup (don't update it)
+- LINKEDIN-SECTIONS-BREAKDOWN.md is the main LinkedIn reference
+- All markdown documentation should stay current with HTML changes
+
+### Git Workflow:
+- Write clear, descriptive commit messages
+- Always push to master after commits
+- Use conventional commit style when appropriate
+
+---
+
+## 🔔 Reminder:
+
+**HTML file updated? → Deploy to Vercel immediately**
+
+This is the #1 rule for this project. Don't complete a task involving HTML files without deploying.
+
+---
+
+## 📋 Action Items Management (Obsidian Vault)
+
+**RULE: When the user mentions tasks, action items, or "things to do", automatically update the Obsidian vault.**
+
+### Action Items Location:
+- **File**: `/Users/lcalderon/github/JobHunt/Jobhunt/20-Actions/Action Items.md`
+- **Dashboard**: `/Users/lcalderon/github/JobHunt/Jobhunt/20-Actions/Action Dashboard.md`
+- **Workflow Guide**: `/Users/lcalderon/github/JobHunt/Jobhunt/20-Actions/ACTION-ITEMS-WORKFLOW.md`
+
+### When to Update Action Items:
+- User mentions tasks or action items
+- User says "add this to my todo list" or similar
+- User asks "what are my action items?" (read and summarize)
+- After planning sessions, add next steps as action items
+
+### Action Item Format:
+```markdown
+- [ ] Task description #tag1 #tag2 #next-action
+```
+
+### Available Tags:
+- `#next-action` - High priority, do next
+- `#jobhunt` - Job search related
+- `#networking` - Networking/outreach
+- `#admin` - Administrative tasks
+- `#research` - Research tasks
+- `#follow-up` - Follow-up items
+- `#urgent` - Urgent items
+
+### Sections to Use:
+- `## Inbox` - New items, unsorted
+- `## Job Search` - Job applications, interviews, etc.
+- `## Networking` - Outreach, connections, messages
+- `## Admin` - Administrative tasks
+- `## Research` - Company research, role research
+- `## Follow-ups` - Items requiring follow-up
+
+### Update Process:
+1. Read current `Action Items.md`
+2. Add new items to appropriate section
+3. Update the `updated` timestamp in frontmatter (format: `YYYY-MM-DD HH:MM:SS PST`)
+4. Use appropriate tags
+5. Save the file
+
+**This ensures action items persist across all Cursor sessions and sync with Obsidian automatically.**

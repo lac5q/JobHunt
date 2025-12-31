@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Resume Format Gallery</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 50px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .format-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .format-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .format-preview {
+            height: 400px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 3px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .format-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: scale(0.5);
+            transform-origin: top left;
+            width: 200%;
+            height: 200%;
+        }
+
+        .format-info {
+            padding: 25px;
+        }
+
+        .format-number {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .format-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .format-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .format-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: #e8f4f8;
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .view-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .view-btn:hover {
+            background: #5568d3;
+        }
+
+        .best-for {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Luis Calderon Resume Formats</h1>
+        <p class="subtitle">10 Divergent Designs Optimized for VP/Director/Principal PM Roles</p>
+
+        <div class="gallery">
+            <!-- Format 1 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <iframe src="format-1-executive-metrics.html"></iframe>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 1</div>
+                    <div class="format-name">Executive Metrics-Driven</div>
+                    <div class="format-description">
+                        FAANG-style format with prominent metrics dashboard. Impact-first layout with quantified achievements in visual boxes. Clean, professional, data-obsessed aesthetic.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">FAANG</span>
+                        <span class="tag">Metrics-First</span>
+                        <span class="tag">ATS-Friendly</span>
+                        <span class="tag">Conservative</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> Google, Meta, Amazon, Microsoft, Stripe, large tech companies focused on metrics
+                    </div>
+                    <a href="format-1-executive-metrics.html" class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 2 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📊</div>
+                        <div>Product Storytelling Timeline</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 2</div>
+                    <div class="format-name">Product Storytelling Timeline</div>
+                    <div class="format-description">
+                        Narrative-driven format with visual timeline showing product journey. Emphasizes product launches, user growth, and evolution of products over time. Story arc from Intuit to SketchPop.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">Storytelling</span>
+                        <span class="tag">Visual Timeline</span>
+                        <span class="tag">Product-Focused</span>
+                        <span class="tag">Creative</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> Notion, Figma, Canva, design-forward PLG companies that value storytelling
+                    </div>
+                    <a href="format-2-storytelling.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 3 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">⚡</div>
+                        <div>Impact-First Minimalist</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 3</div>
+                    <div class="format-name">Impact-First Minimalist</div>
+                    <div class="format-description">
+                        Ultra-clean single-page format. Each role leads with 3 key impacts in bold. Minimal decoration, maximum readability. Optimized for 7-second recruiter scan.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">Minimalist</span>
+                        <span class="tag">Impact-Led</span>
+                        <span class="tag">Single Page</span>
+                        <span class="tag">Scannable</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> Startups, YC companies, fast-moving teams that value conciseness
+                    </div>
+                    <a href="format-3-minimalist.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 4 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📈</div>
+                        <div>Data Visualization Dashboard</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 4</div>
+                    <div class="format-name">Data Visualization Dashboard</div>
+                    <div class="format-description">
+                        Infographic-style resume with charts, progress bars, and visual metrics. Skills shown as rating bars, experience as timeline graph. Data scientist meets product leader aesthetic.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">Data Viz</span>
+                        <span class="tag">Infographic</span>
+                        <span class="tag">Technical</span>
+                        <span class="tag">Modern</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> Data-driven companies, analytics platforms, Amplitude, Mixpanel
+                    </div>
+                    <a href="format-4-dataviz.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 5 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">🚀</div>
+                        <div>Modern Two-Column PLG</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 5</div>
+                    <div class="format-name">Modern Two-Column PLG Focus</div>
+                    <div class="format-description">
+                        Left sidebar with skills/education, right column for experience. Heavy emphasis on PLG metrics: activation, conversion, retention. Color-coded growth indicators.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">Two-Column</span>
+                        <span class="tag">PLG-Focused</span>
+                        <span class="tag">Modern</span>
+                        <span class="tag">Colorful</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> Duolingo, Grammarly, Dropbox, Slack, pure PLG companies
+                    </div>
+                    <a href="format-5-plg.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 6 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">🤖</div>
+                        <div>AI/ML Innovation Showcase</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 6</div>
+                    <div class="format-name">AI/ML Innovation Showcase</div>
+                    <div class="format-description">
+                        Dedicated AI products section at top. Each AI feature shown as "product card" with tech stack, impact, user metrics. Highlights pre-ChatGPT innovation + modern LLM adoption.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">AI-First</span>
+                        <span class="tag">Product Cards</span>
+                        <span class="tag">Technical</span>
+                        <span class="tag">Innovation</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> OpenAI, Anthropic, AI startups, companies building AI-powered products
+                    </div>
+                    <a href="format-6-ai-showcase.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 7 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">⚡</div>
+                        <div>Startup-Friendly Single Page</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 7</div>
+                    <div class="format-name">Startup-Friendly Single Page</div>
+                    <div class="format-description">
+                        Aggressive single-page format. 0-1 products highlighted. "Builder" mindset emphasized. Skills list includes "willing to do whatever it takes." Startup hustle aesthetic.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">Startup</span>
+                        <span class="tag">Single Page</span>
+                        <span class="tag">0-1 Focus</span>
+                        <span class="tag">Scrappy</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> Seed/Series A startups, Faire, Ramp, early-stage companies
+                    </div>
+                    <a href="format-7-startup.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 8 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">👔</div>
+                        <div>Classic Executive Conservative</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 8</div>
+                    <div class="format-name">Classic Executive Conservative</div>
+                    <div class="format-description">
+                        Traditional two-page format. Serif font, formal language, emphasis on leadership and strategy. Reads like Fortune 500 executive resume. Perfect for traditional enterprise.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">Traditional</span>
+                        <span class="tag">Executive</span>
+                        <span class="tag">Conservative</span>
+                        <span class="tag">Formal</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> Large enterprise, Salesforce, Oracle, SAP, Fortune 500 product orgs
+                    </div>
+                    <a href="format-8-conservative.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 9 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">🔧</div>
+                        <div>Skills-Matrix Technical</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 9</div>
+                    <div class="format-name">Skills-Matrix Technical</div>
+                    <div class="format-description">
+                        Detailed skills matrix showing proficiency levels. Tech stack for each role clearly listed. Appeals to technical PMs and engineering-driven companies. Shows you can "speak engineer."
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">Technical</span>
+                        <span class="tag">Skills Matrix</span>
+                        <span class="tag">Engineering</span>
+                        <span class="tag">Detailed</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> GitHub, GitLab, technical platforms, dev tools, API companies
+                    </div>
+                    <a href="format-9-technical.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+
+            <!-- Format 10 -->
+            <div class="format-card">
+                <div class="format-preview">
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">🎨</div>
+                        <div>Portfolio Hybrid Visual</div>
+                    </div>
+                </div>
+                <div class="format-info">
+                    <div class="format-number">Format 10</div>
+                    <div class="format-name">Portfolio Hybrid Visual</div>
+                    <div class="format-description">
+                        Creative blend of resume + portfolio. Screenshots of products shipped. Before/after metrics visuals. Product thinking demonstrated visually. Works as both PDF and web page.
+                    </div>
+                    <div class="format-tags">
+                        <span class="tag">Visual</span>
+                        <span class="tag">Portfolio</span>
+                        <span class="tag">Creative</span>
+                        <span class="tag">Interactive</span>
+                    </div>
+                    <div class="best-for">
+                        <strong>Best for:</strong> Consumer apps, design-led companies, Airbnb, Pinterest, creative product roles
+                    </div>
+                    <a href="format-10-portfolio.html"  class="view-btn">View Full Resume</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px; color: white; font-size: 14px; opacity: 0.8;">
+            <p>All formats optimized for ATS systems • Print-ready • PDF-exportable</p>
+            <p style="margin-top: 10px;">Targeting: VP Product • Director Product • Principal PM at PLG/Consumer/SMB Companies</p>
+        </div>
+    </div>
+</body>
+</html>

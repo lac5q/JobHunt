@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Impact-First Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.4;
+            color: #1a1a1a;
+            background: white;
+        }
+
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+        }
+
+        .page {
+            padding: 0.5in;
+            min-height: 11in;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #000;
+        }
+
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #000;
+        }
+
+        .header-text h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header-text .title {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .header-text .contact {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #000;
+        }
+
+        .role {
+            margin-bottom: 25px;
+        }
+
+        .role-title-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 3px;
+        }
+
+        .role-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .dates {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .company {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .impact-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .impact-list li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .impact-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .metric {
+            font-weight: 700;
+            color: #000;
+        }
+
+        .subsection {
+            font-size: 13px;
+            font-weight: 600;
+            margin: 12px 0 6px 0;
+            font-style: italic;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            font-size: 11px;
+        }
+
+        .skill-category {
+            margin-bottom: 8px;
+        }
+
+        .skill-category strong {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 12px;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .print-button:hover {
+            background: #333;
+        }
+
+        @media print {
+            .page {
+                padding: 0.5in;
+                min-height: 0;
+                page-break-after: always;
+            }
+
+            .page:last-child {
+                page-break-after: auto;
+            }
+
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">Print</button>
+
+    <div class="container">
+        <!-- Page 1 -->
+        <div class="page">
+            <div class="header">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFLhrcVCSYY8w/profile-displayphoto-shrink_800_800/B56ZX04IgtHQAg-/0/1743570110941?e=1766620800&v=beta&t=9KHaWvyX8UvAxH_yLT7FD15TObn3kZgtfQP1A3j7m1o" alt="Luis Calderon" class="profile-photo">
+                <div class="header-text">
+                    <h1>Luis Calderon</h1>
+                    <div class="title">AI/ML Product Leader | VP/Director Product Management</div>
+                    <div class="contact">San Diego, CA • lcalderon@gmail.com • linkedin.com/in/luiscalderon</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">Experience</div>
+
+                <!-- SketchPop -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Chief Product Officer</div>
+                        <div class="dates">Jul 2025 - Present</div>
+                    </div>
+                    <div class="company">SketchPop LLC • San Diego, CA</div>
+                    <ul class="impact-list">
+                        <li>Scaled acquired e-commerce business to <span class="metric">$3M revenue</span> with <span class="metric">20% margins</span> and 30-person team through AI-powered transformation</li>
+                        <li>Deployed AI chatbot achieving <span class="metric">40% cost reduction</span> while maintaining 4.8+ star customer satisfaction</li>
+                        <li>Integrated LLM-powered tools (GPT-4/Claude) for personalized customer communications, order updates, and upsell recommendations</li>
+                        <li>Leveraged AI for demand forecasting and inventory planning, reducing fulfillment delays by <span class="metric">30%</span></li>
+                        <li>Rebuilt backend tech stack with modern AI infrastructure for scalable AI feature deployment</li>
+                        <li>Developed AI-assisted quality control system flagging issues before artist review</li>
+                        <li>Implemented ML models predicting customer preferences and recommending personalized products</li>
+                        <li>Created AI-powered content generation for SEO, product descriptions, and marketing copy</li>
+                        <li>Built data pipeline for continuous AI model improvement using customer feedback loops</li>
+                        <li>AI automation enabled <span class="metric">30-person team to handle 2x order volume</span></li>
+                    </ul>
+                </div>
+
+                <!-- Growth Alchemy Lab -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Growth Management Consultant</div>
+                        <div class="dates">Sep 2024 - Present</div>
+                    </div>
+                    <div class="company">Growth Alchemy Lab • San Diego, CA</div>
+                    <ul class="impact-list">
+                        <li>Founded AI/ML product consulting practice advising startups on AI strategy, implementation, and operational deployment</li>
+                        <li>Advise companies on AI/ML product strategy, feature prioritization, and roadmap development focused on ROI</li>
+                        <li>Guide AI operations deployment: chatbots, AI agents, workflow automation using GPT-4, Claude, Gemini, Llama</li>
+                        <li>Help companies evaluate build vs. buy for AI features and select appropriate vendors/platforms</li>
+                        <li>Develop AI product metrics frameworks and success measurement tied to business KPIs</li>
+                        <li>Consult on prompt engineering, LLM orchestration, and AI agent frameworks for production</li>
+                        <li><strong>Ivo.AI:</strong> Product advisor for AI sales automation - advised on AI agent architecture and LLM integration</li>
+                        <li><strong>B2B SaaS:</strong> AI feature development, implementation roadmaps, cost-benefit analysis, GTM strategy</li>
+                        <li><strong>E-commerce:</strong> AI chatbot deployment, customer service automation, operational AI use cases</li>
+                        <li>Helped clients achieve <span class="metric">30-50% cost reduction</span>, <span class="metric">15-25% retention improvement</span></li>
+                    </ul>
+                </div>
+
+                <!-- Intuit -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Consumer Group Product Management Leader - Growth</div>
+                        <div class="dates">Oct 2021 - Sep 2024</div>
+                    </div>
+                    <div class="company">Intuit • San Diego, CA</div>
+                    <ul class="impact-list">
+                        <li>Led <span class="metric">$900M-$1B Self-Employed business unit</span> as Principal/Group PM managing 4 Product Managers</li>
+                        <li>Delivered <span class="metric">10-15% CAGR revenue growth ($100-150M annual growth)</span> through AI-powered product innovation</li>
+                        <li><strong>Expense Categorization AI:</strong> Shipped ML model auto-categorizing expenses, reducing manual entry <span class="metric">60%+</span> for millions</li>
+                        <li><strong>Deduction Finder ML:</strong> Built HITL predictive algorithm identifying missed deductions, helping users maximize refunds by <span class="metric">$1,200+ average</span></li>
+                        <li><strong>Audit Risk Predictor:</strong> Developed ML model predicting IRS audit risk and suggesting optimizations</li>
+                        <li><strong>Document Extraction AI:</strong> Implemented OCR/AI extracting data from W-2s, 1099s, receipts</li>
+                        <li>Led cross-BU AI coordination ensuring consistent experiences and shared ML infrastructure</li>
+                        <li>Shipped partner integrations, freemium acquisition model, mobile experience improvements</li>
+                        <li>Coordinated product strategy across multiple business units and engineering teams</li>
+                        <li>AI products served millions of self-employed users (freelancers, gig workers, small businesses)</li>
+                    </ul>
+                </div>
+
+                <!-- Ancestry -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Director of (Growth) Product Management</div>
+                        <div class="dates">Jan 2016 - 2017</div>
+                    </div>
+                    <div class="company">Ancestry • San Francisco Bay Area</div>
+                    <ul class="impact-list">
+                        <li>Led acquisition, conversion & growth for <span class="metric">$800M subscription business</span></li>
+                        <li>Built, tested, and rolled out abandon cart feature delivering <span class="metric">5% revenue lift</span></li>
+                        <li>Launched mobile initiative achieving <span class="metric">30% lift in mobile app conversion subscriptions</span></li>
+                        <li>Launched customer advocacy initiative documenting end-to-end journey, metrics, and pricing</li>
+                        <li>Collaborated cross-functionally with Finance, Product, Marketing, Member Services</li>
+                        <li>Defined GTM strategy, coordinated marketing planning, influenced product roadmap</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page">
+            <div class="section">
+                <!-- eBay -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Product Leader</div>
+                        <div class="dates">Mar 2013 - Apr 2015</div>
+                    </div>
+                    <div class="company">eBay Marketplaces • San Francisco Bay Area</div>
+                    
+                    <div class="subsection">North America Product Business Unit Leader</div>
+                    <ul class="impact-list">
+                        <li>Managed cross-functional teams for eBay Payments (cart, checkout, installments) & Customer Connection (My eBay, Sign-in, Registration)</li>
+                        <li>Improved checkout conversion <span class="metric">+2%</span>, lowered operational costs <span class="metric">-33% defects</span>, improved buyer NPS</li>
+                        <li>Drove A/B testing and launch decisions shipping releases generating <span class="metric">$100M+ business lift</span></li>
+                        <li>Explored market opportunities, represented customer voice, surveyed competitive landscape</li>
+                        <li>Collaborated on UX design, business use cases, go-to-market coordination</li>
+                    </ul>
+
+                    <div class="subsection">Global Payments Product Analytics Senior Manager</div>
+                    <ul class="impact-list">
+                        <li>Global lead for Payments Analytics team providing strategic/analytical support for product insights</li>
+                        <li>Managed partnerships with product management, development, business units for timely releases</li>
+                        <li>Led teams conducting A/B tests, analyzing data, delivering actionable findings</li>
+                        <li>Recommended, tracked, dashboarded key business and product metrics</li>
+                        <li>Hired, trained, coached, mentored team of <span class="metric">6+ analysts and managers</span></li>
+                    </ul>
+                </div>
+
+                <!-- Tile -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Growth Product Leader</div>
+                        <div class="dates">Mar 2015 - Mar 2016</div>
+                    </div>
+                    <div class="company">Tile • San Francisco Bay Area</div>
+                    <ul class="impact-list">
+                        <li>Defined, launched, improved subscription renewal program from strategy to operations</li>
+                        <li>Developed business case, financials, GTM strategy for hardware-as-a-service subscription</li>
+                        <li>Executed GTM strategy including market/product requirements, marketing plan, communications</li>
+                        <li>Managed creative talent for packaging, product, marketing collateral development</li>
+                        <li>Conducted extensive qualitative/quantitative A/B testing for customer insights</li>
+                    </ul>
+                </div>
+
+                <!-- Doctor.com -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Director of Product Management</div>
+                        <div class="dates">Feb 2017 - May 2018</div>
+                    </div>
+                    <div class="company">Doctor.com • San Francisco Bay Area</div>
+                    <ul class="impact-list">
+                        <li>Led product analytics, publisher operations, reporting platforms</li>
+                        <li>Launched provider-facing personalized reporting platform increasing engagement <span class="metric">15%</span>, decreasing retention</li>
+                        <li>Developed core analytics metrics, dashboards, 2018 product OKRs</li>
+                        <li>Defined product analytics reporting architecture, led/mentored analysts</li>
+                        <li>Defined user personas and value prop to product messaging</li>
+                        <li>Spearheaded enterprise-wide project integrating provider data with partners</li>
+                    </ul>
+                </div>
+
+                <!-- Epilogue Capital -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Managing Partner</div>
+                        <div class="dates">Sep 2018 - Present</div>
+                    </div>
+                    <div class="company">Epilogue Capital • San Diego, CA</div>
+                    <ul class="impact-list">
+                        <li>Investing and acquiring profitable small businesses</li>
+                    </ul>
+                </div>
+
+                <!-- Earlier Career -->
+                <div class="role">
+                    <div class="role-title-line">
+                        <div class="role-title">Management Consultant / Senior Consultant</div>
+                        <div class="dates">2000 - 2012</div>
+                    </div>
+                    <div class="company">Accenture, Booz Allen Hamilton, Capgemini</div>
+                    <ul class="impact-list">
+                        <li><strong>Accenture:</strong> Marketing & Sales Strategy, CRM for Communications/Media/Technology companies</li>
+                        <li>Developed worldwide marketing process review driving <span class="metric">10% cost efficiency gain</span> for consumer electronics</li>
+                        <li>Performed due diligence on marketing automation solution saving <span class="metric">$50-100M operational costs</span></li>
+                        <li><strong>Booz Allen Hamilton:</strong> Led requirements analysis, design, testing for IRS complex systems</li>
+                        <li>Cultivated relations acquiring/extending <span class="metric">$15M contract</span>; managed <span class="metric">$100M project</span></li>
+                        <li><strong>Capgemini:</strong> Analyzed/tested <span class="metric">$1B telecom billing system</span> for Nextel</li>
+                        <li>Functional lead for cutting-edge hardware testing; developed certification plan for go-live</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">Skills</div>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <strong>AI/ML Product</strong>
+                        LLMs (GPT-4, Claude, Gemini), AI Agents, HITL, ML Models, OCR, Predictive Analytics
+                    </div>
+                    <div class="skill-category">
+                        <strong>Product Leadership</strong>
+                        P&L Management, Team Leadership, Product Strategy, Roadmap Development, Cross-functional
+                    </div>
+                    <div class="skill-category">
+                        <strong>Growth & Analytics</strong>
+                        Product-Led Growth, A/B Testing, Conversion Optimization, Analytics, Metrics
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">Education</div>
+<div class="education-item">
+                <div><strong>MBA & MS</strong><br>University of Michigan (Ross & SEAS)</div>
+                <div style="text-align: right; color: #888;">2009 - 2011</div>
+            </div>
+            <div class="education-item">
+                <div><strong>BS, Electrical Engineering</strong><br>University of Virginia</div>
+                <div style="text-align: right; color: #888;">1996 - 2000</div>
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

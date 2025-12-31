@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Executive Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            color: #000;
+            background: white;
+        }
+
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+        }
+
+        .page {
+            padding: 0.75in;
+            min-height: 11in;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #000;
+            margin-bottom: 20px;
+        }
+
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 2px solid #000;
+            object-fit: cover;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .contact-info {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .summary {
+            text-align: justify;
+            font-size: 12px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #000;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #000;
+        }
+
+        .experience-item {
+            margin-bottom: 20px;
+        }
+
+        .job-header {
+            margin-bottom: 8px;
+        }
+
+        .job-title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .job-company {
+            font-size: 12px;
+            font-style: italic;
+            margin-bottom: 3px;
+        }
+
+        .job-dates {
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+
+        .job-description {
+            font-size: 12px;
+            text-align: justify;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .responsibilities {
+            list-style-type: disc;
+            margin-left: 25px;
+        }
+
+        .responsibilities li {
+            margin-bottom: 6px;
+            font-size: 11px;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        .subsection-title {
+            font-size: 11px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            text-decoration: underline;
+        }
+
+        .education-item {
+            margin-bottom: 15px;
+        }
+
+        .degree {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .institution {
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .skills-section {
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        .skill-category {
+            margin-bottom: 8px;
+        }
+
+        .skill-category strong {
+            font-size: 12px;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        @media print {
+            .page {
+                padding: 0.75in;
+                page-break-after: always;
+            }
+
+            .page:last-child {
+                page-break-after: auto;
+            }
+
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">Print Resume</button>
+
+    <div class="container">
+        <!-- Page 1 -->
+        <div class="page">
+            <div class="header">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFLhrcVCSYY8w/profile-displayphoto-shrink_800_800/B56ZX04IgtHQAg-/0/1743570110941?e=1766620800&v=beta&t=9KHaWvyX8UvAxH_yLT7FD15TObn3kZgtfQP1A3j7m1o" alt="Luis Calderon" class="profile-photo">
+                <div class="name">LUIS CALDERON</div>
+                <div class="contact-info">San Diego, California</div>
+                <div class="contact-info">lcalderon@gmail.com • LinkedIn: /in/luiscalderon</div>
+            </div>
+
+            <div class="summary">
+                <div class="summary-title">Professional Summary</div>
+                Accomplished Product Management Executive with over 20 years of progressive leadership experience in artificial intelligence, machine learning, and product-led growth strategies. Demonstrated expertise in scaling businesses from early-stage startups to billion-dollar enterprises, with proven track record of delivering measurable revenue growth and operational excellence. Currently serving as Chief Product Officer, having successfully scaled acquired e-commerce business to $3M annual revenue with 20% profit margins through strategic AI implementation. Previously led $900M+ business unit at Intuit, shipping four major AI/ML products to millions of users while managing cross-functional teams and delivering 10-15% CAGR. MBA/MS from University of Michigan. Seeking VP/Director Product Management position to leverage extensive AI/ML expertise and proven leadership capabilities.
+            </div>
+
+            <div class="section-title">Professional Experience</div>
+
+            <!-- SketchPop -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Chief Product Officer</div>
+                    <div class="job-company">SketchPop LLC, San Diego, California</div>
+                    <div class="job-dates">July 2025 - Present</div>
+                </div>
+                <div class="job-description">
+                    Provide executive leadership for product strategy and operations of acquired custom art e-commerce business. Spearhead comprehensive AI-powered operational transformation resulting in $3M annual revenue with 30-person team and 20% profit margins.
+                </div>
+                
+                <div class="subsection-title">Artificial Intelligence Implementation & Operational Efficiency:</div>
+                <ul class="responsibilities">
+                    <li>Deployed enterprise-grade AI chatbot for customer service automation in 2025, achieving 40% cost reduction while maintaining 4.8+ star customer satisfaction rating, positioning company as early mover in applying post-ChatGPT LLM capabilities to e-commerce operations</li>
+                    <li>Integrated sophisticated LLM-powered customer communication tools (GPT-4/Claude) for personalized order updates, revision requests, and strategic upsell recommendations, creating seamless customer experience journey</li>
+                    <li>Leveraged artificial intelligence for advanced demand forecasting and inventory planning operations, reducing fulfillment delays by 30% and optimizing resource allocation across supply chain</li>
+                </ul>
+
+                <div class="subsection-title">Product & Technology Innovation:</div>
+                <ul class="responsibilities">
+                    <li>Orchestrated complete rebuild of entire backend technology stack with modern AI infrastructure to enable scalable AI feature deployment and continuous model improvement capabilities</li>
+                    <li>Developed proprietary AI-assisted quality control system that autonomously flags potential quality issues before artist review, improving consistency and reducing rework</li>
+                    <li>Implemented sophisticated machine learning models to predict customer preferences with high accuracy and recommend personalized product options, increasing upsell conversion rates</li>
+                    <li>Created AI-powered content generation system for product descriptions, SEO optimization, and marketing copy, accelerating content production by factor of 10x</li>
+                    <li>Built comprehensive data pipeline for continuous AI model improvement using customer feedback and order data, enabling rapid iteration and enhancement</li>
+                </ul>
+
+                <div class="subsection-title">Business Outcomes & Strategic Impact:</div>
+                <ul class="responsibilities">
+                    <li>Revenue Performance: Successfully scaled organization to $3M annual revenue post-acquisition through strategic AI-driven efficiency improvements and product innovation</li>
+                    <li>Profitability Achievement: Achieved and maintained 20% profit margins in highly competitive consumer market through operational excellence and cost optimization</li>
+                    <li>Operational Leverage: AI automation initiatives enabled 30-person team to efficiently handle 2x order volume, demonstrating significant scalability and efficiency gains</li>
+                </ul>
+            </div>
+
+            <!-- Growth Alchemy Lab -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Growth Management Consultant (Founder)</div>
+                    <div class="job-company">Growth Alchemy Lab, San Diego, California</div>
+                    <div class="job-dates">September 2024 - Present</div>
+                </div>
+                <div class="job-description">
+                    Founded specialized AI/ML product consulting practice providing strategic advisory services to startups and growth-stage companies on artificial intelligence strategy, implementation methodologies, and operational deployment. Specialize in helping organizations leverage LLMs, AI agents, and operational AI to drive measurable business outcomes.
+                </div>
+                
+                <div class="subsection-title">AI Product Consulting & Strategic Advisory:</div>
+                <ul class="responsibilities">
+                    <li>Provide strategic counsel to companies on comprehensive AI/ML product strategy, feature prioritization frameworks, and roadmap development with explicit focus on ROI and practical implementation pathways</li>
+                    <li>Guide organizations through AI operations deployment including chatbots, AI agents, and workflow automation leveraging latest LLM capabilities (GPT-4, Claude, Gemini, Llama)</li>
+                    <li>Assist companies in evaluating build versus buy decisions for AI features and selecting appropriate AI vendors and platforms based on technical requirements and budgetary constraints</li>
+                    <li>Develop comprehensive AI product metrics frameworks and success measurement strategies directly tied to business KPIs and customer outcomes</li>
+                    <li>Consult on advanced prompt engineering, LLM orchestration, and AI agent frameworks for enterprise production deployments at scale</li>
+                </ul>
+
+                <div class="subsection-title">Notable Client Engagements & Deliverables:</div>
+                <ul class="responsibilities">
+                    <li>Ivo.AI: Served as Product Advisor for AI-powered sales automation platform, providing strategic guidance on AI agent architecture, LLM integration strategy, and comprehensive AI operations tools roadmap</li>
+                    <li>Multiple B2B SaaS Companies: Directed AI feature development initiatives, implementation roadmaps, comprehensive cost-benefit analysis, and go-to-market strategy for AI product launches</li>
+                    <li>E-commerce Platforms: Provided expert advisory on AI chatbot deployment, customer service automation, and operational AI use cases driving efficiency improvements</li>
+                    <li>Early-Stage AI Startups: Conducted AI product-market fit validation, pricing model development, and competitive positioning in increasingly crowded AI market</li>
+                </ul>
+
+                <div class="subsection-title">Measurable Client Impact:</div>
+                <ul class="responsibilities">
+                    <li>Helped clients achieve measurable ROI from AI investments including cost reduction of 30-50%, revenue lift, and significant efficiency gains</li>
+                    <li>Guided successful AI feature launches that improved customer retention by 15-25% and enhanced engagement metrics</li>
+                    <li>Enabled companies to accelerate AI initiatives by providing hands-on implementation guidance versus theoretical strategy consulting</li>
+                </ul>
+            </div>
+
+            <!-- Intuit -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Consumer Group Product Management Leader - Growth (Principal/Group Product Manager)</div>
+                    <div class="job-company">Intuit, San Diego, California</div>
+                    <div class="job-dates">October 2021 - September 2024</div>
+                </div>
+                <div class="job-description">
+                    Provided senior leadership for $900M-$1B Self-Employed business unit, managing team of 4 Product Managers and delivering 10-15% CAGR revenue growth ($100-150M annual growth) through strategic AI-powered product innovation and cross-functional leadership.
+                </div>
+                
+                <div class="subsection-title">AI/ML Product Leadership (Shipped 4 Major AI Products to Production):</div>
+                <ul class="responsibilities">
+                    <li>Expense Categorization AI: Successfully shipped sophisticated ML model that automatically categorizes business expenses from receipts and transactions, reducing manual data entry by 60%+ for millions of self-employed users and significantly improving user experience</li>
+                    <li>Deduction Finder ML: Developed and deployed predictive algorithm using Human-in-the-Loop (HITL) training methodology that identifies missed tax deductions based on user profile, industry vertical, and transaction patterns, helping users maximize refunds by average of $1,200+</li>
+                    <li>Audit Risk Predictor: Built comprehensive ML model that predicts IRS audit risk and suggests strategic optimizations to reduce risk profile while maximizing legitimate tax deductions</li>
+                    <li>Document Extraction AI: Implemented advanced OCR and AI technology to extract structured data from uploaded tax documents (W-2s, 1099s, receipts), improving accuracy and substantially reducing user effort</li>
+                    <li>Cross-Business Unit AI Coordination: Led coordination across multiple TurboTax business units to ensure consistent AI experiences and shared ML infrastructure, driving operational efficiency</li>
+                </ul>
+
+                <div class="subsection-title">Product & Growth Achievements:</div>
+                <ul class="responsibilities">
+                    <li>Revenue Growth: Successfully delivered 10-15% CAGR on $900M+ business through strategic AI/ML product initiatives and growth experimentation</li>
+                    <li>Team Leadership: Hired, mentored, and developed high-performing team of 4 Product Managers supporting comprehensive AI/ML roadmap and growth initiatives</li>
+                    <li>Product Launches: Directed partner integrations, freemium acquisition model development, and mobile experience improvements driving user acquisition</li>
+                    <li>Cross-Functional Leadership: Coordinated comprehensive product strategy across multiple business units and engineering teams for unified customer experience</li>
+                    <li>Customer Impact: AI products served millions of self-employed users including freelancers, gig economy workers, and small business owners</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page">
+            <!-- Ancestry -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Director of (Growth) Product Management</div>
+                    <div class="job-company">Ancestry, San Francisco Bay Area</div>
+                    <div class="job-dates">January 2016 - 2017</div>
+                </div>
+                <div class="job-description">
+                    Directed Product Management for Acquisition, Conversion & Growth. Responsible for identifying new business opportunities, defining strategic roadmaps and building new top funnel product and shopping experiences that drive measurable business lift for $800M subscription business.
+                </div>
+                <ul class="responsibilities">
+                    <li>Oversaw the conceptualization, building, testing, and comprehensive roll-out of abandon cart feature resulting in 5% revenue lift through strategic recovery tactics</li>
+                    <li>Launched and managed mobile initiative efforts resulting in 30% lift in mobile application conversion subscriptions through optimized user experience</li>
+                    <li>Launched comprehensive customer advocacy initiative to better understand and document the customer end-to-end journey along with key metrics and pricing across the complete product experience</li>
+                    <li>Worked cross-functionally with Finance, Product, Marketing, and Member Services departments to address issues, discover opportunities, and advance the business</li>
+                    <li>Defined and drove the go-to-market strategy, coordinated integrated marketing planning efforts, and influenced product roadmap for $800M Ancestry subscription business</li>
+                </ul>
+            </div>
+
+            <!-- eBay -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Product Leader (North America Business Unit & Global Analytics)</div>
+                    <div class="job-company">eBay Marketplaces, San Francisco Bay Area</div>
+                    <div class="job-dates">March 2013 - April 2015</div>
+                </div>
+                <div class="job-description">
+                    North America Product Business Unit Leader. Managed and advised cross-functional teams to deliver business performance, customer satisfaction, and product strategy for eBay Payments (shopping cart, checkout, installments) and Customer Connection (My eBay, Sign-in, Customer Registration) across mobile and site experiences.
+                </div>
+                <ul class="responsibilities">
+                    <li>Explored new market opportunities, represented customer's voice, surveyed competitive landscape, defined success goals and metrics, and made strategic business and product recommendations to advance product roadmap and improve conversion (+2% checkout), lower operational costs (-33% defects), and delight buyers (NPS score improvement)</li>
+                    <li>Collaborated with cross-functional product stakeholders to design User Experience (UX) drafts, develop comprehensive business use cases, coordinate go-to-market tasks, drive A/B testing and make launch decisions to "ship" product releases, over $100M of business lift, and improved buyer experiences</li>
+                    <li>Served as Global lead for eBay Payments (Checkout/Cart) Product Analytics team responsible for providing strategic and analytical support to drive product and business actionable insights, optimizations and recommendations for opportunities and product releases</li>
+                    <li>Managed key partnerships with product management, development, and business units to ensure timely product releases and achieve business objectives</li>
+                    <li>Led teams conducting A/B tests, analyzing data, and delivering actionable findings to drive business decisions</li>
+                    <li>Recommended, tracked, dashboarded and advised on key business and product metrics across organization</li>
+                    <li>Hired, trained, coached, and mentored team of 6+ analysts and managers delivering data-driven insights</li>
+                </ul>
+            </div>
+
+            <!-- Additional Roles -->
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Director of Product Management</div>
+                    <div class="job-company">Doctor.com, San Francisco Bay Area</div>
+                    <div class="job-dates">February 2017 - May 2018</div>
+                </div>
+                <ul class="responsibilities">
+                    <li>Product leader responsible for product analytics, publisher operations, and reporting platforms</li>
+                    <li>Conceptualized, designed, and launched provider facing personalized reporting platform that increased engagement by 15%</li>
+                    <li>Developed core analytics metrics, dashboards, and 2018 year product OKRs</li>
+                    <li>Defined product analytics reporting architecture, led and mentored analysts</li>
+                    <li>Spearheaded enterprise-wide project integrating provider data to and from partners</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Growth Product Leader (Advisor)</div>
+                    <div class="job-company">Tile, San Francisco Bay Area</div>
+                    <div class="job-dates">March 2015 - March 2016</div>
+                </div>
+                <ul class="responsibilities">
+                    <li>Advisor responsible for defining, launching, and improving new subscription renewal program from strategy down to product and business operations</li>
+                    <li>Developed comprehensive business case, financials, and go-to-market strategy for innovative hardware-as-a-service subscription/renewal business model</li>
+                    <li>Developed and executed go-to-market strategy, including market and product requirements, marketing plan, and communications calendar</li>
+                    <li>Conducted extensive qualitative and quantitative A/B testing to gather customer insights</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Managing Partner</div>
+                    <div class="job-company">Epilogue Capital, San Diego, California</div>
+                    <div class="job-dates">September 2018 - Present</div>
+                </div>
+                <ul class="responsibilities">
+                    <li>Investing and acquiring profitable small businesses with focus on operational improvement and growth</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Management Consultant</div>
+                    <div class="job-company">Accenture, San Francisco</div>
+                    <div class="job-dates">January 2010 - October 2012</div>
+                </div>
+                <div class="job-description">Function: Marketing & Sales Strategy, Marketing & Sales Transformation and Customer Relationship Management (CRM). Industry Focus: Communication, Media, & Technology.</div>
+                <ul class="responsibilities">
+                    <li>Developed and coordinated the launch of a world-wide marketing process review for a leading consumer electronics company, driving a 10% gain in cost to service efficiency</li>
+                    <li>Performed due-diligence and value case analysis of a marketing automation solution for a consumer electronics provider; resulting in a solution expected to save the world-wide marketing organization $50-100M in operational costs</li>
+                    <li>Assessed the market size, growth target, and sales scenario forecast for a market leading cloud technology & service provider to develop a sales pipeline management plan</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Senior Consultant</div>
+                    <div class="job-company">Booz Allen Hamilton</div>
+                    <div class="job-dates">June 2003 - May 2005</div>
+                </div>
+                <ul class="responsibilities">
+                    <li>Led efforts in requirements analysis, design, and testing of a complex case handling system for the Internal Revenue Service</li>
+                    <li>Cultivated customer relations essential in acquiring and extending $15M contract</li>
+                    <li>Advised and developed technology solutions; Developed project plan and managed resources (6-20 reports) resulting in timely completion of $100M project</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <div class="job-title">Senior Consultant</div>
+                    <div class="job-company">Capgemini (Sogeti USA)</div>
+                    <div class="job-dates">September 2000 - June 2003</div>
+                </div>
+                <ul class="responsibilities">
+                    <li>Analyzed requirements and tested $1 billion telecommunications billing system for Nextel Wireless Communications</li>
+                    <li>Functional lead for testing efforts in the Nextel Testing Laboratory of cutting-edge hardware components</li>
+                    <li>Developed and executed certification plan for go-live project launch of a billion dollar system</li>
+                </ul>
+            </div>
+
+            <div class="section-title">Education</div>
+
+<div class="education-item">
+            <div class="degree-header">
+                <div class="degree">Master of Business Administration (MBA) & Master of Science (MS)</div>
+                <div class="date">2009 - 2011</div>
+            </div>
+            <div class="institution">University of Michigan - Ross School of Business & SEAS</div>
+        </div>
+
+        <div class="education-item">
+            <div class="degree-header">
+                <div class="degree">Bachelor of Science (BS), Electrical Engineering</div>
+                <div class="date">1996 - 2000</div>
+            </div>
+            <div class="institution">University of Virginia</div>
+        </div>
+
+            <div class="section-title">Core Competencies</div>
+
+            <div class="skills-section">
+                <div class="skill-category">
+                    <strong>Artificial Intelligence & Machine Learning:</strong> LLM Integration (GPT-4, Claude, Gemini, Llama), AI Agents, Human-in-the-Loop (HITL) Training, Machine Learning Models, Predictive Analytics, OCR, Natural Language Processing, Prompt Engineering, AI Operations
+                </div>
+                <div class="skill-category">
+                    <strong>Product Management & Strategy:</strong> Product-Led Growth (PLG), 0-1 Product Development, Product Strategy, Roadmap Development, Feature Prioritization, Market Analysis, Go-to-Market Strategy, Product Analytics
+                </div>
+                <div class="skill-category">
+                    <strong>Leadership & Management:</strong> P&L Management, Team Building, Cross-functional Leadership, Hiring & Mentoring, Strategic Planning, Stakeholder Management, Change Management
+                </div>
+                <div class="skill-category">
+                    <strong>Growth & Analytics:</strong> A/B Testing, Conversion Optimization, User Acquisition, Retention Strategy, Metrics & KPIs, Data-Driven Decision Making, Customer Journey Mapping
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

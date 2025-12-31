@@ -1,0 +1,44 @@
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/
+
+# Vercel
+.vercel
+
+# Environment
+.env.local
+.env
+
+# Archive (old/deprecated files)
+archive/
+
+# ===========================================
+# PERSONAL/SENSITIVE DATA - DO NOT COMMIT
+# ===========================================
+
+# LinkedIn data exports (entire folder and all subfolders)
+linkedin-archives/
+data/
+
+# Connection data (contains PII)
+connections-data.js
+
+# Any CSV files (likely contain personal data)
+*.csv
+
+# Any data exports
+*.zip
+
+# Temp files
+*.tmp
+.claude-rules
+
+# IDE
+.idea/
+*.swp
+*~

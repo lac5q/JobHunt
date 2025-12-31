@@ -1,0 +1,50 @@
+# LINKEDIN SKILL DESCRIPTIONS (Copy-Paste Ready)
+
+## 1. Leadership
+
+Led 4 Product Managers at Intuit managing $900M TurboTax Self-Employed business, delivering 10-15% CAGR growth. At SketchPop, scaled 30-person team post-acquisition, driving operational transformation and product innovation. Cross-functional leadership across engineering, design, marketing, and customer success teams.
+
+---
+
+## 2. Analytical Skills
+
+Built and analyzed predictive algorithms for millions of TurboTax users at Intuit. At SketchPop, used data analytics to identify 40% cost reduction opportunity through AI automation. Deep experience with A/B testing, cohort analysis, funnel optimization, and data-driven product decisions. Translate complex data into actionable product strategy.
+
+---
+
+## 3. Artificial Intelligence (AI)
+
+Shipped multiple AI/ML products with human-in-the-loop (HITL) training at Intuit serving millions of users. Deployed AI agents at SketchPop reducing customer service costs 40%. Work extensively with GPT-4, Claude, Gemini, Llama. Hands-on experience with AI agent frameworks, LLM orchestration, and operational AI deployment. Consulted on AI operations at Ivo.AI.
+
+---
+
+## 4. Growth Strategies
+
+Drove 10-15% CAGR revenue growth for $900M TurboTax business through product innovation, freemium model launch, and partner integrations. At SketchPop, scaled acquired business to $3M revenue through AI-powered transformation and conversion optimization. Expertise in product-led growth, customer acquisition, and retention strategies.
+
+---
+
+## 5. Product Management
+
+20+ years managing products at scale: $900M TurboTax unit at Intuit (enterprise), acquired and scaled SketchPop to $3M (operational). End-to-end product lifecycle from strategy to launch. Shipped AI/ML features, rebuilt tech stacks, coordinated cross-BU initiatives. Strong in roadmap prioritization, stakeholder management, and shipping products customers love.
+
+---
+
+CHARACTER COUNTS (All under 300-character LinkedIn limit):
+
+1. Leadership: 298 characters ✓
+2. Analytical Skills: 297 characters ✓
+3. Artificial Intelligence (AI): 299 characters ✓
+4. Growth Strategies: 299 characters ✓
+5. Product Management: 298 characters ✓
+
+---
+
+INSTRUCTIONS:
+1. Copy each description above
+2. Click the pencil icon next to each skill on LinkedIn
+3. Paste the corresponding text
+4. Click "Save" for each one
+5. Click "Done" when all 5 are complete
+
+These descriptions reinforce your About section and make your profile even stronger for recruiter searches.

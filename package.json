@@ -1,0 +1,22 @@
+{
+  "name": "jobhunt-dashboard",
+  "version": "1.0.0",
+  "description": "Job search dashboard with automated screenshot testing",
+  "scripts": {
+    "screenshots": "node docs/generate-screenshots.js",
+    "screenshots:safe": "node docs/generate-screenshots-safe.js",
+    "test:playwright": "node docs/test-playwright.js",
+    "test:visual": "node docs/generate-screenshots.js",
+    "test": "playwright test tests/regression-tests.spec.js",
+    "test:ui": "playwright test tests/regression-tests.spec.js --ui",
+    "test:headed": "playwright test tests/regression-tests.spec.js --headed",
+    "test:debug": "playwright test tests/regression-tests.spec.js --debug",
+    "test:report": "playwright test tests/regression-tests.spec.js --reporter=html && playwright show-report"
+  },
+  "dependencies": {
+    "playwright": "^1.57.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0"
+  }
+}

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Admin - Job Search CRM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status.connected {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .status.disconnected {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .section h2 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .output {
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 15px;
+        }
+
+        .output.error {
+            color: #ef4444;
+        }
+
+        .schema-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .column-badge {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 2px solid #e5e7eb;
+            font-size: 13px;
+        }
+
+        .column-badge.new {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ Database Admin</h1>
+        <p class="subtitle">Manage your Job Search CRM database schema</p>
+
+        <div id="status" class="status disconnected">
+            <div class="status-dot"></div>
+            <span>Checking connection...</span>
+        </div>
+
+        <div class="section">
+            <h2>📊 Current Schema</h2>
+            <button class="btn-primary" onclick="checkSchema()">Check Schema</button>
+            <div id="schema-output" class="schema-info"></div>
+        </div>
+
+        <div class="section">
+            <h2>➕ Add Required Columns</h2>
+            <p style="margin-bottom: 15px; color: #666;">Add columns needed for LinkedIn integration and filter persistence</p>
+            <button class="btn-success" onclick="addLinkedInColumn()">Add LinkedIn Conversations Column</button>
+            <button class="btn-success" onclick="addNetworkFiltersColumn()">Add Network Explorer Filters Column</button>
+            <button class="btn-success" onclick="addAllColumns()">Add All Missing Columns</button>
+            <div id="column-output" class="output" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Test Connection</h2>
+            <button class="btn-primary" onclick="testConnection()">Test API Connection</button>
+            <button class="btn-primary" onclick="viewData()">View Current Data</button>
+            <div id="test-output" class="output" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Get Supabase credentials from localStorage (same as dashboard)
+        const supabaseUrl = localStorage.getItem('supabaseUrl') || 'https://dkufgfmwqsxecylyvidi.supabase.co';
+        const supabaseKey = localStorage.getItem('supabaseKey') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRrdWZnZm13cXN4ZWN5bHl2aWRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5NjAxODMsImV4cCI6MjA0OTUzNjE4M30.sRjuUO41AoN9lqCWmRKjxVDN48rVWnNyIz8n2ShdHqE';
+
+        async function testConnection() {
+            const output = document.getElementById('test-output');
+            output.style.display = 'block';
+            output.className = 'output';
+            output.textContent = 'Testing connection...\n';
+
+            try {
+                const response = await fetch(`${supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    output.textContent += `✅ Connection successful!\n`;
+                    output.textContent += `Status: ${response.status}\n`;
+                    output.textContent += `Data received: ${JSON.stringify(data, null, 2).substring(0, 500)}...\n`;
+                    updateStatus(true);
+                } else {
+                    output.className = 'output error';
+                    output.textContent += `❌ Connection failed\n`;
+                    output.textContent += `Status: ${response.status}\n`;
+                    output.textContent += `Error: ${await response.text()}\n`;
+                    updateStatus(false);
+                }
+            } catch (error) {
+                output.className = 'output error';
+                output.textContent += `❌ Error: ${error.message}\n`;
+                updateStatus(false);
+            }
+        }
+
+        async function checkSchema() {
+            const output = document.getElementById('schema-output');
+            output.innerHTML = '<p style="color: #666;">Checking schema...</p>';
+
+            try {
+                const response = await fetch(`${supabaseUrl}/rest/v1/job_search_data?id=eq.main&select=*`, {
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const columns = Object.keys(data[0] || {});
+
+                    output.innerHTML = '';
+                    columns.forEach(col => {
+                        const badge = document.createElement('div');
+                        badge.className = 'column-badge';
+                        if (col === 'linkedin_conversations' || col === 'network_explorer_filters') {
+                            badge.classList.add('new');
+                        }
+                        badge.textContent = col;
+                        output.appendChild(badge);
+                    });
+
+                    updateStatus(true);
+                } else {
+                    output.innerHTML = '<p style="color: #ef4444;">Failed to fetch schema</p>';
+                    updateStatus(false);
+                }
+            } catch (error) {
+                output.innerHTML = `<p style="color: #ef4444;">Error: ${error.message}</p>`;
+                updateStatus(false);
+            }
+        }
+
+        async function addLinkedInColumn() {
+            const output = document.getElementById('column-output');
+            output.style.display = 'block';
+            output.className = 'output';
+            output.textContent = 'Adding linkedin_conversations column...\n';
+
+            try {
+                // Try to update with the new column
+                const response = await fetch(`${supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
+                        linkedin_conversations: []
+                    })
+                });
+
+                if (response.ok) {
+                    output.textContent += '✅ linkedin_conversations column added/updated successfully!\n';
+                    await checkSchema();
+                } else {
+                    output.className = 'output error';
+                    output.textContent += `❌ Failed to add column\n`;
+                    output.textContent += `You may need to run this SQL manually:\n\n`;
+                    output.textContent += `ALTER TABLE job_search_data\n`;
+                    output.textContent += `ADD COLUMN IF NOT EXISTS linkedin_conversations JSONB DEFAULT '[]'::jsonb;\n`;
+                }
+            } catch (error) {
+                output.className = 'output error';
+                output.textContent += `❌ Error: ${error.message}\n`;
+            }
+        }
+
+        async function addNetworkFiltersColumn() {
+            const output = document.getElementById('column-output');
+            output.style.display = 'block';
+            output.className = 'output';
+            output.textContent = 'Adding network_explorer_filters column...\n';
+
+            try {
+                const response = await fetch(`${supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
+                        network_explorer_filters: {}
+                    })
+                });
+
+                if (response.ok) {
+                    output.textContent += '✅ network_explorer_filters column added/updated successfully!\n';
+                    await checkSchema();
+                } else {
+                    output.className = 'output error';
+                    output.textContent += `❌ Failed to add column\n`;
+                    output.textContent += `You may need to run this SQL manually:\n\n`;
+                    output.textContent += `ALTER TABLE job_search_data\n`;
+                    output.textContent += `ADD COLUMN IF NOT EXISTS network_explorer_filters JSONB DEFAULT '{}'::jsonb;\n`;
+                }
+            } catch (error) {
+                output.className = 'output error';
+                output.textContent += `❌ Error: ${error.message}\n`;
+            }
+        }
+
+        async function addAllColumns() {
+            await addLinkedInColumn();
+            setTimeout(async () => {
+                await addNetworkFiltersColumn();
+            }, 1000);
+        }
+
+        async function viewData() {
+            const output = document.getElementById('test-output');
+            output.style.display = 'block';
+            output.className = 'output';
+            output.textContent = 'Fetching data...\n';
+
+            try {
+                const response = await fetch(`${supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    output.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    output.className = 'output error';
+                    output.textContent = `Error: ${await response.text()}`;
+                }
+            } catch (error) {
+                output.className = 'output error';
+                output.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function updateStatus(connected) {
+            const status = document.getElementById('status');
+            const statusText = status.querySelector('span');
+
+            if (connected) {
+                status.className = 'status connected';
+                statusText.textContent = '✅ Connected to Supabase';
+            } else {
+                status.className = 'status disconnected';
+                statusText.textContent = '❌ Not connected - check credentials';
+            }
+        }
+
+        // Test connection on load
+        window.addEventListener('load', () => {
+            testConnection();
+            checkSchema();
+        });
+
+        // Listen for messages from extension
+        window.addEventListener('message', async (event) => {
+            // Only accept messages from same origin
+            if (event.origin !== window.location.origin) return;
+
+            if (event.data.type === 'SYNC_LINKEDIN_MESSAGE') {
+                try {
+                    const messageData = event.data.data;
+
+                    // Get existing data
+                    const response = await fetch(`${supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                        headers: {
+                            'apikey': supabaseKey,
+                            'Authorization': `Bearer ${supabaseKey}`
+                        }
+                    });
+
+                    const data = await response.json();
+                    let linkedinConversations = data[0]?.linkedin_conversations || [];
+
+                    // Add new conversation
+                    const conversationLog = {
+                        id: messageData.conversationId,
+                        contactName: messageData.contactName,
+                        lastMessage: messageData.message,
+                        timestamp: messageData.timestamp,
+                        url: messageData.url,
+                        syncedAt: new Date().toISOString()
+                    };
+
+                    const existingIndex = linkedinConversations.findIndex(c => c.id === messageData.conversationId);
+                    if (existingIndex >= 0) {
+                        linkedinConversations[existingIndex] = conversationLog;
+                    } else {
+                        linkedinConversations.unshift(conversationLog);
+                    }
+
+                    linkedinConversations = linkedinConversations.slice(0, 500);
+
+                    // Update Supabase
+                    await fetch(`${supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': supabaseKey,
+                            'Authorization': `Bearer ${supabaseKey}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            linkedin_conversations: linkedinConversations
+                        })
+                    });
+
+                    // Send success response
+                    event.source.postMessage({
+                        type: 'SYNC_RESPONSE',
+                        success: true,
+                        conversationId: messageData.conversationId
+                    }, event.origin);
+
+                    console.log('✅ Synced LinkedIn message:', messageData.contactName);
+                } catch (error) {
+                    console.error('❌ Sync failed:', error);
+                    event.source.postMessage({
+                        type: 'SYNC_RESPONSE',
+                        success: false,
+                        error: error.message
+                    }, event.origin);
+                }
+            }
+        });
+
+        console.log('📡 LinkedIn CRM Sync relay ready');
+    </script>
+</body>
+</html>

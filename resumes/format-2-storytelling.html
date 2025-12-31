@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luis Calderon - Product Leadership Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.5;
+            color: #2c3e50;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .page {
+            padding: 0.6in;
+            min-height: 11in;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 25px;
+            border-bottom: 3px solid #3498db;
+            margin-bottom: 25px;
+        }
+
+        .profile-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 4px solid #3498db;
+            object-fit: cover;
+        }
+
+        .name {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 16px;
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .contact {
+            font-size: 13px;
+            color: #34495e;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 45px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #3498db, #2ecc71);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -34px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3498db;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #3498db;
+            z-index: 1;
+        }
+
+        .timeline-marker.current {
+            background: #2ecc71;
+            box-shadow: 0 0 0 2px #2ecc71;
+        }
+
+        .role-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .role-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .company {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .dates {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .role-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #e1e8ed;
+            border-top: none;
+        }
+
+        .story-intro {
+            font-size: 13px;
+            font-style: italic;
+            color: #34495e;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: white;
+            border-left: 4px solid #3498db;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 15px 0 8px 0;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .achievements {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .achievements li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .achievements li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-size: 16px;
+        }
+
+        .metric {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .skill-tag {
+            background: #3498db;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .print-button:hover {
+            background: #2980b9;
+        }
+
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+            }
+
+            .page {
+                padding: 0.5in;
+                min-height: 0;
+                page-break-after: always;
+            }
+
+            .page:last-child {
+                page-break-after: auto;
+            }
+
+            .print-button {
+                display: none;
+            }
+
+            .timeline::before, .role-header, .summary, .metric, .skill-tag {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">Print Resume</button>
+
+    <div class="container">
+        <!-- Page 1 -->
+        <div class="page">
+            <div class="header">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQFLhrcVCSYY8w/profile-displayphoto-shrink_800_800/B56ZX04IgtHQAg-/0/1743570110941?e=1766620800&v=beta&t=9KHaWvyX8UvAxH_yLT7FD15TObn3kZgtfQP1A3j7m1o" alt="Luis Calderon" class="profile-photo">
+                <h1 class="name">Luis Calderon</h1>
+                <p class="tagline">AI/ML Product Leader | Driving Growth Through Innovation</p>
+                <p class="contact">San Diego, CA | lcalderon@gmail.com | LinkedIn: /in/luiscalderon</p>
+            </div>
+
+            <div class="summary">
+                <strong>Product Leadership Journey:</strong> 20+ year career evolution from management consulting to AI/ML product leadership, consistently driving measurable business impact through strategic product innovation. Expert in leveraging cutting-edge AI/ML technologies to transform operations, accelerate growth, and deliver exceptional customer experiences. Track record of scaling businesses from startups to billion-dollar enterprises.
+            </div>
+
+            <div class="timeline">
+                <!-- SketchPop -->
+                <div class="timeline-item">
+                    <div class="timeline-marker current"></div>
+                    <div class="role-header">
+                        <div class="role-title">Chief Product Officer</div>
+                        <div class="company">SketchPop LLC</div>
+                        <div class="dates">July 2025 - Present | San Diego, CA</div>
+                    </div>
+                    <div class="role-content">
+                        <div class="story-intro">
+                            Acquired and scaled custom art e-commerce business to $3M revenue with 30-person team and 20% margins through AI-powered operational transformation and product innovation.
+                        </div>
+
+                        <div class="section-title">AI Implementation & Operational Efficiency (2025)</div>
+                        <ul class="achievements">
+                            <li>Deployed AI chatbot for customer service automation (2025), achieving <span class="metric">40% cost reduction</span> while maintaining 4.8+ star customer satisfaction - early mover in applying post-ChatGPT LLM capabilities to e-commerce operations</li>
+                            <li>Integrated LLM-powered customer communication tools (GPT-4/Claude) for personalized order updates, revision requests, and upsell recommendations</li>
+                            <li>Leveraged AI for demand forecasting and inventory planning, reducing fulfillment delays by <span class="metric">30%</span></li>
+                        </ul>
+
+                        <div class="section-title">Product & Technology Innovation</div>
+                        <ul class="achievements">
+                            <li>Rebuilt entire backend tech stack with modern AI infrastructure to enable scalable AI feature deployment</li>
+                            <li>Developed AI-assisted quality control system that flags potential issues before artist review</li>
+                            <li>Implemented machine learning models to predict customer preferences and recommend personalized product options</li>
+                            <li>Created AI-powered content generation for product descriptions, SEO optimization, and marketing copy</li>
+                            <li>Built data pipeline for continuous AI model improvement using customer feedback and order data</li>
+                        </ul>
+
+                        <div class="section-title">Business Outcomes</div>
+                        <ul class="achievements">
+                            <li>Revenue: Scaled to <span class="metric">$3M annual revenue</span> post-acquisition</li>
+                            <li>Profitability: Achieved 20% EBITDA margins by reducing overhead with strategic changes and AI automation</li>
+                            <li>Operational Leverage: AI automation allowed <span class="metric">30-person team to handle 2x order volume</span></li>
+                        </ul>
+
+                        <div class="skills">
+                            <span class="skill-tag">AI Chatbots</span>
+                            <span class="skill-tag">LLM Integration</span>
+                            <span class="skill-tag">E-commerce</span>
+                            <span class="skill-tag">Shopify</span>
+                            <span class="skill-tag">P&L Management</span>
+                            <span class="skill-tag">Team Leadership</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Alchemy Lab -->
+                <div class="timeline-item">
+                    <div class="timeline-marker current"></div>
+                    <div class="role-header">
+                        <div class="role-title">Growth Management Consultant</div>
+                        <div class="company">Growth Alchemy Lab</div>
+                        <div class="dates">September 2024 - Present | San Diego, CA</div>
+                    </div>
+                    <div class="role-content">
+                        <div class="story-intro">
+                            Founded AI/ML product consulting practice advising startups and growth-stage companies on AI strategy, implementation, and operational deployment. Specialize in helping companies leverage LLMs, AI agents, and operational AI to drive measurable business outcomes.
+                        </div>
+
+                        <div class="section-title">AI Product Consulting & Advisory</div>
+                        <ul class="achievements">
+                            <li>Advise companies on AI/ML product strategy, feature prioritization, and roadmap development with focus on ROI and practical implementation</li>
+                            <li>Guide AI operations deployment including chatbots, AI agents, and workflow automation using latest LLM capabilities (GPT-4, Claude, Gemini, Llama)</li>
+                            <li>Help companies evaluate build vs. buy decisions for AI features and select appropriate AI vendors/platforms</li>
+                            <li>Develop AI product metrics frameworks and success measurement strategies tied to business KPIs</li>
+                            <li>Consult on prompt engineering, LLM orchestration, and AI agent frameworks for production deployments</li>
+                        </ul>
+
+                        <div class="section-title">Notable Client Engagements</div>
+                        <ul class="achievements">
+                            <li><strong>Ivo.AI:</strong> Product advisor for AI-powered sales automation platform - advised on AI agent architecture, LLM integration strategy, and AI operations tools roadmap</li>
+                            <li><strong>Multiple B2B SaaS Companies:</strong> AI feature development, implementation roadmaps, cost-benefit analysis, and go-to-market strategy for AI products</li>
+                            <li><strong>E-commerce Platforms:</strong> Advised on AI chatbot deployment, customer service automation, and operational AI use cases</li>
+                            <li><strong>Early-Stage AI Startups:</strong> AI product-market fit validation, pricing models, competitive positioning in crowded AI market</li>
+                        </ul>
+
+                        <div class="section-title">Impact</div>
+                        <ul class="achievements">
+                            <li>Helped clients achieve measurable ROI from AI investments (cost reduction <span class="metric">30-50%</span>, revenue lift, efficiency gains)</li>
+                            <li>Guided successful AI feature launches that improved customer retention <span class="metric">15-25%</span> and engagement</li>
+                            <li>Enabled companies to move faster with AI by providing hands-on implementation guidance vs. theoretical strategy</li>
+                        </ul>
+
+                        <div class="skills">
+                            <span class="skill-tag">AI/ML Consulting</span>
+                            <span class="skill-tag">Product Strategy</span>
+                            <span class="skill-tag">LLM Integration</span>
+                            <span class="skill-tag">AI Agents</span>
+                            <span class="skill-tag">GPT-4/Claude</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Intuit -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="role-header">
+                        <div class="role-title">Consumer Group Product Management Leader - Growth</div>
+                        <div class="company">Intuit</div>
+                        <div class="dates">October 2021 - September 2024 | San Diego, CA</div>
+                    </div>
+                    <div class="role-content">
+                        <div class="story-intro">
+                            Led $900M-$1B Self-Employed business unit as Principal/Group PM, managing team of 4 Product Managers and delivering 10-15% CAGR revenue growth ($100-150M annual growth) through AI-powered product innovation.
+                        </div>
+
+                        <div class="section-title">AI/ML Product Leadership (Shipped 4 Major AI Products)</div>
+                        <ul class="achievements">
+                            <li><strong>Expense Categorization AI:</strong> Shipped ML model that automatically categorizes business expenses from receipts and transactions, reducing manual data entry by <span class="metric">60%+</span> for millions of self-employed users</li>
+                            <li><strong>Deduction Finder ML:</strong> Developed predictive algorithm using Human-in-the-Loop (HITL) training that identifies missed deductions based on user profile, industry, and transaction patterns - helped users maximize refunds by average of <span class="metric">$1,200+</span></li>
+                            <li><strong>Audit Risk Predictor:</strong> Built ML model that predicts IRS audit risk and suggests optimizations to reduce risk while maximizing legitimate deductions</li>
+                            <li><strong>Document Extraction AI:</strong> Implemented OCR and AI to extract structured data from uploaded tax documents (W-2s, 1099s, receipts), improving accuracy and reducing user effort</li>
+                            <li><strong>Cross-BU AI Coordination:</strong> Led coordination across TurboTax business units to ensure consistent AI experiences and shared ML infrastructure</li>
+                        </ul>
+
+                        <div class="section-title">Product & Growth Achievements</div>
+                        <ul class="achievements">
+                            <li>Revenue Growth: Delivered <span class="metric">10-15% CAGR on $900M+</span> business through strategic AI/ML product initiatives</li>
+                            <li>Team Leadership: Hired, mentored, and developed team of 4 Product Managers supporting AI/ML roadmap</li>
+                            <li>Product Launches: Partner integrations, freemium acquisition model, mobile experience improvements</li>
+                            <li>Cross-Functional Leadership: Coordinated product strategy across multiple business units and engineering teams</li>
+                            <li>Customer Impact: AI products served millions of self-employed users (freelancers, gig workers, small business owners)</li>
+                        </ul>
+
+                        <div class="skills">
+                            <span class="skill-tag">AI/ML Product</span>
+                            <span class="skill-tag">HITL</span>
+                            <span class="skill-tag">Machine Learning</span>
+                            <span class="skill-tag">Product-Led Growth</span>
+                            <span class="skill-tag">Team Leadership</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page">
+            <div class="timeline">
+                <!-- Ancestry -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="role-header">
+                        <div class="role-title">Director of (Growth) Product Management</div>
+                        <div class="company">Ancestry</div>
+                        <div class="dates">January 2016 - 2017 | San Francisco Bay Area</div>
+                    </div>
+                    <div class="role-content">
+                        <div class="story-intro">
+                            Director of Product - Acquisition, Conversion & Growth. Leader responsible for identifying new business opportunities, defining roadmaps and building new top funnel product and shopping experiences that drive business lift.
+                        </div>
+
+                        <ul class="achievements">
+                            <li>Oversaw the building, testing, and roll-out of an abandon cart feature resulting in a <span class="metric">5% revenue lift</span></li>
+                            <li>Launched and managed mobile initiative efforts resulting in <span class="metric">30% lift in mobile app conversion subscriptions</span></li>
+                            <li>Launched a customer advocacy initiative to better understand and document the customer end-to-end journey along with key metrics & pricing across the product experience</li>
+                            <li>Worked cross-functionally with Finance, Product, Marketing, and Member services to address issues, discover opportunities, and advance the business</li>
+                            <li>Defined and drove the go-to-market strategy, coordinating integrated marketing planning efforts, and influencing the product roadmap for the $800M Ancestry subscription business</li>
+                        </ul>
+
+                        <div class="skills">
+                            <span class="skill-tag">Growth Product</span>
+                            <span class="skill-tag">Conversion Optimization</span>
+                            <span class="skill-tag">Mobile Product</span>
+                            <span class="skill-tag">Customer Journey</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- eBay -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="role-header">
+                        <div class="role-title">Product Leader</div>
+                        <div class="company">eBay Marketplaces</div>
+                        <div class="dates">March 2013 - April 2015 | San Francisco Bay Area</div>
+                    </div>
+                    <div class="role-content">
+                        <div class="story-intro">
+                            North America Product Business Unit Leader. Managed & advised cross-functional teams to deliver business performance, customer satisfaction, and product strategy for eBay Payments (shopping cart, checkout, installments) & Customer Connection (My eBay, Sign-in, Customer Registration) across mobile and site experiences.
+                        </div>
+
+                        <ul class="achievements">
+                            <li>Explored new market opportunities, represented customer's voice, surveyed competitive landscape, defined success goals and metrics, and made strategic business & product recommendations to advance product roadmap and improve conversion (<span class="metric">+2% checkout</span>), lower operational costs (<span class="metric">-33% defects</span>), and delight buyers (NPS score)</li>
+                            <li>Collaborated with cross-functional product stakeholders to design User Experience (UX) drafts, develop business use cases, coordinate go-to-market tasks, drive A/B testing and make launch decisions to "ship" product releases, <span class="metric">over $100M of business lift</span>, and improved buyer experiences</li>
+                            <li>Global lead for eBay Payments (Checkout/Cart) Product Analytics team responsible for providing strategic and analytical support to drive product and business actionable insights, optimizations and recommendations for opportunities and product releases</li>
+                            <li>Managed key partnership with product management, development, & business units to ensure timely product releases and achieve business objectives</li>
+                            <li>Led teams conducting A/B tests, analyzing data, and delivering actionable findings</li>
+                            <li>Recommended, tracked, dashboarded and advised on key business and product metrics</li>
+                            <li>Hired, trained, coached, and mentored team of 6+ analysts and managers</li>
+                        </ul>
+
+                        <div class="skills">
+                            <span class="skill-tag">Payments Product</span>
+                            <span class="skill-tag">Product Analytics</span>
+                            <span class="skill-tag">Conversion Optimization</span>
+                            <span class="skill-tag">Team Management</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Roles -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="role-header">
+                        <div class="role-title">Earlier Career Highlights</div>
+                        <div class="company">Accenture, Booz Allen Hamilton, Capgemini</div>
+                        <div class="dates">2000 - 2013</div>
+                    </div>
+                    <div class="role-content">
+                        <ul class="achievements">
+                            <li><strong>Accenture (2010-2012):</strong> Management Consultant driving 10% cost efficiency gains for consumer electronics companies, marketing automation solutions saving $50-100M in operational costs</li>
+                            <li><strong>Booz Allen Hamilton (2003-2005):</strong> Led requirements analysis, design, and testing of complex systems for IRS; cultivated customer relations essential in acquiring and extending $15M contract</li>
+                            <li><strong>Capgemini (2000-2003):</strong> Analyzed and tested $1 billion telecommunications billing system for Nextel; functional lead for testing efforts in cutting-edge hardware components</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

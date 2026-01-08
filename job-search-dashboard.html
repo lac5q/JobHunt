@@ -4720,7 +4720,7 @@ Luis
                                             ${c.lastContact ? `<span style="color: #999; font-size: 0.7em;">${formatRelativeDate(c.lastContact)}</span>` : ''}
                                         </div>
                                         <div style="margin-top: 8px; display: flex; gap: 5px;">
-                                            <button onclick="event.stopPropagation(); editContact('${c.id}')"
+                                            <button onclick="event.stopPropagation(); openEditContactModal('${c.id}')"
                                                 style="flex: 1; padding: 4px 8px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75em;">View</button>
                                             <button onclick="event.stopPropagation(); composeMessageForContact('${c.id}')"
                                                 style="flex: 1; padding: 4px 8px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75em;">Message</button>
@@ -4732,9 +4732,6 @@ Luis
                     </div>
                 `;
             }).join('');
-
-            // Save updated statuses
-            saveContacts(contacts);
         }
 
         function handlePipelineCardClick(event, contactId) {
@@ -4747,7 +4744,7 @@ Luis
                 }
                 renderPipeline();
             } else {
-                editContact(contactId);
+                openEditContactModal(contactId);
             }
         }
 

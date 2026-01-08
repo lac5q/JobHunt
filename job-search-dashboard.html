@@ -1679,6 +1679,12 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
+        .kanban-card.selected {
+            background: #e3f2fd;
+            border: 2px solid #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
         .kanban-card-title {
             font-weight: 600;
             font-size: 0.95em;
@@ -5810,7 +5816,23 @@ Luis
                     <td><strong>${escapeHtml(job.title)}</strong></td>
                     <td>${escapeHtml(job.company)}</td>
                     <td>${escapeHtml(job.location || '-')}</td>
-                    <td><span class="job-badge status-${job.status}">${getStatusLabel(job.status)}</span></td>
+                    <td>
+                        <select
+                            class="status-dropdown"
+                            data-job-id="${job.id}"
+                            onchange="updateJobStatus('${job.id}', this.value)"
+                            style="padding: 5px 10px; border-radius: 5px; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 0.9em;"
+                        >
+                            <option value="saved" ${job.status === 'saved' ? 'selected' : ''}>Saved</option>
+                            <option value="applied" ${job.status === 'applied' ? 'selected' : ''}>Applied</option>
+                            <option value="phone-screen" ${job.status === 'phone-screen' ? 'selected' : ''}>Phone Screen</option>
+                            <option value="interview-1" ${job.status === 'interview-1' ? 'selected' : ''}>Interview 1</option>
+                            <option value="interview-2" ${job.status === 'interview-2' ? 'selected' : ''}>Interview 2</option>
+                            <option value="interview-3" ${job.status === 'interview-3' ? 'selected' : ''}>Interview 3</option>
+                            <option value="offer" ${job.status === 'offer' ? 'selected' : ''}>Offer</option>
+                            <option value="rejected" ${job.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                        </select>
+                    </td>
                     <td>
                         ${job.contactCount > 0
                             ? `<a href="#" onclick="openJobContactsModal('${job.id}'); return false;">${job.contactCount}${job.hasExactMatches ? '' : '*'}</a> <a href="#" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}'); return false;" class="find-people-link" title="Find more">+</a>`
@@ -5827,6 +5849,8 @@ Luis
         }
 
         // Render kanban view
+        let selectedJobIds = new Set();
+
         function renderJobsKanban(jobs) {
             const columns = {
                 saved: jobs.filter(j => j.status === 'saved'),
@@ -5839,14 +5863,97 @@ Luis
                 const column = document.querySelector(`.kanban-column[data-status="${status}"]`);
                 if (column) {
                     column.querySelector('.kanban-count').textContent = columns[status].length;
-                    column.querySelector('.kanban-cards').innerHTML = columns[status].map(job => `
-                        <div class="kanban-card" onclick="editJob('${job.id}')">
+                    const cardsContainer = column.querySelector('.kanban-cards');
+                    cardsContainer.innerHTML = columns[status].map(job => `
+                        <div
+                            class="kanban-card ${selectedJobIds.has(job.id) ? 'selected' : ''}"
+                            draggable="true"
+                            data-job-id="${job.id}"
+                            onclick="handleKanbanCardClick(event, '${job.id}')"
+                            ondragstart="handleDragStart(event, '${job.id}')"
+                            ondragend="handleDragEnd(event)"
+                        >
                             <div class="kanban-card-title">${escapeHtml(job.title)}</div>
                             <div class="kanban-card-company">${escapeHtml(job.company)}</div>
                         </div>
                     `).join('');
+
+                    // Make column droppable
+                    cardsContainer.ondragover = (e) => {
+                        e.preventDefault();
+                        cardsContainer.style.background = '#f0f0f0';
+                    };
+                    cardsContainer.ondragleave = (e) => {
+                        cardsContainer.style.background = '';
+                    };
+                    cardsContainer.ondrop = (e) => {
+                        e.preventDefault();
+                        cardsContainer.style.background = '';
+                        handleDrop(e, status);
+                    };
                 }
             });
+        }
+
+        // Handle kanban card click for multi-select
+        function handleKanbanCardClick(event, jobId) {
+            if (event.ctrlKey || event.metaKey) {
+                // Ctrl/Cmd+click: toggle selection
+                event.stopPropagation();
+                if (selectedJobIds.has(jobId)) {
+                    selectedJobIds.delete(jobId);
+                } else {
+                    selectedJobIds.add(jobId);
+                }
+                renderJobsTab();
+            } else if (event.shiftKey && selectedJobIds.size > 0) {
+                // Shift+click: select range
+                event.stopPropagation();
+                // Simple implementation: select all between last selected and current
+                selectedJobIds.add(jobId);
+                renderJobsTab();
+            } else {
+                // Normal click: open edit modal
+                editJob(jobId);
+            }
+        }
+
+        // Handle drag start
+        function handleDragStart(event, jobId) {
+            if (!selectedJobIds.has(jobId)) {
+                selectedJobIds.clear();
+                selectedJobIds.add(jobId);
+            }
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', JSON.stringify(Array.from(selectedJobIds)));
+        }
+
+        // Handle drag end
+        function handleDragEnd(event) {
+            document.querySelectorAll('.kanban-cards').forEach(c => c.style.background = '');
+        }
+
+        // Handle drop
+        async function handleDrop(event, newStatus) {
+            event.preventDefault();
+            const jobIds = JSON.parse(event.dataTransfer.getData('text/plain'));
+
+            const jobs = getJobs();
+            jobIds.forEach(jobId => {
+                const job = jobs.find(j => j.id === jobId);
+                if (job) {
+                    job.status = newStatus === 'interviewing' ? 'phone-screen' : newStatus;
+                    job.updatedAt = new Date().toISOString();
+                    if (newStatus === 'applied' && !job.appliedAt) {
+                        job.appliedAt = new Date().toISOString();
+                    }
+                }
+            });
+
+            selectedJobIds.clear();
+            saveJobsToStorage(jobs);
+            await syncJobs();
+            renderJobsTab();
         }
 
         // Update jobs stats
@@ -5933,6 +6040,24 @@ Luis
             document.getElementById('job-notes').value = job.notes || '';
 
             document.getElementById('job-modal').classList.add('active');
+        }
+
+        // Update job status from dropdown
+        async function updateJobStatus(jobId, newStatus) {
+            const jobs = getJobs();
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+
+            job.status = newStatus;
+            job.updatedAt = new Date().toISOString();
+
+            if (newStatus === 'applied' && !job.appliedAt) {
+                job.appliedAt = new Date().toISOString();
+            }
+
+            saveJobsToStorage(jobs);
+            await syncJobs(); // Sync to Supabase if configured
+            renderJobsTab(); // Refresh the display
         }
 
         // Delete job

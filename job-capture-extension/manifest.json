@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Job Capture - Job Search CRM",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Capture jobs from LinkedIn, Indeed, Glassdoor, and any webpage. Includes AI assistant for applications.",
   "permissions": [
     "storage",

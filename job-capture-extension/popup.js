@@ -416,7 +416,7 @@ function extractGenericJobData() {
         try {
             const el = document.querySelector(selector);
             if (el && el.innerText.length > 200) {
-                data.description = el.innerText.slice(0, 3000);
+                data.description = el.innerText.slice(0, 4000); // Increased for better AI context
                 break;
             }
         } catch (e) {
@@ -672,6 +672,12 @@ async function generateAnswer() {
         return;
     }
 
+    // Check if we have job data extracted
+    if (!currentJob || !currentJob.title) {
+        showAIError('Please extract job details first (click "Re-extract" on Save Job tab)');
+        return;
+    }
+
     const settings = await chrome.storage.sync.get(['aiProvider', 'aiApiKey', 'dashboardUrl']);
     // Use default API key if not set
     const apiKey = settings.aiApiKey || DEFAULT_AI_API_KEY;
@@ -681,10 +687,10 @@ async function generateAnswer() {
     }
     settings.aiApiKey = apiKey; // Ensure we use the key
 
-    // Get current job info
-    const jobTitle = document.getElementById('job-title').value || 'the role';
-    const jobCompany = document.getElementById('job-company').value || 'the company';
-    const jobDescription = document.getElementById('job-description').value || '';
+    // Get current job info from extracted data
+    const jobTitle = currentJob.title || 'the role';
+    const jobCompany = currentJob.company || 'the company';
+    const jobDescription = currentJob.description || '';
 
     // Get character limit
     const charLimit = document.getElementById('answer-char-limit').value;
@@ -720,6 +726,12 @@ Important guidelines:
 
 // Generate cover letter
 async function generateCoverLetter() {
+    // Check if we have job data extracted
+    if (!currentJob || !currentJob.title || !currentJob.company) {
+        showAIError('Please extract job details first (click "Re-extract" on Save Job tab)');
+        return;
+    }
+
     const settings = await chrome.storage.sync.get(['aiProvider', 'aiApiKey', 'dashboardUrl']);
     // Use default API key if not set
     const apiKey = settings.aiApiKey || DEFAULT_AI_API_KEY;
@@ -729,15 +741,11 @@ async function generateCoverLetter() {
     }
     settings.aiApiKey = apiKey;
 
-    const jobTitle = document.getElementById('job-title').value;
-    const jobCompany = document.getElementById('job-company').value;
-    const jobDescription = document.getElementById('job-description').value || '';
+    // Get job info from extracted data
+    const jobTitle = currentJob.title;
+    const jobCompany = currentJob.company;
+    const jobDescription = currentJob.description || '';
     const focusInstructions = document.getElementById('cover-letter-focus').value.trim();
-
-    if (!jobTitle || !jobCompany) {
-        showAIError('Please extract or enter job details first');
-        return;
-    }
 
     // Build focus section if provided
     let focusSection = '';
@@ -1044,16 +1052,18 @@ async function generateResume() {
     const useAI = document.getElementById('resume-ai-optimize').checked;
     const customPrompt = document.getElementById('resume-custom-prompt').value.trim();
 
-    const jobTitle = document.getElementById('job-title').value;
-    const jobCompany = document.getElementById('job-company').value;
-    const jobDescription = document.getElementById('job-description').value || '';
-
-    if (!jobTitle || !jobCompany) {
-        statusEl.textContent = '⚠️ Please extract or enter job details first';
+    // Check if we have job data extracted
+    if (!currentJob || !currentJob.title || !currentJob.company) {
+        statusEl.textContent = '⚠️ Please extract job details first (click "Re-extract" on Save Job tab)';
         statusEl.className = 'resume-status error';
         statusEl.style.display = 'block';
         return;
     }
+
+    // Get job info from extracted data
+    const jobTitle = currentJob.title;
+    const jobCompany = currentJob.company;
+    const jobDescription = currentJob.description || '';
 
     btn.disabled = true;
     statusEl.textContent = '📄 Generating targeted resume...';

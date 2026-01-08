@@ -1,7 +1,7 @@
 // Job Capture Extension - Content Script
 // Extracts job data from job board pages
 
-console.log('Job Capture Extension v1.7.1');
+console.log('Job Capture Extension v1.7.2');
 
 // Detect which job board we're on
 function detectJobBoard() {
@@ -112,7 +112,7 @@ function extractLinkedInJob() {
         for (const selector of descriptionSelectors) {
             const el = document.querySelector(selector);
             if (el?.textContent?.trim()) {
-                description = el.textContent.trim().slice(0, 2000);
+                description = el.textContent.trim().slice(0, 4000); // Increased for better AI context
                 break;
             }
         }
@@ -198,7 +198,7 @@ function extractIndeedJob() {
 
         const descriptionEl = document.querySelector('#jobDescriptionText') ||
                              document.querySelector('.jobsearch-jobDescriptionText');
-        const description = descriptionEl?.textContent.trim().slice(0, 2000) || '';
+        const description = descriptionEl?.textContent.trim().slice(0, 4000) || ''; // Increased for better AI context
 
         let locationType = 'unknown';
         const jobText = (document.body.textContent || '').toLowerCase();
@@ -237,7 +237,7 @@ function extractGlassdoorJob() {
 
         const descriptionEl = document.querySelector('[data-test="job-description"]') ||
                              document.querySelector('.jobDescriptionContent');
-        const description = descriptionEl?.textContent.trim().slice(0, 2000) || '';
+        const description = descriptionEl?.textContent.trim().slice(0, 4000) || ''; // Increased for better AI context
 
         let locationType = 'unknown';
         if (description.toLowerCase().includes('remote')) locationType = 'remote';

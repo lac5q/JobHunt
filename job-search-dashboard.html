@@ -1685,6 +1685,12 @@
             box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
+        .pipeline-card.selected {
+            background: #e3f2fd !important;
+            border: 2px solid #667eea !important;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+        }
+
         .kanban-card-title {
             font-weight: 600;
             font-size: 0.95em;
@@ -2208,15 +2214,32 @@
         <!-- Pipeline Tab -->
         <div id="pipeline" class="tab-content">
             <div class="section">
-                <h2>Outreach Pipeline</h2>
-
-                <div class="funnel-container" id="pipeline-funnel">
-                    <!-- Funnel stages will be populated here -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Outreach Pipeline</h2>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="pipeline-search" placeholder="Search contacts..." oninput="renderPipeline()"
+                            style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; width: 200px;">
+                        <select id="pipeline-filter-company" onchange="renderPipeline()"
+                            style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px;">
+                            <option value="">All Companies</option>
+                        </select>
+                        <select id="pipeline-filter-priority" onchange="renderPipeline()"
+                            style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px;">
+                            <option value="">All Priorities</option>
+                            <option value="high">High Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                        <button onclick="showAllContacts = !showAllContacts; renderPipeline();"
+                            style="padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            <span id="toggle-all-text">Show All</span>
+                        </button>
+                    </div>
                 </div>
 
-                <h3 style="margin-bottom: 15px;">Pipeline by Stage</h3>
-                <div id="pipeline-by-stage">
-                    <!-- Pipeline details will be populated here -->
+                <!-- Pipeline Kanban Board -->
+                <div class="pipeline-kanban" id="pipeline-kanban" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <!-- Kanban columns will be populated here -->
                 </div>
             </div>
         </div>
@@ -4574,57 +4597,233 @@ Luis
         // PIPELINE
         // ============================================
 
+        let showAllContacts = false;
+        let selectedContactIds = new Set();
+
         function renderPipeline() {
-            const contacts = getContacts();
+            let contacts = getContacts();
 
-            const stages = [
-                { key: 'new', label: 'New', count: 0 },
-                { key: 'contacted', label: 'Contacted', count: 0 },
-                { key: 'responded', label: 'Responded', count: 0 },
-                { key: 'call-scheduled', label: 'Call Scheduled', count: 0 },
-                { key: 'call-completed', label: 'Call Completed', count: 0 },
-                { key: 'referral', label: 'Referral', count: 0 },
-                { key: 'interviewing', label: 'Interviewing', count: 0 },
-                { key: 'offer', label: 'Offers', count: 0 }
-            ];
+            // Auto-categorize contacts based on message history
+            contacts = contacts.map(c => {
+                if (!c.status || c.status === 'not-contacted') {
+                    // Auto-detect status from message history
+                    if (c.messageHistory && c.messageHistory.length > 0) {
+                        const hasOutbound = c.messageHistory.some(m => m.direction === 'outbound');
+                        const hasInbound = c.messageHistory.some(m => m.direction === 'inbound');
 
-            contacts.forEach(c => {
-                const stage = stages.find(s => s.key === c.status);
-                if (stage) stage.count++;
+                        if (hasInbound && hasOutbound) {
+                            c.status = 'responded';
+                        } else if (hasOutbound) {
+                            c.status = 'contacted';
+                        } else {
+                            c.status = 'new';
+                        }
+                    } else {
+                        c.status = 'new';
+                    }
+                }
+                return c;
             });
 
-            // Render funnel
-            const funnelContainer = document.getElementById('pipeline-funnel');
-            funnelContainer.innerHTML = stages.map((stage, i) => {
-                const prevCount = i > 0 ? stages[i-1].count : stage.count;
-                const conversion = prevCount > 0 ? Math.round((stage.count / prevCount) * 100) : 0;
+            // Apply filters
+            const searchTerm = document.getElementById('pipeline-search')?.value.toLowerCase() || '';
+            const companyFilter = document.getElementById('pipeline-filter-company')?.value || '';
+            const priorityFilter = document.getElementById('pipeline-filter-priority')?.value || '';
+
+            let filtered = contacts.filter(c => {
+                // Search filter
+                if (searchTerm) {
+                    const name = (c.name || '').toLowerCase();
+                    const company = (c.company || '').toLowerCase();
+                    const title = (c.title || '').toLowerCase();
+                    if (!name.includes(searchTerm) && !company.includes(searchTerm) && !title.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+
+                // Company filter
+                if (companyFilter && c.company !== companyFilter) return false;
+
+                // Priority filter
+                if (priorityFilter && c.priority !== priorityFilter) return false;
+
+                // Show all vs high priority only
+                if (!showAllContacts && c.priority !== 'high') return false;
+
+                return true;
+            });
+
+            // Update toggle button text
+            const toggleBtn = document.getElementById('toggle-all-text');
+            if (toggleBtn) {
+                toggleBtn.textContent = showAllContacts ? `Show Priority (${contacts.filter(c => c.priority === 'high').length})` : `Show All (${contacts.length})`;
+            }
+
+            // Update company filter dropdown
+            const companySelect = document.getElementById('pipeline-filter-company');
+            if (companySelect) {
+                const companies = [...new Set(contacts.map(c => c.company).filter(Boolean))].sort();
+                companySelect.innerHTML = '<option value="">All Companies</option>' +
+                    companies.map(comp => `<option value="${escapeHtml(comp)}" ${comp === companyFilter ? 'selected' : ''}>${escapeHtml(comp)}</option>`).join('');
+            }
+
+            // Define stages
+            const stages = [
+                { key: 'new', label: '🆕 To Contact', color: '#6c757d' },
+                { key: 'contacted', label: '📧 Contacted', color: '#17a2b8' },
+                { key: 'responded', label: '💬 Responded', color: '#28a745' },
+                { key: 'call-scheduled', label: '📅 Call Scheduled', color: '#ffc107' },
+                { key: 'call-completed', label: '✅ Call Done', color: '#20c997' },
+                { key: 'referral', label: '🔗 Referral', color: '#667eea' },
+                { key: 'interviewing', label: '🎯 Interviewing', color: '#ff6b6b' },
+                { key: 'offer', label: '🎉 Offer', color: '#e83e8c' }
+            ];
+
+            // Group contacts by stage
+            const contactsByStage = {};
+            stages.forEach(stage => {
+                contactsByStage[stage.key] = filtered.filter(c => c.status === stage.key);
+            });
+
+            // Render kanban board
+            const kanbanContainer = document.getElementById('pipeline-kanban');
+            kanbanContainer.innerHTML = stages.map(stage => {
+                const stageContacts = contactsByStage[stage.key] || [];
+
                 return `
-                    <div class="funnel-stage">
-                        <h4>${stage.label}</h4>
-                        <div class="count">${stage.count}</div>
-                        ${i > 0 ? `<div class="conversion">${conversion}% from prev</div>` : ''}
+                    <div class="pipeline-column" style="background: #f8f9fa; border-radius: 8px; padding: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="margin: 0; font-size: 0.95em; color: ${stage.color};">${stage.label}</h3>
+                            <span style="background: ${stage.color}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold;">${stageContacts.length}</span>
+                        </div>
+                        <div class="pipeline-cards"
+                            ondrop="handlePipelineDrop(event, '${stage.key}')"
+                            ondragover="event.preventDefault(); event.currentTarget.style.background='#e3f2fd';"
+                            ondragleave="event.currentTarget.style.background='transparent';"
+                            style="min-height: 200px; display: flex; flex-direction: column; gap: 10px;">
+                            ${stageContacts.length === 0 ?
+                                `<div style="text-align: center; color: #999; padding: 40px 10px; font-size: 0.9em;">Drop contacts here</div>` :
+                                stageContacts.map(c => `
+                                    <div class="pipeline-card ${selectedContactIds.has(c.id) ? 'selected' : ''}"
+                                        draggable="true"
+                                        data-contact-id="${c.id}"
+                                        onclick="handlePipelineCardClick(event, '${c.id}')"
+                                        ondragstart="handlePipelineCardDragStart(event, '${c.id}')"
+                                        ondragend="event.currentTarget.style.opacity='1'"
+                                        style="background: white; padding: 12px; border-radius: 6px; cursor: move; border-left: 3px solid ${stage.color}; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                        <div style="font-weight: 600; margin-bottom: 5px; font-size: 0.9em;">${escapeHtml(c.name || 'Unknown')}</div>
+                                        ${c.company ? `<div style="color: #666; font-size: 0.85em; margin-bottom: 5px;">${escapeHtml(c.company)}</div>` : ''}
+                                        ${c.title ? `<div style="color: #999; font-size: 0.8em; margin-bottom: 5px;">${escapeHtml(c.title)}</div>` : ''}
+                                        <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                                            ${c.priority === 'high' ? '<span style="background: #ff6b6b; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.7em;">HIGH</span>' : ''}
+                                            ${c.messageHistory && c.messageHistory.length > 0 ? `<span style="background: #e3f2fd; color: #1976d2; padding: 2px 6px; border-radius: 3px; font-size: 0.7em;">${c.messageHistory.length} msg</span>` : ''}
+                                            ${c.lastContact ? `<span style="color: #999; font-size: 0.7em;">${formatRelativeDate(c.lastContact)}</span>` : ''}
+                                        </div>
+                                        <div style="margin-top: 8px; display: flex; gap: 5px;">
+                                            <button onclick="event.stopPropagation(); editContact('${c.id}')"
+                                                style="flex: 1; padding: 4px 8px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75em;">View</button>
+                                            <button onclick="event.stopPropagation(); composeMessageForContact('${c.id}')"
+                                                style="flex: 1; padding: 4px 8px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75em;">Message</button>
+                                        </div>
+                                    </div>
+                                `).join('')
+                            }
+                        </div>
                     </div>
                 `;
             }).join('');
 
-            // Render pipeline by stage
-            const pipelineDetails = document.getElementById('pipeline-by-stage');
-            pipelineDetails.innerHTML = stages.filter(s => s.count > 0).map(stage => {
-                const stageContacts = contacts.filter(c => c.status === stage.key);
-                return `
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="color: #667eea; margin-bottom: 10px;">${stage.label} (${stage.count})</h4>
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                            ${stageContacts.map(c => `
-                                <div style="background: #f8f9fa; padding: 10px 15px; border-radius: 8px; border-left: 3px solid #667eea;">
-                                    <strong>${c.name || `${c.firstName} ${c.lastName}`.trim() || 'Unknown'}</strong><br>
-                                    <span style="color: #666; font-size: 0.9em;">${c.company || c.title || 'No company'}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }).join('') || '<p style="color: #666;">No contacts in pipeline yet.</p>';
+            // Save updated statuses
+            saveContacts(contacts);
+        }
+
+        function handlePipelineCardClick(event, contactId) {
+            if (event.ctrlKey || event.metaKey) {
+                // Multi-select
+                if (selectedContactIds.has(contactId)) {
+                    selectedContactIds.delete(contactId);
+                } else {
+                    selectedContactIds.add(contactId);
+                }
+                renderPipeline();
+            } else {
+                editContact(contactId);
+            }
+        }
+
+        function handlePipelineCardDragStart(event, contactId) {
+            event.currentTarget.style.opacity = '0.5';
+
+            // If this card is not in the selection, make it the only selected card
+            if (!selectedContactIds.has(contactId)) {
+                selectedContactIds.clear();
+                selectedContactIds.add(contactId);
+            }
+
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', JSON.stringify([...selectedContactIds]));
+        }
+
+        async function handlePipelineDrop(event, newStatus) {
+            event.preventDefault();
+            event.currentTarget.style.background = 'transparent';
+
+            const contactIds = JSON.parse(event.dataTransfer.getData('text/plain'));
+            const contacts = getContacts();
+
+            contactIds.forEach(contactId => {
+                const contact = contacts.find(c => c.id === contactId);
+                if (contact) {
+                    contact.status = newStatus;
+
+                    // Add outreach record when moving to contacted
+                    if (newStatus === 'contacted' && (!contact.outreach || contact.outreach.length === 0)) {
+                        if (!contact.outreach) contact.outreach = [];
+                        contact.outreach.push({
+                            id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                            date: new Date().toISOString(),
+                            type: 'linkedin',
+                            notes: 'Moved to contacted in pipeline'
+                        });
+                    }
+                }
+            });
+
+            selectedContactIds.clear();
+            saveContacts(contacts);
+            await syncContacts();
+            renderPipeline();
+        }
+
+        function composeMessageForContact(contactId) {
+            const contact = getContacts().find(c => c.id === contactId);
+            if (!contact) return;
+
+            // Switch to CRM tab and open AI panel with this contact
+            showTab('crm');
+
+            // Pre-fill AI panel
+            document.getElementById('ai-contact-name').value = contact.name || '';
+            document.getElementById('ai-contact-company').value = contact.company || '';
+            document.getElementById('ai-contact-title').value = contact.title || '';
+
+            // Show AI panel
+            document.getElementById('ai-panel').style.display = 'block';
+        }
+
+        function formatRelativeDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays}d ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
+            if (diffDays < 365) return `${Math.floor(diffDays / 30)}mo ago`;
+            return `${Math.floor(diffDays / 365)}y ago`;
         }
 
         // ============================================

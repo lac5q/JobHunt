@@ -1250,6 +1250,664 @@
                 font-size: 0.95em;
             }
         }
+
+        /* ================================
+           JOBS TRACKER STYLES
+           ================================ */
+
+        .jobs-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .jobs-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .jobs-controls input,
+        .jobs-controls select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+        }
+
+        .jobs-controls input:focus,
+        .jobs-controls select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .jobs-controls input[type="text"] {
+            min-width: 200px;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            padding: 10px 15px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            background: #dee2e6;
+        }
+
+        .view-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Jobs Grid (Cards View) */
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .job-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 180px;
+        }
+
+        .job-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .job-card.priority-high {
+            border-left: 4px solid #ff5722;
+        }
+
+        .job-card.priority-medium {
+            border-left: 4px solid #ff9800;
+        }
+
+        .job-card.priority-low {
+            border-left: 4px solid #4caf50;
+        }
+
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .job-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .job-card-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 4px 0;
+            line-height: 1.3;
+        }
+
+        .job-card-company {
+            color: #667eea;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .job-card-location {
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 6px;
+            line-height: 1.4;
+            /* Show full location - don't truncate */
+        }
+
+        .job-card-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .job-tag {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 500;
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .job-tag.remote { background: #e8f5e9; color: #2e7d32; }
+        .job-tag.hybrid { background: #fff3e0; color: #ef6c00; }
+        .job-tag.onsite { background: #e3f2fd; color: #1565c0; }
+
+        .job-card-status {
+            flex-shrink: 0;
+        }
+
+        .status-select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 24px;
+        }
+
+        .status-select.status-saved { background-color: #e3f2fd; color: #1976d2; }
+        .status-select.status-applied { background-color: #fff3e0; color: #f57c00; }
+        .status-select.status-phone-screen { background-color: #e8f5e9; color: #388e3c; }
+        .status-select.status-interview-1,
+        .status-select.status-interview-2,
+        .status-select.status-interview-3 { background-color: #f3e5f5; color: #7b1fa2; }
+        .status-select.status-offer { background-color: #c8e6c9; color: #2e7d32; }
+        .status-select.status-rejected { background-color: #ffcdd2; color: #c62828; }
+        .status-select.status-withdrawn { background-color: #eeeeee; color: #757575; }
+
+        .status-select:hover {
+            filter: brightness(0.95);
+        }
+
+        .status-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+        }
+
+        .job-card-contacts {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .job-card-contacts span {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .job-card-contacts button {
+            padding: 5px 10px;
+            font-size: 0.8em;
+        }
+
+        .job-card-find-people {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .find-people-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 4px 8px !important;
+            font-size: 0.75em !important;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+        }
+
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .find-people-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .find-people-link:hover {
+            text-decoration: underline;
+        }
+
+        .job-card-find-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .job-card-footer {
+            margin-top: auto;
+        }
+
+        .job-card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .job-card-footer > .job-card-contacts:first-child + .job-card-actions {
+            margin-top: 8px;
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .job-card-actions .btn {
+            padding: 6px 12px;
+            font-size: 0.85em;
+        }
+
+        .job-card-actions .btn-edit {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .job-card-actions .btn-edit:hover {
+            background: #eee;
+        }
+
+        .job-card-actions .btn-view {
+            color: #667eea;
+            background: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .job-card-actions .btn-view:hover {
+            text-decoration: underline;
+        }
+
+        .job-card-actions .btn-delete,
+        .btn-delete {
+            background: transparent;
+            color: #999;
+            border: 1px solid transparent;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .job-card-actions .btn-delete:hover,
+        .btn-delete:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+
+        .job-card-actions .btn-disabled {
+            color: #aaa;
+            cursor: default;
+            font-size: 0.8em;
+        }
+
+        .job-card-actions .btn-disabled:hover {
+            text-decoration: none;
+        }
+
+        /* Legacy badge styles for table view */
+        .job-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .job-badge.status-saved { background: #e3f2fd; color: #1976d2; }
+        .job-badge.status-applied { background: #fff3e0; color: #f57c00; }
+        .job-badge.status-phone-screen { background: #e8f5e9; color: #388e3c; }
+        .job-badge.status-interview-1,
+        .job-badge.status-interview-2,
+        .job-badge.status-interview-3 { background: #f3e5f5; color: #7b1fa2; }
+        .job-badge.status-offer { background: #e8f5e9; color: #2e7d32; }
+        .job-badge.status-rejected { background: #ffebee; color: #c62828; }
+        .job-badge.status-withdrawn { background: #fafafa; color: #757575; }
+
+        /* Jobs Table View */
+        .jobs-table-container {
+            overflow-x: auto;
+        }
+
+        .jobs-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .jobs-table th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .jobs-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .jobs-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Jobs Kanban View */
+        .jobs-kanban {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            min-height: 500px;
+        }
+
+        .kanban-column {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .kanban-column h4 {
+            margin: 0 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kanban-count {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.85em;
+        }
+
+        .kanban-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .kanban-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .kanban-card:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .kanban-card-title {
+            font-weight: 600;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        .kanban-card-company {
+            color: #667eea;
+            font-size: 0.9em;
+        }
+
+        /* Job Contacts List in Modal */
+        .job-contacts-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .job-contact-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .job-contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .job-contact-info h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .job-contact-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        /* Mobile responsive for Jobs */
+        @media (max-width: 768px) {
+            .jobs-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .jobs-controls input[type="text"] {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .jobs-kanban {
+                grid-template-columns: 1fr;
+            }
+
+            .view-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Email Sync Styles */
+        .email-sync-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .email-sync-btn.syncing {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .email-sync-btn .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .email-preview-modal .modal-content {
+            max-width: 700px;
+        }
+
+        .email-preview-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+
+        .email-preview-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #fafafa;
+        }
+
+        .email-preview-item:hover {
+            background: #f0f0f0;
+        }
+
+        .email-preview-item input[type="checkbox"] {
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .email-preview-content {
+            flex: 1;
+        }
+
+        .email-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .email-preview-subject {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .email-preview-date {
+            font-size: 0.8em;
+            color: #888;
+            white-space: nowrap;
+        }
+
+        .email-preview-from {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .email-preview-snippet {
+            font-size: 0.85em;
+            color: #555;
+            line-height: 1.4;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .email-preview-account {
+            display: inline-block;
+            font-size: 0.75em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+        }
+
+        .email-preview-account.personal {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .email-preview-account.work {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .email-preview-empty {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .email-preview-stats {
+            padding: 10px 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .job-card-email-btn {
+            font-size: 0.8em;
+            padding: 4px 8px;
+        }
+
+        .job-card-email-sync-info {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .sync-progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .sync-progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -1304,6 +1962,7 @@
             <button class="tab-btn" data-tab="pipeline">Pipeline</button>
             <button class="tab-btn" data-tab="analytics">Analytics</button>
             <button class="tab-btn" data-tab="resources">Resources</button>
+            <button class="tab-btn" data-tab="jobs">Jobs Tracker</button>
             <a href="./ai-tools.html" class="tab-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none;">🤖 AI Tools</a>
         </div>
 
@@ -1683,6 +2342,243 @@ Luis
                 <p><strong>Location:</strong> San Diego, CA (open to remote, willing to travel LA/SF)</p>
             </div>
         </div>
+
+        <!-- Jobs Tracker Tab -->
+        <div id="jobs" class="tab-content">
+            <!-- Jobs Stats -->
+            <div class="jobs-stats-grid">
+                <div class="stat-card">
+                    <h3 id="jobs-total-count">0</h3>
+                    <p>Total Jobs</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="jobs-applied-count">0</h3>
+                    <p>Applied</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="jobs-interviewing-count">0</h3>
+                    <p>Interviewing</p>
+                </div>
+                <div class="stat-card success">
+                    <h3 id="jobs-offers-count">0</h3>
+                    <p>Offers</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="jobs-response-rate">0%</h3>
+                    <p>Response Rate</p>
+                </div>
+            </div>
+
+            <!-- Jobs Controls -->
+            <div class="section">
+                <div class="jobs-controls">
+                    <input type="text" id="jobs-search" placeholder="Search jobs..." oninput="filterJobs()">
+                    <select id="jobs-status-filter" onchange="filterJobs()">
+                        <option value="">All Statuses</option>
+                        <option value="saved">Saved</option>
+                        <option value="applied">Applied</option>
+                        <option value="phone-screen">Phone Screen</option>
+                        <option value="interview-1">Interview 1</option>
+                        <option value="interview-2">Interview 2</option>
+                        <option value="interview-3">Interview 3</option>
+                        <option value="offer">Offer</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="withdrawn">Withdrawn</option>
+                    </select>
+                    <select id="jobs-source-filter" onchange="filterJobs()">
+                        <option value="">All Sources</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="indeed">Indeed</option>
+                        <option value="glassdoor">Glassdoor</option>
+                        <option value="manual">Manual</option>
+                    </select>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="cards" onclick="setJobsView('cards')">Cards</button>
+                        <button class="view-btn" data-view="table" onclick="setJobsView('table')">Table</button>
+                        <button class="view-btn" data-view="kanban" onclick="setJobsView('kanban')">Kanban</button>
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddJobModal()">+ Add Job</button>
+                    <button class="btn btn-success email-sync-btn" id="sync-all-emails-btn" onclick="syncAllJobEmails()" title="Search Gmail for emails related to tracked jobs">
+                        <span id="sync-emails-icon">📧</span>
+                        <span id="sync-emails-text">Sync Emails</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Jobs Grid (Cards View) -->
+            <div id="jobs-cards-view" class="jobs-grid">
+                <div class="empty-state" id="jobs-empty-state">
+                    <p>No jobs yet. Add your first job to start tracking!</p>
+                    <button class="btn btn-primary" onclick="openAddJobModal()">+ Add Job</button>
+                </div>
+            </div>
+
+            <!-- Jobs Table View -->
+            <div id="jobs-table-view" class="jobs-table-container" style="display: none;">
+                <table class="jobs-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Company</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Contacts</th>
+                            <th>Applied</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jobs-table-body">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Jobs Kanban View -->
+            <div id="jobs-kanban-view" class="jobs-kanban" style="display: none;">
+                <div class="kanban-column" data-status="saved">
+                    <h4>Saved <span class="kanban-count">0</span></h4>
+                    <div class="kanban-cards"></div>
+                </div>
+                <div class="kanban-column" data-status="applied">
+                    <h4>Applied <span class="kanban-count">0</span></h4>
+                    <div class="kanban-cards"></div>
+                </div>
+                <div class="kanban-column" data-status="interviewing">
+                    <h4>Interviewing <span class="kanban-count">0</span></h4>
+                    <div class="kanban-cards"></div>
+                </div>
+                <div class="kanban-column" data-status="offer">
+                    <h4>Offers <span class="kanban-count">0</span></h4>
+                    <div class="kanban-cards"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Job Modal -->
+    <div class="modal" id="job-modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 id="job-modal-title">Add Job</h2>
+                <button class="modal-close" onclick="closeJobModal()">&times;</button>
+            </div>
+            <form id="job-form" onsubmit="saveJob(event)">
+                <input type="hidden" id="job-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Job Title *</label>
+                        <input type="text" id="job-title" required placeholder="e.g., Senior Product Manager">
+                    </div>
+                    <div class="form-group">
+                        <label>Company *</label>
+                        <input type="text" id="job-company" required placeholder="e.g., Google">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="job-location" placeholder="e.g., San Francisco, CA">
+                    </div>
+                    <div class="form-group">
+                        <label>Location Type</label>
+                        <select id="job-location-type">
+                            <option value="unknown">Unknown</option>
+                            <option value="remote">Remote</option>
+                            <option value="hybrid">Hybrid</option>
+                            <option value="onsite">On-site</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Salary Range</label>
+                        <input type="text" id="job-salary" placeholder="e.g., $150k-$200k">
+                    </div>
+                    <div class="form-group">
+                        <label>Source</label>
+                        <select id="job-source">
+                            <option value="manual">Manual Entry</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="indeed">Indeed</option>
+                            <option value="glassdoor">Glassdoor</option>
+                            <option value="company">Company Website</option>
+                            <option value="referral">Referral</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="job-status">
+                            <option value="saved">Saved</option>
+                            <option value="applied">Applied</option>
+                            <option value="phone-screen">Phone Screen</option>
+                            <option value="interview-1">Interview 1</option>
+                            <option value="interview-2">Interview 2</option>
+                            <option value="interview-3">Interview 3</option>
+                            <option value="offer">Offer</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="withdrawn">Withdrawn</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select id="job-priority">
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Job URL</label>
+                    <input type="url" id="job-url" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Job Description</label>
+                    <textarea id="job-description" rows="4" placeholder="Paste the job description here..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="job-notes" rows="3" placeholder="Your notes about this opportunity..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeJobModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Job</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Job Contacts Modal -->
+    <div class="modal" id="job-contacts-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="job-contacts-modal-title">Contacts at Company</h2>
+                <button class="modal-close" onclick="closeJobContactsModal()">&times;</button>
+            </div>
+            <div id="job-contacts-list" class="job-contacts-list">
+                <!-- Contacts will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Preview Modal -->
+    <div class="modal email-preview-modal" id="email-preview-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="email-preview-title">Emails Found</h2>
+                <button class="modal-close" onclick="closeEmailPreviewModal()">&times;</button>
+            </div>
+            <div id="email-preview-stats" class="email-preview-stats" style="display: none;"></div>
+            <div id="email-preview-list" class="email-preview-list">
+                <!-- Emails will be populated here -->
+            </div>
+            <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                <button class="btn btn-secondary" onclick="closeEmailPreviewModal()">Cancel</button>
+                <button class="btn btn-primary" id="email-append-btn" onclick="confirmEmailAppend()">Add Selected to Notes</button>
+            </div>
+        </div>
     </div>
 
     <!-- Add/Edit Contact Modal -->
@@ -1922,6 +2818,10 @@ Luis
         // SUPABASE SYNC MODULE
         // ============================================
 
+        // Default Supabase credentials (no setup required)
+        const DEFAULT_SUPABASE_URL = 'https://dkufgfmwqsxecylyvidi.supabase.co';
+        const DEFAULT_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRrdWZnZm13cXN4ZWN5bHl2aWRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0OTIxMTgsImV4cCI6MjA4MTA2ODExOH0.GPdoDd7z5nuGx-oQ2l6CQX-fdz7T4CdUpG_PwORZB_g';
+
         const SyncManager = {
             supabaseUrl: null,
             supabaseKey: null,
@@ -1929,17 +2829,23 @@ Luis
             lastSync: null,
 
             init() {
-                // SECURITY: Credentials should only be stored in localStorage, never hardcoded in source
-                // Users must configure Supabase credentials through the Settings UI
-                this.supabaseUrl = localStorage.getItem('supabaseUrl');
-                this.supabaseKey = localStorage.getItem('supabaseKey');
+                // Use localStorage values if set, otherwise use defaults
+                this.supabaseUrl = localStorage.getItem('supabaseUrl') || DEFAULT_SUPABASE_URL;
+                this.supabaseKey = localStorage.getItem('supabaseKey') || DEFAULT_SUPABASE_KEY;
                 this.lastSync = localStorage.getItem('lastSync');
+
+                // Auto-save defaults to localStorage
+                if (!localStorage.getItem('supabaseUrl')) {
+                    localStorage.setItem('supabaseUrl', DEFAULT_SUPABASE_URL);
+                }
+                if (!localStorage.getItem('supabaseKey')) {
+                    localStorage.setItem('supabaseKey', DEFAULT_SUPABASE_KEY);
+                }
 
                 this.updateUI();
 
-                if (this.isConfigured()) {
-                    this.loadFromCloud();
-                }
+                // Always load from cloud since we have defaults
+                this.loadFromCloud();
             },
 
             isConfigured() {
@@ -2023,6 +2929,7 @@ Luis
                 this.updateUI();
 
                 try {
+                    console.log('🔄 Loading from cloud...', this.supabaseUrl);
                     const response = await fetch(`${this.supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
                         headers: {
                             'apikey': this.supabaseKey,
@@ -2033,8 +2940,10 @@ Luis
                     if (!response.ok) throw new Error('Failed to load data');
 
                     const data = await response.json();
+                    console.log('📦 Cloud data received:', data);
                     if (data && data.length > 0) {
                         const cloudData = data[0];
+                        console.log('📋 Jobs in cloud:', cloudData.jobs?.length || 0, cloudData.jobs);
                         const cloudTime = new Date(cloudData.updated_at).getTime();
                         const localTime = parseInt(localStorage.getItem('localDataTimestamp') || '0');
 
@@ -2052,11 +2961,18 @@ Luis
                             if (cloudData.reviewed_contacts) {
                                 localStorage.setItem('reviewedContacts', JSON.stringify(cloudData.reviewed_contacts));
                             }
+                            if (cloudData.jobs) {
+                                localStorage.setItem('jobSearchJobs', JSON.stringify(cloudData.jobs));
+                            }
                             localStorage.setItem('localDataTimestamp', cloudTime.toString());
 
                             // Refresh displays
                             if (typeof updateAllDisplays === 'function') {
                                 updateAllDisplays();
+                            }
+                            // Refresh jobs tab if visible
+                            if (typeof renderJobs === 'function') {
+                                renderJobs();
                             }
                         }
 
@@ -2064,6 +2980,9 @@ Luis
                         if (cloudData.linkedin_conversations && cloudData.linkedin_conversations.length > 0) {
                             this.importLinkedInConversations(cloudData.linkedin_conversations);
                         }
+
+                        // NOTE: Jobs are loaded via loadJobsFromCloud() when Jobs tab is opened
+                        // Not loaded here to prevent race conditions with local edits
                     }
 
                     this.lastSync = new Date().toISOString();
@@ -2091,6 +3010,8 @@ Luis
                 this.updateUI();
 
                 try {
+                    // NOTE: Jobs are NOT included here - they are synced via /api/job-sync endpoint
+                    // to prevent race conditions where dashboard overwrites extension-saved jobs
                     const payload = {
                         id: 'main',
                         contacts: JSON.parse(localStorage.getItem('jobSearchContacts') || '[]'),
@@ -3237,12 +4158,33 @@ Luis
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-                btn.classList.add('active');
-                document.getElementById(btn.dataset.tab).classList.add('active');
+                const tabId = btn.dataset.tab;
+                switchToTab(tabId);
+                // Update URL hash without triggering scroll
+                history.pushState(null, '', `#${tabId}`);
             });
+        });
+
+        // Switch to a specific tab
+        function switchToTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+            const tabContent = document.getElementById(tabId);
+
+            if (tabBtn && tabContent) {
+                tabBtn.classList.add('active');
+                tabContent.classList.add('active');
+            }
+        }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                switchToTab(hash);
+            }
         });
 
         // Handle URL parameters and hash for deep linking
@@ -3253,13 +4195,7 @@ Luis
 
             // Switch to the correct tab based on hash
             if (hash) {
-                const tabBtn = document.querySelector(`.tab-btn[data-tab="${hash}"]`);
-                if (tabBtn) {
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    tabBtn.classList.add('active');
-                    document.getElementById(hash).classList.add('active');
-                }
+                switchToTab(hash);
             }
 
             // Fill in search and trigger filter
@@ -3675,8 +4611,8 @@ Luis
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                             ${stageContacts.map(c => `
                                 <div style="background: #f8f9fa; padding: 10px 15px; border-radius: 8px; border-left: 3px solid #667eea;">
-                                    <strong>${c.firstName} ${c.lastName}</strong><br>
-                                    <span style="color: #666; font-size: 0.9em;">${c.company}</span>
+                                    <strong>${c.name || `${c.firstName} ${c.lastName}`.trim() || 'Unknown'}</strong><br>
+                                    <span style="color: #666; font-size: 0.9em;">${c.company || c.title || 'No company'}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -4484,6 +5420,1221 @@ Luis
                 });
             }
         });
+
+        // ================================
+        // JOBS TRACKER FUNCTIONS
+        // ================================
+
+        let currentJobsView = 'cards';
+
+        // Get jobs from localStorage
+        function getJobs() {
+            return JSON.parse(localStorage.getItem('jobSearchJobs') || '[]');
+        }
+
+        // Save jobs to localStorage (cloud sync happens via API)
+        function saveJobsToStorage(jobs) {
+            localStorage.setItem('jobSearchJobs', JSON.stringify(jobs));
+            // NOTE: Jobs are synced via /api/job-sync, not general sync
+        }
+
+        // Sync a single job to cloud via API
+        async function syncJobToCloud(job, isNew = false) {
+            try {
+                const response = await fetch('/api/job-sync', {
+                    method: isNew ? 'POST' : 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(isNew ? job : { id: job.id, ...job })
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to sync job to cloud:', await response.text());
+                    return false;
+                }
+
+                console.log('✅ Job synced to cloud:', job.title);
+                return true;
+            } catch (error) {
+                console.error('Error syncing job to cloud:', error);
+                return false;
+            }
+        }
+
+        // Load jobs from cloud API
+        async function loadJobsFromCloud() {
+            try {
+                const response = await fetch('/api/job-sync');
+                if (!response.ok) {
+                    console.error('Failed to load jobs from cloud');
+                    return false;
+                }
+                const data = await response.json();
+                if (data.success && data.jobs) {
+                    // Get locally deleted jobs to prevent resurrection
+                    const deletedJobs = JSON.parse(localStorage.getItem('deletedJobIds') || '[]');
+
+                    // Filter out any jobs that were deleted locally
+                    const cloudJobs = data.jobs.filter(job => !deletedJobs.includes(job.id));
+
+                    // Merge with local jobs using timestamp-based conflict resolution
+                    const localJobs = getJobs();
+                    const mergedJobs = mergeJobData(localJobs, cloudJobs);
+
+                    localStorage.setItem('jobSearchJobs', JSON.stringify(mergedJobs));
+                    console.log('✅ Loaded and merged', mergedJobs.length, 'jobs from cloud');
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error loading jobs from cloud:', error);
+            }
+            return false;
+        }
+
+        // Merge local and cloud jobs using timestamp-based conflict resolution
+        function mergeJobData(localJobs, cloudJobs) {
+            const merged = new Map();
+
+            // Add all local jobs first
+            localJobs.forEach(job => {
+                merged.set(job.id, job);
+            });
+
+            // Merge in cloud jobs, keeping newer version based on updatedAt
+            cloudJobs.forEach(cloudJob => {
+                const localJob = merged.get(cloudJob.id);
+
+                if (!localJob) {
+                    // New job from cloud, add it
+                    merged.set(cloudJob.id, cloudJob);
+                } else {
+                    // Job exists locally, compare timestamps
+                    const localTime = new Date(localJob.updatedAt || localJob.capturedAt || 0).getTime();
+                    const cloudTime = new Date(cloudJob.updatedAt || cloudJob.capturedAt || 0).getTime();
+
+                    if (cloudTime > localTime) {
+                        // Cloud version is newer, use it
+                        merged.set(cloudJob.id, cloudJob);
+                    }
+                    // Otherwise keep local version (it's newer or same)
+                }
+            });
+
+            return Array.from(merged.values());
+        }
+
+        // Clean up old deleted job IDs (older than 30 days)
+        function cleanupDeletedJobIds() {
+            try {
+                const deletedJobs = JSON.parse(localStorage.getItem('deletedJobIds') || '[]');
+                const lastCleanup = localStorage.getItem('deletedJobsLastCleanup');
+                const now = Date.now();
+
+                // Only cleanup once per week
+                if (lastCleanup && (now - parseInt(lastCleanup)) < 7 * 24 * 60 * 60 * 1000) {
+                    return;
+                }
+
+                // For now, just keep the most recent 100 deleted job IDs
+                // (This is simpler than tracking timestamps for each deletion)
+                if (deletedJobs.length > 100) {
+                    const trimmed = deletedJobs.slice(-100);
+                    localStorage.setItem('deletedJobIds', JSON.stringify(trimmed));
+                    console.log('🧹 Cleaned up old deleted job IDs');
+                }
+
+                localStorage.setItem('deletedJobsLastCleanup', now.toString());
+            } catch (error) {
+                console.error('Error cleaning up deleted job IDs:', error);
+            }
+        }
+
+        // Normalize company name for matching
+        function normalizeCompany(name) {
+            if (!name) return '';
+            return name.toLowerCase()
+                .replace(/\b(inc|llc|corp|corporation|ltd|limited|co|company|technologies|tech|software|solutions|group|holdings|enterprises)\b\.?/gi, '')
+                .replace(/[^a-z0-9]/g, '')
+                .trim();
+        }
+
+        // Get primary company name (first meaningful word, min 3 chars)
+        function getPrimaryCompanyName(name) {
+            if (!name) return '';
+            // Remove common suffixes and get the core name
+            const cleaned = name.toLowerCase()
+                .replace(/\.(ai|io|co|com|org|net)$/gi, '')
+                .replace(/\b(inc|llc|corp|corporation|ltd|limited|co|company|technologies|tech|software|solutions|group|holdings|enterprises|recruiting|staffing|partners)\b\.?/gi, '')
+                .trim();
+            // Get words with 3+ characters
+            const words = cleaned.split(/[^a-z0-9]+/).filter(w => w.length >= 3);
+            return words[0] || '';
+        }
+
+        // Check if two company names are a fuzzy match
+        function companiesMatch(company1, company2) {
+            if (!company1 || !company2) return { match: false, type: null };
+
+            const norm1 = normalizeCompany(company1);
+            const norm2 = normalizeCompany(company2);
+
+            // Exact match on normalized names
+            if (norm1 === norm2 && norm1.length > 0) {
+                return { match: true, type: 'exact' };
+            }
+
+            // Contains match (one contains the other, min 4 chars to avoid false positives)
+            if (norm1.length >= 4 && norm2.length >= 4) {
+                if (norm1.includes(norm2) || norm2.includes(norm1)) {
+                    return { match: true, type: 'partial' };
+                }
+            }
+
+            // Primary name match (first word matches)
+            const primary1 = getPrimaryCompanyName(company1);
+            const primary2 = getPrimaryCompanyName(company2);
+            if (primary1.length >= 4 && primary1 === primary2) {
+                return { match: true, type: 'primary' };
+            }
+
+            return { match: false, type: null };
+        }
+
+        // Generate LinkedIn search URL to find people at a company
+        function getLinkedInPeopleSearchUrl(company, role = '') {
+            const baseUrl = 'https://www.linkedin.com/search/results/people/';
+            const companyKeyword = encodeURIComponent(company);
+            const roleKeyword = role ? encodeURIComponent(role) : '';
+            const keywords = role ? `${companyKeyword} ${roleKeyword}` : companyKeyword;
+            return `${baseUrl}?keywords=${keywords}&origin=GLOBAL_SEARCH_HEADER`;
+        }
+
+        // Open LinkedIn search for people at company
+        function findPeopleAtCompany(company, searchType = 'all') {
+            let url;
+            switch(searchType) {
+                case 'recruiters':
+                    url = getLinkedInPeopleSearchUrl(company, 'recruiter OR talent acquisition');
+                    break;
+                case 'hiring-managers':
+                    url = getLinkedInPeopleSearchUrl(company, 'hiring manager OR director OR VP product');
+                    break;
+                case 'product':
+                    url = getLinkedInPeopleSearchUrl(company, 'product manager OR product director');
+                    break;
+                default:
+                    url = getLinkedInPeopleSearchUrl(company);
+            }
+            window.open(url, '_blank');
+        }
+
+        // Match jobs to contacts by company (with fuzzy matching)
+        function matchJobsToContacts() {
+            const jobs = getJobs();
+            const contacts = getContacts();
+
+            jobs.forEach(job => {
+                // Find all matching contacts with match type
+                const matches = [];
+                contacts.forEach(c => {
+                    const result = companiesMatch(job.company, c.company);
+                    if (result.match) {
+                        matches.push({
+                            id: c.id,
+                            name: c.name,
+                            company: c.company,
+                            matchType: result.type
+                        });
+                    }
+                });
+
+                // Sort by match quality: exact > partial > primary
+                const matchOrder = { exact: 0, partial: 1, primary: 2 };
+                matches.sort((a, b) => matchOrder[a.matchType] - matchOrder[b.matchType]);
+
+                job.matchedContactIds = matches.map(m => m.id);
+                job.matchedContacts = matches; // Store full match info for display
+                job.contactCount = matches.length;
+                job.hasExactMatches = matches.some(m => m.matchType === 'exact');
+            });
+
+            saveJobsToStorage(jobs);
+            return jobs;
+        }
+
+        // Render jobs based on current view and filters
+        function renderJobs() {
+            const jobs = matchJobsToContacts();
+            const searchTerm = document.getElementById('jobs-search')?.value.toLowerCase() || '';
+            const statusFilter = document.getElementById('jobs-status-filter')?.value || '';
+            const sourceFilter = document.getElementById('jobs-source-filter')?.value || '';
+
+            // Filter jobs
+            let filteredJobs = jobs.filter(job => {
+                if (job.isArchived) return false;
+
+                const matchesSearch = !searchTerm ||
+                    job.title?.toLowerCase().includes(searchTerm) ||
+                    job.company?.toLowerCase().includes(searchTerm) ||
+                    job.location?.toLowerCase().includes(searchTerm);
+
+                const matchesStatus = !statusFilter || job.status === statusFilter;
+                const matchesSource = !sourceFilter || job.source === sourceFilter;
+
+                return matchesSearch && matchesStatus && matchesSource;
+            });
+
+            // Update stats
+            updateJobsStats(jobs);
+
+            // Render based on view
+            if (currentJobsView === 'cards') {
+                renderJobsCards(filteredJobs);
+            } else if (currentJobsView === 'table') {
+                renderJobsTable(filteredJobs);
+            } else if (currentJobsView === 'kanban') {
+                renderJobsKanban(filteredJobs);
+            }
+        }
+
+        // Render cards view
+        function renderJobsCards(jobs) {
+            const container = document.getElementById('jobs-cards-view');
+            let emptyState = document.getElementById('jobs-empty-state');
+
+            if (jobs.length === 0) {
+                container.innerHTML = '';
+                // Recreate empty state if it was destroyed by innerHTML
+                if (!emptyState) {
+                    emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state';
+                    emptyState.id = 'jobs-empty-state';
+                    emptyState.innerHTML = `
+                        <p>No jobs yet. Add your first job to start tracking!</p>
+                        <button class="btn btn-primary" onclick="openAddJobModal()">+ Add Job</button>
+                    `;
+                }
+                container.appendChild(emptyState);
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            // Hide empty state if it exists
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+            container.innerHTML = jobs.map(job => renderJobCard(job)).join('');
+        }
+
+        // Render single job card
+        function renderJobCard(job) {
+            // Status dropdown options
+            const statusOptions = [
+                { value: 'saved', label: 'Saved' },
+                { value: 'applied', label: 'Applied' },
+                { value: 'phone-screen', label: 'Phone Screen' },
+                { value: 'interview-1', label: 'Interview 1' },
+                { value: 'interview-2', label: 'Interview 2' },
+                { value: 'interview-3', label: 'Interview 3' },
+                { value: 'offer', label: 'Offer' },
+                { value: 'rejected', label: 'Rejected' },
+                { value: 'withdrawn', label: 'Withdrawn' }
+            ];
+
+            // Build tags
+            const tags = [];
+            if (job.source && job.source !== 'manual') tags.push(`<span class="job-tag">${job.source}</span>`);
+            if (job.locationType && job.locationType !== 'unknown') {
+                tags.push(`<span class="job-tag ${job.locationType}">${job.locationType}</span>`);
+            }
+            if (job.salary) tags.push(`<span class="job-tag">${escapeHtml(job.salary)}</span>`);
+
+            return `
+                <div class="job-card priority-${job.priority || 'medium'}">
+                    <div class="job-card-header">
+                        <div class="job-card-info">
+                            <h3 class="job-card-title">${escapeHtml(job.title)}</h3>
+                            <div class="job-card-company">${escapeHtml(job.company)}</div>
+                            ${job.location ? `<div class="job-card-location">📍 ${escapeHtml(job.location)}</div>` : ''}
+                            ${tags.length > 0 ? `<div class="job-card-tags">${tags.join('')}</div>` : ''}
+                        </div>
+                        <div class="job-card-status">
+                            <select class="status-select status-${job.status}" onchange="changeJobStatus('${job.id}', this.value)">
+                                ${statusOptions.map(opt => `<option value="${opt.value}" ${job.status === opt.value ? 'selected' : ''}>${opt.label}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="job-card-footer">
+                        ${job.contactCount > 0 ? `
+                            <div class="job-card-contacts">
+                                <span>👥 ${job.contactCount} contact${job.contactCount > 1 ? 's' : ''}${job.hasExactMatches ? '' : ' (similar companies)'}</span>
+                                <button class="btn btn-secondary" onclick="openJobContactsModal('${job.id}')">View</button>
+                            </div>
+                            <div class="job-card-find-row">
+                                <button class="btn btn-sm btn-outline" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}', 'all')" title="Find more people">🔍 Find</button>
+                                <button class="btn btn-sm btn-outline" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}', 'recruiters')" title="Find recruiters">Recruiters</button>
+                                <button class="btn btn-sm btn-outline" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}', 'product')" title="Find product people">Product</button>
+                            </div>
+                        ` : `
+                            <div class="job-card-contacts job-card-find-people">
+                                <span>🔍 Find people at ${escapeHtml(job.company)}:</span>
+                                <div class="find-people-buttons">
+                                    <button class="btn btn-sm btn-outline" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}', 'all')" title="Search all employees">All</button>
+                                    <button class="btn btn-sm btn-outline" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}', 'recruiters')" title="Find recruiters">Recruiters</button>
+                                    <button class="btn btn-sm btn-outline" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}', 'product')" title="Find product people">Product</button>
+                                </div>
+                            </div>
+                        `}
+                        <div class="job-card-actions">
+                            <button class="btn btn-edit" onclick="editJob('${job.id}')">✏️ Edit</button>
+                            <button class="btn btn-sm job-card-email-btn" onclick="syncJobEmails('${job.id}')" title="Find emails mentioning ${escapeHtml(job.company)}">📧 Emails</button>
+                            ${job.url ? `<a href="${job.url}" target="_blank" class="btn btn-view">↗ View Job</a>` : '<span class="btn btn-view btn-disabled" title="No job URL saved">No URL</span>'}
+                            <button class="btn btn-delete" onclick="deleteJob('${job.id}')" title="Delete job">🗑️</button>
+                        </div>
+                        ${job.lastEmailSync ? `<div class="job-card-email-sync-info">Last email sync: ${new Date(job.lastEmailSync).toLocaleDateString()}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render table view
+        function renderJobsTable(jobs) {
+            const tbody = document.getElementById('jobs-table-body');
+
+            if (jobs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No jobs found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = jobs.map(job => `
+                <tr>
+                    <td><strong>${escapeHtml(job.title)}</strong></td>
+                    <td>${escapeHtml(job.company)}</td>
+                    <td>${escapeHtml(job.location || '-')}</td>
+                    <td><span class="job-badge status-${job.status}">${getStatusLabel(job.status)}</span></td>
+                    <td>
+                        ${job.contactCount > 0
+                            ? `<a href="#" onclick="openJobContactsModal('${job.id}'); return false;">${job.contactCount}${job.hasExactMatches ? '' : '*'}</a> <a href="#" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}'); return false;" class="find-people-link" title="Find more">+</a>`
+                            : `<a href="#" onclick="findPeopleAtCompany('${escapeHtml(job.company).replace(/'/g, "\\'")}'); return false;" class="find-people-link">🔍 Find</a>`
+                        }
+                    </td>
+                    <td>${job.appliedAt ? new Date(job.appliedAt).toLocaleDateString() : '-'}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="editJob('${job.id}')" style="padding: 5px 10px;">Edit</button>
+                        <button class="btn btn-delete" onclick="deleteJob('${job.id}')" style="padding: 5px 10px;" title="Delete">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render kanban view
+        function renderJobsKanban(jobs) {
+            const columns = {
+                saved: jobs.filter(j => j.status === 'saved'),
+                applied: jobs.filter(j => j.status === 'applied'),
+                interviewing: jobs.filter(j => ['phone-screen', 'interview-1', 'interview-2', 'interview-3'].includes(j.status)),
+                offer: jobs.filter(j => j.status === 'offer')
+            };
+
+            Object.keys(columns).forEach(status => {
+                const column = document.querySelector(`.kanban-column[data-status="${status}"]`);
+                if (column) {
+                    column.querySelector('.kanban-count').textContent = columns[status].length;
+                    column.querySelector('.kanban-cards').innerHTML = columns[status].map(job => `
+                        <div class="kanban-card" onclick="editJob('${job.id}')">
+                            <div class="kanban-card-title">${escapeHtml(job.title)}</div>
+                            <div class="kanban-card-company">${escapeHtml(job.company)}</div>
+                        </div>
+                    `).join('');
+                }
+            });
+        }
+
+        // Update jobs stats
+        function updateJobsStats(jobs) {
+            const activeJobs = jobs.filter(j => !j.isArchived);
+            const applied = activeJobs.filter(j => j.status !== 'saved');
+            const interviewing = activeJobs.filter(j => ['phone-screen', 'interview-1', 'interview-2', 'interview-3'].includes(j.status));
+            const offers = activeJobs.filter(j => j.status === 'offer');
+            const responses = activeJobs.filter(j => !['saved', 'applied', 'rejected'].includes(j.status));
+
+            document.getElementById('jobs-total-count').textContent = activeJobs.length;
+            document.getElementById('jobs-applied-count').textContent = applied.length;
+            document.getElementById('jobs-interviewing-count').textContent = interviewing.length;
+            document.getElementById('jobs-offers-count').textContent = offers.length;
+
+            const responseRate = applied.length > 0 ? Math.round((responses.length / applied.length) * 100) : 0;
+            document.getElementById('jobs-response-rate').textContent = responseRate + '%';
+        }
+
+        // Get human-readable status label
+        function getStatusLabel(status) {
+            const labels = {
+                'saved': 'Saved',
+                'applied': 'Applied',
+                'phone-screen': 'Phone Screen',
+                'interview-1': 'Interview 1',
+                'interview-2': 'Interview 2',
+                'interview-3': 'Interview 3',
+                'offer': 'Offer',
+                'rejected': 'Rejected',
+                'withdrawn': 'Withdrawn'
+            };
+            return labels[status] || status;
+        }
+
+        // Set jobs view
+        function setJobsView(view) {
+            currentJobsView = view;
+
+            // Update view buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === view);
+            });
+
+            // Show/hide view containers
+            document.getElementById('jobs-cards-view').style.display = view === 'cards' ? 'grid' : 'none';
+            document.getElementById('jobs-table-view').style.display = view === 'table' ? 'block' : 'none';
+            document.getElementById('jobs-kanban-view').style.display = view === 'kanban' ? 'grid' : 'none';
+
+            renderJobs();
+        }
+
+        // Filter jobs (called on search/filter change)
+        function filterJobs() {
+            renderJobs();
+        }
+
+        // Open Add Job modal
+        function openAddJobModal() {
+            document.getElementById('job-modal-title').textContent = 'Add Job';
+            document.getElementById('job-form').reset();
+            document.getElementById('job-id').value = '';
+            document.getElementById('job-modal').classList.add('active');
+        }
+
+        // Edit existing job
+        function editJob(jobId) {
+            const jobs = getJobs();
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+
+            document.getElementById('job-modal-title').textContent = 'Edit Job';
+            document.getElementById('job-id').value = job.id;
+            document.getElementById('job-title').value = job.title || '';
+            document.getElementById('job-company').value = job.company || '';
+            document.getElementById('job-location').value = job.location || '';
+            document.getElementById('job-location-type').value = job.locationType || 'unknown';
+            document.getElementById('job-salary').value = job.salary || '';
+            document.getElementById('job-source').value = job.source || 'manual';
+            document.getElementById('job-status').value = job.status || 'saved';
+            document.getElementById('job-priority').value = job.priority || 'medium';
+            document.getElementById('job-url').value = job.url || '';
+            document.getElementById('job-description').value = job.description || '';
+            document.getElementById('job-notes').value = job.notes || '';
+
+            document.getElementById('job-modal').classList.add('active');
+        }
+
+        // Delete job
+        async function deleteJob(jobId) {
+            const jobs = getJobs();
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+
+            const confirmed = confirm(`Delete "${job.title}" at ${job.company}?\n\nThis cannot be undone.`);
+            if (!confirmed) return;
+
+            const updatedJobs = jobs.filter(j => j.id !== jobId);
+            saveJobsToStorage(updatedJobs);
+
+            // Track deleted job ID to prevent resurrection from cloud
+            const deletedJobs = JSON.parse(localStorage.getItem('deletedJobIds') || '[]');
+            if (!deletedJobs.includes(jobId)) {
+                deletedJobs.push(jobId);
+                localStorage.setItem('deletedJobIds', JSON.stringify(deletedJobs));
+            }
+
+            renderJobs();
+
+            // Sync deletion to cloud
+            try {
+                const { supabaseUrl, supabaseKey } = getSyncCredentials();
+                if (supabaseUrl && supabaseKey) {
+                    await fetch(`${supabaseUrl}/rest/v1/job_search_data?id=eq.main`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': supabaseKey,
+                            'Authorization': `Bearer ${supabaseKey}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ jobs: updatedJobs })
+                    });
+                    console.log('✅ Job deleted and synced');
+                }
+            } catch (error) {
+                console.error('Failed to sync job deletion:', error);
+            }
+        }
+
+        // Save job (add or update)
+        async function saveJob(event) {
+            event.preventDefault();
+
+            const jobId = document.getElementById('job-id').value;
+            const jobs = getJobs();
+
+            const jobData = {
+                title: document.getElementById('job-title').value.trim(),
+                company: document.getElementById('job-company').value.trim(),
+                location: document.getElementById('job-location').value.trim(),
+                locationType: document.getElementById('job-location-type').value,
+                salary: document.getElementById('job-salary').value.trim(),
+                source: document.getElementById('job-source').value,
+                status: document.getElementById('job-status').value,
+                priority: document.getElementById('job-priority').value,
+                url: document.getElementById('job-url').value.trim(),
+                description: document.getElementById('job-description').value.trim(),
+                notes: document.getElementById('job-notes').value.trim()
+            };
+
+            let jobToSync;
+            let isNew = false;
+
+            if (jobId) {
+                // Update existing job
+                const index = jobs.findIndex(j => j.id === jobId);
+                if (index !== -1) {
+                    const existingJob = jobs[index];
+
+                    // Track status change
+                    if (jobData.status !== existingJob.status) {
+                        existingJob.statusHistory = existingJob.statusHistory || [];
+                        existingJob.statusHistory.push({
+                            status: jobData.status,
+                            date: new Date().toISOString(),
+                            notes: 'Status updated'
+                        });
+
+                        if (jobData.status === 'applied' && !existingJob.appliedAt) {
+                            jobData.appliedAt = new Date().toISOString();
+                        }
+                    }
+
+                    jobs[index] = {
+                        ...existingJob,
+                        ...jobData,
+                        companyNormalized: normalizeCompany(jobData.company),
+                        updatedAt: new Date().toISOString()
+                    };
+                    jobToSync = jobs[index];
+                }
+            } else {
+                // Check for duplicate URL before adding new job
+                if (jobData.url) {
+                    const existingJob = jobs.find(j => j.url === jobData.url);
+                    if (existingJob) {
+                        alert(`This job already exists!\n\n"${existingJob.title}" at ${existingJob.company}\n\nURL: ${jobData.url}`);
+                        return;
+                    }
+                }
+
+                // Add new job
+                const newJob = {
+                    id: `job-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    ...jobData,
+                    companyNormalized: normalizeCompany(jobData.company),
+                    statusHistory: [{
+                        status: jobData.status,
+                        date: new Date().toISOString(),
+                        notes: 'Job added'
+                    }],
+                    capturedAt: new Date().toISOString(),
+                    appliedAt: jobData.status === 'applied' ? new Date().toISOString() : null,
+                    matchedContactIds: [],
+                    contactCount: 0,
+                    isArchived: false
+                };
+                jobs.unshift(newJob);
+                jobToSync = newJob;
+                isNew = true;
+            }
+
+            saveJobsToStorage(jobs);
+            closeJobModal();
+            renderJobs();
+
+            // Sync to cloud via API (async, don't block UI)
+            if (jobToSync) {
+                syncJobToCloud(jobToSync, isNew);
+            }
+        }
+
+        // Change job status via dropdown
+        async function changeJobStatus(jobId, newStatus) {
+            const jobs = getJobs();
+            const job = jobs.find(j => j.id === jobId);
+            if (!job || job.status === newStatus) return;
+
+            // Update status history
+            job.statusHistory = job.statusHistory || [];
+            job.statusHistory.push({
+                status: newStatus,
+                date: new Date().toISOString(),
+                notes: 'Status updated'
+            });
+
+            const oldStatus = job.status;
+            job.status = newStatus;
+
+            // Set appliedAt if moving to applied
+            if (newStatus === 'applied' && !job.appliedAt) {
+                job.appliedAt = new Date().toISOString();
+            }
+
+            job.updatedAt = new Date().toISOString();
+
+            saveJobsToStorage(jobs);
+            renderJobs();
+
+            // Sync to cloud via API
+            syncJobToCloud(job, false);
+        }
+
+        // Close job modal
+        function closeJobModal() {
+            document.getElementById('job-modal').classList.remove('active');
+        }
+
+        // Open contacts modal for a job
+        function openJobContactsModal(jobId) {
+            const jobs = getJobs();
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+
+            const contacts = getContacts();
+            const matchedContacts = contacts.filter(c => job.matchedContactIds?.includes(c.id));
+
+            document.getElementById('job-contacts-modal-title').textContent = `Contacts at ${job.company}`;
+
+            const listContainer = document.getElementById('job-contacts-list');
+
+            if (matchedContacts.length === 0) {
+                listContainer.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">No contacts found at this company</p>';
+            } else {
+                listContainer.innerHTML = matchedContacts.map(contact => `
+                    <div class="job-contact-item">
+                        <div class="job-contact-info">
+                            <h4>${escapeHtml(contact.name)}</h4>
+                            <p>${escapeHtml(contact.title || '')} ${contact.company ? '@ ' + escapeHtml(contact.company) : ''}</p>
+                            ${contact.email ? `<p>${escapeHtml(contact.email)}</p>` : ''}
+                        </div>
+                        <div class="job-contact-actions">
+                            ${contact.email ? `<button class="btn btn-primary" onclick="composeEmailForContact('${contact.id}'); closeJobContactsModal();">Email</button>` : ''}
+                            <button class="btn btn-secondary" onclick="openModal('${contact.id}'); closeJobContactsModal();">View</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('job-contacts-modal').classList.add('active');
+        }
+
+        // Close job contacts modal
+        function closeJobContactsModal() {
+            document.getElementById('job-contacts-modal').classList.remove('active');
+        }
+
+        // ================================
+        // EMAIL-TO-JOB SYNC FUNCTIONS
+        // ================================
+
+        // Store current email preview state
+        let currentEmailPreviewState = {
+            jobId: null,
+            emails: [],
+            isGlobalSync: false,
+            globalSyncResults: []
+        };
+
+        // Email sync configuration
+        const EMAIL_SYNC_CONFIG = {
+            delayBetweenJobs: 500,      // ms between job searches
+            maxEmailsPerJob: 10,        // limit results per job
+            batchSize: 5,               // jobs per batch before pause
+            batchPause: 2000            // ms pause between batches
+        };
+
+        // Check if Gmail is connected
+        function isGmailConnected() {
+            if (typeof DualGmailClient === 'undefined') {
+                return false;
+            }
+            const status = DualGmailClient.getAccountStatus();
+            return status.personal.connected || status.work.connected;
+        }
+
+        // Build Gmail search query for a job
+        function buildEmailQueryForJob(job) {
+            const company = job.company.trim();
+            // Remove common suffixes for better matching
+            const cleanCompany = company
+                .replace(/\b(Inc|LLC|Corp|Ltd|Co|Corporation|Company|Technologies|Tech|Software|Solutions|Group|Holdings|International)\b\.?/gi, '')
+                .replace(/[.,]/g, '')
+                .trim();
+
+            // Search for company name in subject or body
+            // Use quotes for phrase matching if company has multiple words
+            if (cleanCompany.includes(' ')) {
+                return `"${cleanCompany}"`;
+            } else {
+                return cleanCompany;
+            }
+        }
+
+        // Search emails for a single job
+        async function findEmailsForJob(job) {
+            if (!isGmailConnected()) {
+                return { emails: [], error: 'Gmail not connected. Please connect in Settings.' };
+            }
+
+            const query = buildEmailQueryForJob(job);
+
+            try {
+                const results = await DualGmailClient.searchAllAccounts(query, EMAIL_SYNC_CONFIG.maxEmailsPerJob);
+
+                // Filter out already synced emails
+                const syncedIds = job.syncedEmailIds || [];
+                const newEmails = results.combined.filter(email => !syncedIds.includes(email.id));
+
+                // Add account type to each email for display
+                const emailsWithAccount = newEmails.map(email => ({
+                    ...email,
+                    account: results.personal.messages?.some(m => m.id === email.id) ? 'personal' : 'work'
+                }));
+
+                return { emails: emailsWithAccount, error: null };
+            } catch (error) {
+                console.error('Error searching emails for job:', error);
+
+                // Map error to user-friendly message
+                if (error.status === 401) {
+                    return { emails: [], error: 'Gmail session expired. Please reconnect in Settings.' };
+                } else if (error.status === 429) {
+                    return { emails: [], error: 'Rate limited. Please wait a moment and try again.' };
+                } else if (error.status === 403) {
+                    return { emails: [], error: 'Gmail API quota exceeded. Try again later.' };
+                }
+
+                return { emails: [], error: error.message || 'Error searching emails' };
+            }
+        }
+
+        // Format emails for notes
+        function formatEmailsForNotes(emails) {
+            if (emails.length === 0) return '';
+
+            const now = new Date().toISOString().split('T')[0];
+            let formatted = `\n--- EMAIL SYNC [${now}] ---\n`;
+            formatted += `Found ${emails.length} email${emails.length > 1 ? 's' : ''}:\n\n`;
+
+            emails.forEach(email => {
+                const date = new Date(email.date).toLocaleDateString();
+                const accountLabel = email.account === 'personal' ? 'Personal' : 'Work';
+                const subject = email.subject || '(no subject)';
+                const from = email.from || 'Unknown sender';
+                const snippet = email.snippet ? email.snippet.substring(0, 150) + (email.snippet.length > 150 ? '...' : '') : '';
+
+                formatted += `[${accountLabel}] ${date}: ${subject}\n`;
+                formatted += `From: ${from}\n`;
+                if (snippet) {
+                    formatted += `"${snippet}"\n`;
+                }
+                formatted += '\n';
+            });
+
+            formatted += '--- END EMAIL SYNC ---\n';
+            return formatted;
+        }
+
+        // Append emails to job notes (with duplicate check)
+        function appendEmailsToJobNotes(jobId, emails) {
+            if (!emails || emails.length === 0) return false;
+
+            const jobs = getJobs();
+            const jobIndex = jobs.findIndex(j => j.id === jobId);
+            if (jobIndex === -1) return false;
+
+            const job = jobs[jobIndex];
+
+            // Initialize synced email IDs array if needed
+            if (!job.syncedEmailIds) {
+                job.syncedEmailIds = [];
+            }
+
+            // Filter to only truly new emails
+            const newEmails = emails.filter(email => !job.syncedEmailIds.includes(email.id));
+            if (newEmails.length === 0) return false;
+
+            // Format and append to notes
+            const formattedEmails = formatEmailsForNotes(newEmails);
+            job.notes = (job.notes || '') + formattedEmails;
+
+            // Track synced email IDs
+            newEmails.forEach(email => {
+                job.syncedEmailIds.push(email.id);
+            });
+
+            // Update sync metadata
+            job.lastEmailSync = new Date().toISOString();
+            job.emailSyncCount = (job.emailSyncCount || 0) + newEmails.length;
+            job.updatedAt = new Date().toISOString();
+
+            // Save
+            jobs[jobIndex] = job;
+            saveJobsToStorage(jobs);
+
+            // Sync to cloud if available
+            if (typeof syncJobToCloud === 'function') {
+                syncJobToCloud(job, false);
+            }
+
+            return true;
+        }
+
+        // Open email preview modal for a job
+        function openEmailPreviewModal(jobId, emails, isGlobalSync = false) {
+            currentEmailPreviewState = {
+                jobId,
+                emails,
+                isGlobalSync,
+                globalSyncResults: []
+            };
+
+            const jobs = getJobs();
+            const job = jobs.find(j => j.id === jobId);
+            const companyName = job ? job.company : 'Job';
+
+            document.getElementById('email-preview-title').textContent = `Emails for ${companyName}`;
+
+            const listContainer = document.getElementById('email-preview-list');
+            const statsContainer = document.getElementById('email-preview-stats');
+
+            if (emails.length === 0) {
+                statsContainer.style.display = 'none';
+                listContainer.innerHTML = `
+                    <div class="email-preview-empty">
+                        <p>No new emails found mentioning "${companyName}"</p>
+                        <p style="font-size: 0.85em; margin-top: 10px;">Try connecting both personal and work Gmail accounts for better results.</p>
+                    </div>
+                `;
+                document.getElementById('email-append-btn').style.display = 'none';
+            } else {
+                // Show stats
+                const personalCount = emails.filter(e => e.account === 'personal').length;
+                const workCount = emails.filter(e => e.account === 'work').length;
+                statsContainer.style.display = 'block';
+                statsContainer.innerHTML = `
+                    Found ${emails.length} new email${emails.length > 1 ? 's' : ''}
+                    ${personalCount > 0 ? ` | 📧 Personal: ${personalCount}` : ''}
+                    ${workCount > 0 ? ` | 💼 Work: ${workCount}` : ''}
+                `;
+
+                // Render email list with checkboxes
+                listContainer.innerHTML = emails.map((email, index) => {
+                    const date = new Date(email.date).toLocaleDateString();
+                    const subject = escapeHtml(email.subject || '(no subject)');
+                    const from = escapeHtml(email.from || 'Unknown sender');
+                    const snippet = escapeHtml(email.snippet || '').substring(0, 150);
+                    const accountClass = email.account === 'personal' ? 'personal' : 'work';
+                    const accountLabel = email.account === 'personal' ? '📧 Personal' : '💼 Work';
+
+                    return `
+                        <div class="email-preview-item">
+                            <input type="checkbox" id="email-${index}" data-index="${index}" checked>
+                            <div class="email-preview-content">
+                                <div class="email-preview-header">
+                                    <div class="email-preview-subject">
+                                        <span class="email-preview-account ${accountClass}">${accountLabel}</span>
+                                        ${subject}
+                                    </div>
+                                    <span class="email-preview-date">${date}</span>
+                                </div>
+                                <div class="email-preview-from">From: ${from}</div>
+                                <div class="email-preview-snippet">${snippet}${email.snippet && email.snippet.length > 150 ? '...' : ''}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('email-append-btn').style.display = 'block';
+            }
+
+            document.getElementById('email-preview-modal').classList.add('active');
+        }
+
+        // Close email preview modal
+        function closeEmailPreviewModal() {
+            document.getElementById('email-preview-modal').classList.remove('active');
+            currentEmailPreviewState = {
+                jobId: null,
+                emails: [],
+                isGlobalSync: false,
+                globalSyncResults: []
+            };
+        }
+
+        // Confirm and append selected emails
+        function confirmEmailAppend() {
+            const { jobId, emails } = currentEmailPreviewState;
+            if (!jobId || !emails.length) {
+                closeEmailPreviewModal();
+                return;
+            }
+
+            // Get selected emails
+            const selectedEmails = [];
+            emails.forEach((email, index) => {
+                const checkbox = document.getElementById(`email-${index}`);
+                if (checkbox && checkbox.checked) {
+                    selectedEmails.push(email);
+                }
+            });
+
+            if (selectedEmails.length === 0) {
+                alert('No emails selected. Please select at least one email to add to notes.');
+                return;
+            }
+
+            // Append to notes
+            const success = appendEmailsToJobNotes(jobId, selectedEmails);
+
+            if (success) {
+                // Show success message
+                const jobs = getJobs();
+                const job = jobs.find(j => j.id === jobId);
+                alert(`Added ${selectedEmails.length} email${selectedEmails.length > 1 ? 's' : ''} to notes for ${job ? job.company : 'job'}`);
+
+                // Re-render jobs to show updated data
+                renderJobs();
+            }
+
+            closeEmailPreviewModal();
+        }
+
+        // Sync emails for a single job (per-job button)
+        async function syncJobEmails(jobId) {
+            if (!isGmailConnected()) {
+                alert('Gmail not connected. Please connect your Gmail account in Settings first.');
+                return;
+            }
+
+            const jobs = getJobs();
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) {
+                alert('Job not found');
+                return;
+            }
+
+            // Show loading state on button (if we can find it)
+            const buttons = document.querySelectorAll(`button[onclick*="syncJobEmails('${jobId}')"]`);
+            buttons.forEach(btn => {
+                btn.innerHTML = '<span class="spinner" style="width:12px;height:12px;border:2px solid rgba(0,0,0,0.2);border-top-color:#333;border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;"></span>';
+                btn.disabled = true;
+            });
+
+            try {
+                const result = await findEmailsForJob(job);
+
+                if (result.error) {
+                    alert(result.error);
+                    return;
+                }
+
+                // Open preview modal
+                openEmailPreviewModal(jobId, result.emails);
+
+            } finally {
+                // Restore button state
+                buttons.forEach(btn => {
+                    btn.innerHTML = '📧 Emails';
+                    btn.disabled = false;
+                });
+            }
+        }
+
+        // Update sync progress in UI
+        function updateSyncProgress(current, total, status) {
+            const textEl = document.getElementById('sync-emails-text');
+            const iconEl = document.getElementById('sync-emails-icon');
+            const btn = document.getElementById('sync-all-emails-btn');
+
+            if (current === 0 && total === 0) {
+                // Reset
+                textEl.textContent = 'Sync Emails';
+                iconEl.innerHTML = '📧';
+                btn.classList.remove('syncing');
+            } else {
+                textEl.textContent = `${status} (${current}/${total})`;
+                iconEl.innerHTML = '<span class="spinner"></span>';
+                btn.classList.add('syncing');
+            }
+        }
+
+        // Sync emails for all jobs (global sync)
+        async function syncAllJobEmails() {
+            if (!isGmailConnected()) {
+                alert('Gmail not connected. Please connect your Gmail account in Settings first.');
+                return;
+            }
+
+            const jobs = getJobs().filter(job =>
+                !job.isArchived &&
+                !['rejected', 'withdrawn'].includes(job.status)
+            );
+
+            if (jobs.length === 0) {
+                alert('No active jobs to sync');
+                return;
+            }
+
+            const btn = document.getElementById('sync-all-emails-btn');
+            btn.disabled = true;
+
+            let totalEmailsFound = 0;
+            let jobsWithEmails = 0;
+            const allResults = [];
+
+            try {
+                for (let i = 0; i < jobs.length; i++) {
+                    const job = jobs[i];
+                    updateSyncProgress(i + 1, jobs.length, 'Syncing');
+
+                    const result = await findEmailsForJob(job);
+
+                    if (!result.error && result.emails.length > 0) {
+                        totalEmailsFound += result.emails.length;
+                        jobsWithEmails++;
+                        allResults.push({
+                            job,
+                            emails: result.emails
+                        });
+                    }
+
+                    // Rate limiting: pause between jobs
+                    if (i < jobs.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, EMAIL_SYNC_CONFIG.delayBetweenJobs));
+                    }
+
+                    // Extra pause every batch
+                    if ((i + 1) % EMAIL_SYNC_CONFIG.batchSize === 0 && i < jobs.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, EMAIL_SYNC_CONFIG.batchPause));
+                    }
+                }
+
+                // Reset progress
+                updateSyncProgress(0, 0, '');
+
+                if (totalEmailsFound === 0) {
+                    alert(`Searched ${jobs.length} jobs. No new emails found.`);
+                } else {
+                    // Ask user if they want to auto-append all or review individually
+                    const autoAppend = confirm(
+                        `Found ${totalEmailsFound} new emails across ${jobsWithEmails} jobs.\n\n` +
+                        `Click OK to automatically add all emails to job notes.\n` +
+                        `Click Cancel to review each job individually.`
+                    );
+
+                    if (autoAppend) {
+                        // Auto-append all
+                        let appendedCount = 0;
+                        allResults.forEach(({ job, emails }) => {
+                            if (appendEmailsToJobNotes(job.id, emails)) {
+                                appendedCount += emails.length;
+                            }
+                        });
+                        alert(`Added ${appendedCount} emails to notes for ${jobsWithEmails} jobs.`);
+                        renderJobs();
+                    } else {
+                        // Show first job's emails for review
+                        if (allResults.length > 0) {
+                            const firstResult = allResults[0];
+                            currentEmailPreviewState.globalSyncResults = allResults.slice(1);
+                            openEmailPreviewModal(firstResult.job.id, firstResult.emails, true);
+                        }
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error during global sync:', error);
+                alert('Error during email sync: ' + (error.message || 'Unknown error'));
+                updateSyncProgress(0, 0, '');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // Compose email for a contact (reuse existing compose functionality)
+        function composeEmailForContact(contactId) {
+            const contacts = getContacts();
+            const contact = contacts.find(c => c.id === contactId);
+            if (!contact) return;
+
+            // Set the contact in the AI panel if it exists
+            if (typeof selectContactInAIPanel === 'function') {
+                selectContactInAIPanel(contact);
+            } else {
+                // Fallback: open mail client
+                if (contact.email) {
+                    window.location.href = `mailto:${contact.email}`;
+                }
+            }
+        }
+
+        // Initialize jobs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clean up old deleted job IDs
+            cleanupDeletedJobIds();
+
+            // Render jobs when Jobs tab is clicked
+            const jobsTabBtn = document.querySelector('.tab-btn[data-tab="jobs"]');
+            if (jobsTabBtn) {
+                jobsTabBtn.addEventListener('click', async function() {
+                    // Load jobs from cloud API
+                    await loadJobsFromCloud();
+                    renderJobs();
+                });
+            }
+
+            // Initial render if on jobs tab
+            if (window.location.hash === '#jobs') {
+                loadJobsFromCloud().then(() => renderJobs());
+            }
+
+            // Set up sync complete callback (for contacts only, not jobs)
+            const existingOnSyncComplete = window.onSyncComplete;
+            window.onSyncComplete = function() {
+                // Call existing handler if any
+                if (typeof existingOnSyncComplete === 'function') {
+                    existingOnSyncComplete();
+                }
+                // NOTE: Jobs are NOT auto-refreshed here to prevent race conditions
+                // Jobs are loaded explicitly when opening Jobs tab
+                // Re-render contacts (they may have been updated)
+                if (typeof renderContacts === 'function') {
+                    renderContacts();
+                }
+                console.log('✅ Sync complete - contacts refreshed from cloud');
+            };
+        });
+
+        // Helper: escape HTML to prevent XSS
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
 
     <!-- AI Panel Backdrop (for mobile overlay) -->

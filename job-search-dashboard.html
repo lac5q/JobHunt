@@ -5435,7 +5435,9 @@ Luis
 
         // Get jobs from localStorage
         function getJobs() {
-            return JSON.parse(localStorage.getItem('jobSearchJobs') || '[]');
+            const jobs = JSON.parse(localStorage.getItem('jobSearchJobs') || '[]');
+            const deletedJobIds = JSON.parse(localStorage.getItem('deletedJobIds') || '[]');
+            return jobs.filter(job => !deletedJobIds.includes(job.id));
         }
 
         // Save jobs to localStorage (cloud sync happens via API)

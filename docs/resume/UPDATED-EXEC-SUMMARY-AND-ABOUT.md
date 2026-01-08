@@ -7,7 +7,7 @@
 ```
 Data-Driven Product Leader—PLG/Consumer/SMB Expert. Turn user insights into growth through analytics, experimentation, and AI. Equally comfortable managing teams OR being hands-on IC.
 
-10+ year track record leading consumer products and PLG at scale: TurboTax ($900M, 4M+ users), Ancestry ($800M subscriptions), eBay (global marketplace). Now run SketchPop ($3M consumer e-commerce) as CEO. Core superpower: data-driven decision making—analyze user behavior, run experiments, use insights to ship features that drive conversion and retention. Distinguished by shipping AI/ML products BEFORE ChatGPT hype, then rapidly adopting modern LLMs. Rare combination of:
+10+ year track record leading consumer products and PLG at scale: TurboTax ($900M, 4M+ users), Ancestry ($800M subscriptions), eBay (global marketplace). Now run SketchPop - CPO. Core superpower: data-driven decision making—analyze user behavior, run experiments, use insights to ship features that drive conversion and retention. Distinguished by shipping AI/ML products BEFORE ChatGPT hype, then rapidly adopting modern LLMs. Rare combination of:
 
 • Data-Driven Decision Making: Analyze user behavior across millions of sessions, run A/B tests, use cohort analysis and funnel optimization to prioritize ruthlessly—my core superpower. Track record: +2% checkout conversion at eBay ($100M+ lift), 30% mobile conversion lift at Ancestry, 5% revenue lift from abandon cart
 • Product-Led Growth: Led $900M PLG business at Intuit with zero sales team—freemium models, self-serve onboarding, conversion optimization. Also led growth initiatives at Ancestry ($800M subscriptions) and eBay marketplace
@@ -27,13 +27,13 @@ Seeking: VP Product, Director Product, or Principal PM roles at PLG/consumer/SMB
 **Use this version - adds career depth and consumer track record:**
 
 ```
-I'm a data-driven product leader who turns user insights into growth. Equally comfortable managing a team OR being the solo IC product hire. 10+ years leading consumer/PLG products at scale (TurboTax, Ancestry, eBay), deep AI/ML expertise, proven conversion optimization.
+I'm a data-driven product leader who turns user insights into growth. Equally comfortable managing a team OR being the solo IC product hire. 15+ years leading consumer/PLG products at scale (TurboTax, Ancestry, eBay), deep AI/ML expertise, proven conversion optimization.
 
 At Intuit, I led the $900M TurboTax Self-Employed business as Principal/Group PM serving 4M+ solopreneurs, freelancers, gig workers. Managed 4 PMs while staying hands-on—drove 10-15% CAGR ($100-150M annual growth) through data-driven decisions, A/B testing, and shipped 4 AI/ML products that reduced friction and improved conversion.
 
 My superpower: using data analysis to make the right product calls. At TurboTax, analyzed user behavior across millions of sessions to identify drop-offs, then shipped AI features that increased completion rates. At Ancestry, led growth initiatives achieving 30% mobile conversion lift and 5% revenue boost from abandon cart. At eBay, drove $100M+ business lift through 2% checkout optimization. Pure PLG motion—no sales team, self-serve at scale.
 
-As CEO of SketchPop ($3M consumer e-commerce, 20% margins), I wear many hats: solo product leader working with engineers, plus marketing, operations, finance. Acquired through Epilogue Capital (my investment firm focused on consumer/SMB businesses). Use AI as decision-making partner—design experiences, automate tasks, optimize funnels. I write specs, analyze data, work with engineers daily, ship fast.
+As CPO of SketchPop ($3M consumer e-commerce, 20% margins), I wear many hats: solo product leader working with engineers, plus marketing, operations, finance. Acquired through Epilogue Capital (my investment firm focused on consumer/SMB businesses). Use AI as decision-making partner—design experiences, automate tasks, optimize funnels. I write specs, analyze data, work with engineers daily, ship fast.
 
 I thrive in both leadership and IC roles. Led product teams at Intuit (4 PMs) and eBay (6+ analysts), now solo product leader at SketchPop—what matters is shipping great products and building great culture.
 
@@ -41,7 +41,7 @@ What I bring:
 • Data-Driven Decision Making: Track record of conversion wins—+2% at eBay ($100M+), 30% at Ancestry, 5% revenue lift—my core superpower
 • Product-Led Growth: Led PLG at scale (TurboTax $900M, Ancestry $800M, eBay marketplace)—freemium, self-serve, optimization
 • AI/ML for Growth: Shipped 4 AI products at Intuit (pre-ChatGPT); use AI as force multiplier at SketchPop
-• Consumer at Scale: 10+ years serving millions—TurboTax (4M+ users), Ancestry, eBay marketplace
+• Consumer at Scale: 15+ years serving millions—TurboTax (4M+ users), Ancestry, eBay marketplace
 • Hands-On Execution: Work with engineering, write specs, define requirements, ship products personally
 • Team & Culture: Hire and scale PM teams (Intuit, eBay) while building great culture
 
@@ -66,10 +66,10 @@ Location: San Diego preferred, open to remote, willing to travel to LA/SF.
 5. ✅ Emphasized marketplace and subscription expertise
 
 ### About Me:
-1. ✅ Added "10+ years leading consumer/PLG products" in opening
+1. ✅ Added "15+ years leading consumer/PLG products" in opening
 2. ✅ Added full paragraph on Ancestry and eBay achievements with metrics
 3. ✅ Added Epilogue Capital context (explains SketchPop acquisition)
-4. ✅ Updated "What I bring" bullets to reference 10+ year track record
+4. ✅ Updated "What I bring" bullets to reference 15+ year track record
 5. ✅ Added specific conversion wins from eBay and Ancestry
 6. ✅ Still under 2,600 character limit
 
@@ -84,7 +84,7 @@ Location: San Diego preferred, open to remote, willing to travel to LA/SF.
 
 ### AFTER:
 - Mentions: TurboTax, Ancestry, eBay, SketchPop, Epilogue Capital
-- Timeline explicit: "10+ year track record" (2013-2024)
+- Timeline explicit: "15+ year track record" (2009-2024)
 - Feels like: Seasoned consumer/PLG leader with proven track record
 
 ---
@@ -93,7 +93,7 @@ Location: San Diego preferred, open to remote, willing to travel to LA/SF.
 
 ### For Recruiters/Hiring Managers:
 - **Instant credibility**: "TurboTax, Ancestry, eBay" = recognized consumer brands
-- **Depth of experience**: 10+ years vs. just 3 years (Intuit alone)
+- **Depth of experience**: 15+ years vs. just 3 years (Intuit alone)
 - **Proven optimization**: Multiple examples of data-driven conversion wins
 - **Versatility**: Marketplace (eBay) + Subscriptions (Ancestry) + PLG (TurboTax) + E-commerce (SketchPop)
 

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Targeted Resume</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            margin: 0.5in;
+            size: letter;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .no-print { display: none !important; }
+            [contenteditable] {
+                outline: none !important;
+            }
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            color: #1a1a1a;
+            background: white;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.5in;
+        }
+
+        /* Loading state */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+            gap: 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Editable elements */
+        [contenteditable="true"] {
+            outline: 1px dashed transparent;
+            transition: outline 0.2s, background 0.2s;
+            border-radius: 2px;
+        }
+
+        [contenteditable="true"]:hover {
+            outline: 1px dashed #c7d2fe;
+            background: #fafafe;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 2px solid #4f46e5;
+            background: #f8f9ff;
+        }
+
+        /* Toolbar */
+        .edit-toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .toolbar-hint {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toolbar-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .btn-print {
+            background: white;
+            color: #4f46e5;
+        }
+
+        .btn-print:hover {
+            background: #f0f0ff;
+        }
+
+        .btn-add {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-add:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Add space for fixed toolbar */
+        .resume-content {
+            margin-top: 60px;
+        }
+
+        @media print {
+            .resume-content {
+                margin-top: 0;
+            }
+        }
+
+        /* Delete button for bullets */
+        .bullet-container {
+            position: relative;
+        }
+
+        .delete-bullet {
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border: none;
+            background: #fee2e2;
+            color: #dc2626;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bullet-container:hover .delete-bullet {
+            display: flex;
+        }
+
+        .delete-bullet:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Delete button for entire experience */
+        .experience-item {
+            position: relative;
+        }
+
+        .delete-experience {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 4px 8px;
+            border: none;
+            background: #fee2e2;
+            color: #dc2626;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .experience-item:hover .delete-experience {
+            display: flex;
+        }
+
+        .delete-experience:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #4f46e5;
+            margin-bottom: 16px;
+        }
+
+        .name {
+            font-size: 24pt;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .tagline {
+            font-size: 11pt;
+            color: #4f46e5;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .contact-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 9pt;
+            color: #555;
+        }
+
+        .contact-row a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        /* Summary */
+        .summary {
+            background: #f8f9ff;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            border-left: 3px solid #4f46e5;
+        }
+
+        .summary p {
+            font-size: 10pt;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #4f46e5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 10px;
+        }
+
+        /* Experience */
+        .experience-item {
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
+        }
+
+        .exp-title {
+            font-size: 10.5pt;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .exp-company {
+            font-weight: 600;
+            color: #4f46e5;
+        }
+
+        .exp-meta {
+            font-size: 9pt;
+            color: #666;
+            text-align: right;
+        }
+
+        .exp-location {
+            font-size: 8.5pt;
+            color: #888;
+        }
+
+        .exp-highlights {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .exp-highlights li {
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 3px;
+            font-size: 9.5pt;
+            color: #333;
+        }
+
+        .exp-highlights li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 0;
+            color: #4f46e5;
+            font-size: 10pt;
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 24px;
+        }
+
+        .skill-category {
+            margin-bottom: 6px;
+        }
+
+        .skill-category-title {
+            font-size: 9pt;
+            font-weight: 600;
+            color: #4f46e5;
+            margin-bottom: 2px;
+        }
+
+        .skill-list {
+            font-size: 9pt;
+            color: #444;
+        }
+
+        /* Education */
+        .education-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .edu-degree {
+            font-weight: 600;
+            font-size: 10pt;
+        }
+
+        .edu-school {
+            color: #555;
+            font-size: 9.5pt;
+        }
+
+        .edu-details {
+            font-size: 9pt;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Key Achievements */
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px 16px;
+        }
+
+        .achievement-item {
+            font-size: 9pt;
+            color: #333;
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .achievement-item::before {
+            content: "\2605";
+            position: absolute;
+            left: 0;
+            color: #4f46e5;
+            font-size: 8pt;
+        }
+
+        @media screen {
+            body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading state shown while data is being fetched -->
+    <div id="loading-state" class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading resume data...</p>
+    </div>
+
+    <!-- Resume content (hidden until data loads) -->
+    <div id="resume-container" style="display: none;">
+        <!-- Edit Toolbar -->
+        <div class="edit-toolbar no-print">
+            <div class="toolbar-left">
+                <span class="toolbar-title" id="toolbar-title">Resume</span>
+                <span class="toolbar-hint">Click text to edit | Hover to delete bullets or jobs | Next job auto-fills</span>
+            </div>
+            <div class="toolbar-actions">
+                <button class="toolbar-btn btn-add" id="add-bullet-btn">+ Add Bullet</button>
+                <button class="toolbar-btn btn-print" id="print-btn">Save as PDF</button>
+            </div>
+        </div>
+
+        <div class="resume-content" id="resume-content">
+            <!-- Content will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script src="resume-interactivity.js"></script>
+</body>
+</html>

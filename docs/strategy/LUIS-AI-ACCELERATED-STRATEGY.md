@@ -482,7 +482,7 @@ Format: Email draft + talking points for call"
 Based on dual-track strategy:
 
 ```
-I bring enterprise product leadership (Group PM managing $1B TurboTax Self-Employed unit at Intuit) and startup operator experience (CEO of SketchPop, $3M revenue, 30-person team).
+I bring enterprise product leadership (Group PM managing $1B TurboTax Self-Employed unit at Intuit) and startup operator experience (CPO of SketchPop, $3M revenue, 30-person team).
 
 Currently available for SHORT-TERM fractional/consulting engagements (Q1 2026) while evaluating full-time VP/Director Product opportunities.
 

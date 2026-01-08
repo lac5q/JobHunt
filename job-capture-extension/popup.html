@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Capture</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Job Capture</h1>
+            <div class="header-status">
+                <span id="status-dot" class="status-dot"></span>
+                <span id="status-text">Ready</span>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="capture">Save Job</button>
+            <button class="tab-btn" data-tab="ai">AI Assistant</button>
+            <button class="tab-btn" data-tab="settings">Settings</button>
+        </div>
+
+        <!-- Save Job Tab -->
+        <div id="capture-tab" class="tab-content active">
+            <div id="job-preview" class="job-preview">
+                <div class="preview-header">
+                    <span class="source-badge" id="source-badge">Detecting...</span>
+                </div>
+                <div class="form-group">
+                    <label>Job Title *</label>
+                    <input type="text" id="job-title" placeholder="e.g., Senior Product Manager">
+                </div>
+                <div class="form-group">
+                    <label>Company *</label>
+                    <input type="text" id="job-company" placeholder="e.g., Google">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="job-location" placeholder="e.g., San Francisco, CA">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="job-location-type">
+                            <option value="unknown">Unknown</option>
+                            <option value="remote">Remote</option>
+                            <option value="hybrid">Hybrid</option>
+                            <option value="onsite">On-site</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="job-status">
+                            <option value="saved">Saved</option>
+                            <option value="applied">Applied</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Salary (optional)</label>
+                    <input type="text" id="job-salary" placeholder="e.g., $150k-$200k">
+                </div>
+                <div class="form-group">
+                    <label>URL</label>
+                    <input type="text" id="job-url" readonly style="font-size: 0.8em; color: #666;">
+                </div>
+                <div class="form-group">
+                    <label>Job Description <button type="button" class="btn-small" id="read-desc-btn">📄 Read from Page</button></label>
+                    <textarea id="job-description" rows="3" placeholder="Click 'Read from Page' or paste job description here..."></textarea>
+                </div>
+                <input type="hidden" id="job-source">
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" id="save-job-btn">Save Job</button>
+                <button class="btn btn-secondary" id="reextract-btn">Re-extract</button>
+            </div>
+
+            <div id="save-message" class="message" style="display: none;"></div>
+        </div>
+
+        <!-- AI Assistant Tab -->
+        <div id="ai-tab" class="tab-content">
+            <div class="ai-section">
+                <h3>Answer Application Question</h3>
+                <p class="hint">Paste any application question and get a personalized answer based on your background.</p>
+                <textarea id="app-question" placeholder="e.g., Why are you interested in this role?&#10;&#10;Describe a time you led a product launch..."></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; margin-bottom: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label style="font-size: 12px; color: #666;">Character limit:</label>
+                        <select id="answer-char-limit" style="padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;">
+                            <option value="300">300 chars</option>
+                            <option value="500">500 chars</option>
+                            <option value="750">750 chars</option>
+                            <option value="1000" selected>1000 chars</option>
+                            <option value="1500">1500 chars</option>
+                            <option value="2000">2000 chars</option>
+                        </select>
+                    </div>
+                    <span id="answer-char-count" style="font-size: 12px; color: #666;">0 / 1000</span>
+                </div>
+                <button class="btn btn-primary" id="generate-answer-btn">Generate Answer</button>
+                <div id="answer-result" class="result-box" style="display: none;">
+                    <div class="result-header">
+                        <span>Generated Answer</span>
+                        <div class="result-actions">
+                            <button class="btn-copy" id="copy-answer-btn">Copy</button>
+                            <button class="btn-clear" id="clear-answer-btn">Clear</button>
+                        </div>
+                    </div>
+                    <div id="answer-result-text" class="result-text"></div>
+                </div>
+            </div>
+
+            <div class="ai-section">
+                <h3>Generate Cover Letter</h3>
+                <p class="hint">Create a personalized cover letter for the current job.</p>
+                <textarea id="cover-letter-focus" placeholder="Optional: Focus on specific experiences or skills...&#10;&#10;e.g., Focus on my RAG system experience at Intuit&#10;e.g., Emphasize my e-commerce and marketplace background&#10;e.g., Highlight my AI/ML product launches"></textarea>
+                <button class="btn btn-primary" id="generate-cover-btn">Generate Cover Letter</button>
+                <div id="cover-letter-result" class="result-box" style="display: none;">
+                    <div class="result-header">
+                        <span>Cover Letter</span>
+                        <div class="result-actions">
+                            <button class="btn-copy" id="copy-cover-btn">Copy</button>
+                            <button class="btn-gdoc" id="send-to-gdoc-btn">📄 Google Doc</button>
+                            <button class="btn-clear" id="clear-cover-btn">Clear</button>
+                        </div>
+                    </div>
+                    <div id="cover-letter-text" class="result-text"></div>
+                </div>
+            </div>
+
+            <div class="ai-section resume-section">
+                <h3>Generate Targeted Resume</h3>
+                <p class="hint">Create a beautifully designed PDF resume tailored to this specific job.</p>
+                <div class="resume-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="resume-ai-optimize" checked>
+                        <span>AI-optimize bullet points for job</span>
+                    </label>
+                </div>
+                <div class="form-group" style="margin-top: 12px;">
+                    <label style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 13px;">
+                        <span>➕ Add Additional Experience (optional)</span>
+                    </label>
+                    <select id="resume-additional-experience" multiple size="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; background: white;">
+                        <option value="Intuit">Intuit - Principal PM (2021-2024)</option>
+                        <option value="SketchPop LLC">SketchPop - CPO (2024-Present)</option>
+                        <option value="GrowthAlchemyLab">GrowthAlchemyLab - Founder (2024-Present)</option>
+                        <option value="Doctor.com">Doctor.com - Director PM (2017-2018)</option>
+                        <option value="Ancestry">Ancestry - Director PM (2016-2017)</option>
+                        <option value="Tile">Tile - Growth Product Leader (2015-2016)</option>
+                        <option value="eBay Marketplaces">eBay - Product Leader (2013-2015)</option>
+                        <option value="Epilogue Capital">Epilogue Capital - Managing Partner (2018-Present)</option>
+                    </select>
+                    <p class="hint" style="margin-top: 4px; font-size: 11px;">Hold Ctrl/Cmd to select multiple experiences to ensure they appear in your resume</p>
+                </div>
+                <textarea id="resume-custom-prompt" placeholder="Optional: Custom instructions for resume generation...&#10;&#10;e.g., Emphasize my AI/ML experience&#10;e.g., Focus on leadership and team building&#10;e.g., Highlight startup and 0-to-1 product launches&#10;e.g., De-emphasize older healthcare experience"></textarea>
+                <button class="btn btn-primary btn-resume" id="generate-resume-btn">
+                    <span class="btn-icon">📄</span>
+                    Generate Targeted Resume PDF
+                </button>
+                <div id="resume-status" class="resume-status" style="display: none;"></div>
+            </div>
+
+            <div id="ai-loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <span>Generating...</span>
+            </div>
+
+            <div id="ai-error" class="error-message" style="display: none;"></div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings-tab" class="tab-content">
+            <div class="settings-section">
+                <h3>AI Provider</h3>
+                <div class="form-group">
+                    <label>Provider</label>
+                    <select id="ai-provider">
+                        <option value="claude">Claude (Anthropic)</option>
+                        <option value="openai">OpenAI (GPT-4)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>API Key</label>
+                    <input type="password" id="ai-api-key" placeholder="Enter your API key">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Dashboard URL</h3>
+                <div class="form-group">
+                    <input type="url" id="dashboard-url" placeholder="https://yourdomain.vercel.app" value="https://luiscalderon.vercel.app">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Database Connection</h3>
+                <p class="hint">Test your Supabase connection to ensure jobs can sync.</p>
+                <button class="btn btn-secondary" id="test-connection-btn">Test Connection</button>
+                <div id="connection-status" class="connection-status" style="display: none;"></div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" id="save-settings-btn">Save Settings</button>
+            </div>
+
+            <div id="settings-message" class="message" style="display: none;"></div>
+
+            <div class="settings-section stats">
+                <h3>Stats</h3>
+                <p>Jobs saved this session: <strong id="session-count">0</strong></p>
+                <p>Jobs pending sync: <strong id="pending-count">0</strong></p>
+            </div>
+
+            <div class="settings-section">
+                <h3>Local Jobs</h3>
+                <p class="hint">If cloud sync fails, jobs are saved locally. Export them to import into your dashboard.</p>
+                <button class="btn btn-secondary" id="export-jobs-btn">Export Local Jobs</button>
+                <button class="btn btn-secondary" id="clear-local-btn" style="margin-left: 8px;">Clear Local</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="profile.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

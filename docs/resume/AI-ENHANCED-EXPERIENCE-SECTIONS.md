@@ -241,12 +241,12 @@ Skills: AI Consulting, Sales AI, LLM Integration, AI Agents, Product Strategy, B
 ---
 
 ### ❌ BEFORE (Weak AI Positioning):
-> "As CEO of SketchPop, I scaled the business to $3M revenue with a 30-person team."
+> "As CPO of SketchPop, I scaled the business to $3M revenue with a 30-person team."
 
 **Problem:** Sounds like traditional e-commerce, no AI mentioned
 
 ### ✅ AFTER (Strong AI Positioning):
-> "As CEO of SketchPop LLC, I acquired Custom Caricatures and drove post-acquisition transformation through AI: deployed AI agents for customer service (40% cost reduction), rebuilt backend with modern AI infrastructure, and implemented AI-driven approval flows. I work extensively with AI agents, LLM orchestration, and operational AI deployment."
+> "As CPO of SketchPop LLC, I acquired Custom Caricatures and drove post-acquisition transformation through AI: deployed AI agents for customer service (40% cost reduction), rebuilt backend with modern AI infrastructure, and implemented AI-driven approval flows. I work extensively with AI agents, LLM orchestration, and operational AI deployment."
 
 **Improvement:** AI transformation story, quantified ROI (40%), specific AI technologies
 

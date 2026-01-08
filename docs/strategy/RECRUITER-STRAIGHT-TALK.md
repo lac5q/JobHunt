@@ -322,7 +322,7 @@ I'm going to tell you exactly what to do in the next 120 minutes:
 ```
 I help high-growth startups build products customers love - and I've proven it by scaling my own company to $3M+ in annual revenue.
 
-As Founder/CEO of SketchPop LLC, I've lived every product decision a startup faces: finding product-market fit, scaling operations, optimizing conversion, integrating AI, and building teams that execute. I did it with my own capital at risk.
+As Founder/CPO of SketchPop LLC, I've lived every product decision a startup faces: finding product-market fit, scaling operations, optimizing conversion, integrating AI, and building teams that execute. I did it with my own capital at risk.
 
 Now I'm bringing that operator experience to other founders through fractional CPO and VP Product roles.
 

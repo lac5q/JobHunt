@@ -205,7 +205,7 @@ I'm reaching out to get on your radar for senior product leadership roles.
 
 Background:
 • Led $1 billion unit at Intuit/TurboTax
-• Currently building SketchPop (e-commerce, $3M revenue) as founder/CEO
+• Currently building SketchPop - CPO
 • Ross MBA (Michigan), GMAT 720
 • 20+ years product management, business development, scaling
 

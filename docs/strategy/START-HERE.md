@@ -53,7 +53,7 @@ Honest assessment of what's working and what's not
 
 **Background:**
 - Ross MBA '11 (GMAT 720, top 4%)
-- Founder/CEO of SketchPop LLC ($3M+ annual revenue)
+- Founder/CPO of SketchPop LLC ($3M+ annual revenue)
 - 20+ years product management, business development
 - E-commerce/Shopify expert
 - AI integration thought leader

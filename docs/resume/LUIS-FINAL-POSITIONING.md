@@ -86,7 +86,7 @@ I deliver profitable product growth at both enterprise scale and startup speed.
 
 At Intuit, I led TurboTax's $1 billion Self-Employed business as Principal Product Manager, delivering 10-15% CAGR revenue growth while managing a team of 4 PMs and coordinating cross-business unit strategy. I pioneered AI/ML products using Human-in-the-Loop approaches, launched partner integrations, and built freemium models that meaningfully moved acquisition metrics.
 
-As Founder/CEO of SketchPop LLC, I've scaled a profitable e-commerce business to <$3M in revenue with a 30-person team, implementing AI chatbots, modernizing our tech stack, and building approval workflows that improved customer experience and operational efficiency.
+As Founder/CPO of SketchPop LLC, I've scaled a profitable e-commerce business to <$3M in revenue with a 30-person team, implementing AI chatbots, modernizing our tech stack, and building approval workflows that improved customer experience and operational efficiency.
 
 What I Bring:
 • Enterprise Product Leadership: Managed $1B P&L, delivered 10-15% CAGR growth at Intuit

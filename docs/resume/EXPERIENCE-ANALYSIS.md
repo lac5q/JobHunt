@@ -138,7 +138,7 @@
 
 ### **MUST INCLUDE (6 experiences):**
 1. ✅ Intuit (2021-2024) - **ANCHOR EXPERIENCE**
-2. ✅ SketchPop (2024-Present) - **CURRENT ROLE** (fix title to CEO, fix dates)
+2. ✅ SketchPop - CPO, fix dates)
 3. ✅ Growth Alchemy Lab (2024-Present) - **CURRENT CONSULTING**
 4. ✅ Epilogue Capital (2018-Present) - **BRIEF** (explains SketchPop context)
 5. ✅ Ancestry (2016-2017) - **DIRECTOR-LEVEL CONSUMER**
@@ -181,4 +181,4 @@
 - 2015-2016: Tile (optional)
 - 2013-2015: eBay
 
-This gives you 10+ years of recent, relevant product leadership experience at consumer/PLG companies with director+ titles.
+This gives you 15+ years of recent, relevant product leadership experience at consumer/PLG companies with director+ titles.

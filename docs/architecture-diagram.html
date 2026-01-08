@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHunt Architecture</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        
+        // Custom Theme Configuration
+        mermaid.initialize({ 
+            startOnLoad: true,
+            securityLevel: 'loose',
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#0f172a',
+                primaryTextColor: '#f8fafc',
+                primaryBorderColor: '#334155',
+                lineColor: '#94a3b8',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#1e293b',
+                fontFamily: 'Inter, system-ui, sans-serif',
+                fontSize: '14px',
+                edgeLabelBackground: '#1e293b',
+                clusterBkg: '#0f172a00',
+                clusterBorder: '#334155'
+            },
+            flowchart: {
+                curve: 'basis',
+                padding: 30,
+                nodeSpacing: 50,
+                rankSpacing: 50,
+                htmlLabels: true
+            }
+        });
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Modern Dark Theme for Presentation Slides */
+        body {
+            background-color: #020617; /* Slate 950 */
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px;
+            color: #f8fafc;
+        }
+
+        .container {
+            background: #0f172a; /* Slate 900 */
+            padding: 60px;
+            border-radius: 24px;
+            border: 1px solid #1e293b;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 1400px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle background glow effect */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(56, 189, 248, 0.03) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        h1 {
+            color: #f8fafc;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 40px rgba(56, 189, 248, 0.2);
+        }
+
+        p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>JobHunt Platform Architecture</h1>
+        <p>AI-Accelerated Career Management System • Technical Overview</p>
+
+        <div class="mermaid">
+            graph LR
+                
+                %% Subgraphs
+                subgraph Sources [" EXTERNAL SOURCES "]
+                    LI["LinkedIn<br/>(Profile &amp; msgs)"]
+                    JB["Job Boards<br/>(Indeed/Glassdoor)"]
+                    GM["Gmail API<br/>(Dual Identity)"]
+                end
+
+                subgraph Extensions [" BROWSER LAYER "]
+                    direction TB
+                    Ext_Job["<b>Job Capture</b><br/>Extension"]
+                    Ext_CRM["<b>LinkedIn CRM</b><br/>Extension"]
+                end
+
+                subgraph Apps [" FRONTEND APPS "]
+                    direction TB
+                    Dash["<b>Job Dashboard</b><br/>React/Static"]
+                    Net["<b>Network</b><br/>Explorer"]
+                    ResEngine["<b>Resume Engine</b><br/>10+ Formats"]
+                end
+
+                subgraph API [" SERVERLESS API (Vercel) "]
+                    Sync["<b>Sync API</b><br/>Node.js"]
+                    AI_Proxy["<b>AI Gateway</b><br/>Node.js"]
+                end
+
+                subgraph Data [" PERSISTENCE "]
+                    DB[("<b>Supabase</b><br/>PostgreSQL + JSONB")]
+                end
+
+                subgraph AI [" INTELLIGENCE "]
+                    LLM{{"<b>LLM Models</b><br/>Claude 3.5 • GPT-4o"}}
+                end
+
+                %% Connections - Data Ingestion
+                LI --> Ext_CRM
+                LI --> Ext_Job
+                JB --> Ext_Job
+                
+                %% Connections - Browser to API
+                Ext_Job --> Sync
+                Ext_CRM --> Sync
+                Ext_Job -.-> AI_Proxy
+
+                %% Connections - Apps to Data
+                GM <--> Dash
+                Dash <--> Sync
+                Net <--> Sync
+                Sync <--> DB
+                
+                %% Connections - AI
+                Dash -.-> AI_Proxy
+                ResEngine -.-> AI_Proxy
+                AI_Proxy <--> LLM
+
+                %% Connections - Resume Generation
+                DB -.-> ResEngine
+
+                %% Styling
+                classDef source fill:#1e293b,stroke:#475569,stroke-width:1px,color:#94a3b8,rx:5,ry:5;
+                classDef browser fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#dbeafe,rx:10,ry:10,shadow:5px;
+                classDef app fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#dbeafe,rx:10,ry:10;
+                classDef api fill:#14532d,stroke:#22c55e,stroke-width:2px,color:#dcfce7,rx:5,ry:5;
+                classDef db fill:#4c1d95,stroke:#a855f7,stroke-width:2px,color:#f3e8ff,rx:5,ry:5;
+                classDef ai fill:#7c2d12,stroke:#f97316,stroke-width:2px,color:#ffedd5,rx:20,ry:20;
+
+                class LI,JB,GM source;
+                class Ext_Job,Ext_CRM browser;
+                class Dash,Net,ResEngine app;
+                class Sync,AI_Proxy api;
+                class DB db;
+                class LLM ai;
+        </div>
+    </div>
+
+</body>
+</html>

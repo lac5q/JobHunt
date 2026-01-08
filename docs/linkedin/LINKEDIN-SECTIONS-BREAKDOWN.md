@@ -26,7 +26,7 @@ At Intuit, I led the $900M TurboTax Self-Employed business as Principal/Group PM
 
 My superpower: using data analysis to make the right product calls. At TurboTax, analyzed user behavior to identify drop-offs, then shipped AI features that increased completion rates. At Ancestry, led growth initiatives achieving 30% mobile lift and 5% revenue boost from abandon cart. At eBay, drove $100M+ business lift through 2% checkout optimization. Pure PLG motion—no sales team, self-serve at scale.
 
-As CEO of SketchPop ($3M consumer e-commerce, 20% margins), I wear many hats: solo product leader working with engineers, plus marketing, operations, finance. Use AI as decision-making partner—design experiences, automate tasks, optimize funnels. I write specs, analyze data, work with engineers daily, ship fast.
+As CPO of SketchPop ($3M consumer e-commerce, 20% margins), I wear many hats: solo product leader working with engineers, plus marketing, operations, finance. Use AI as decision-making partner—design experiences, automate tasks, optimize funnels. I write specs, analyze data, work with engineers daily, ship fast.
 
 I thrive in both leadership and IC roles. Led product teams at Intuit (4 PMs) and eBay (6+ analysts), now solo product leader at SketchPop—what matters is shipping great products and building great culture.
 

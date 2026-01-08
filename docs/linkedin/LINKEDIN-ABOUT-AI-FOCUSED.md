@@ -7,7 +7,7 @@ I bring enterprise scale, AI/ML product expertise, and operational turnaround ex
 
 At Intuit, I led the $900M TurboTax Self-Employed business as Principal/Group Product Manager, shipping multiple AI/ML products with human-in-the-loop (HITL) training. I managed a team of 4 PMs, drove 10-15% CAGR revenue growth, and coordinated cross-business-unit AI initiatives. My AI products helped millions of self-employed users optimize tax outcomes using predictive algorithms.
 
-As CEO of SketchPop LLC, I acquired Custom Caricatures and drove post-acquisition transformation through AI: deployed AI agents for customer service (40% cost reduction), rebuilt backend with modern AI infrastructure, and implemented AI-driven approval flows. I work extensively with AI agents, LLM orchestration, and operational AI deployment. Currently scaling to $3M revenue with 30-person team and 20% margins.
+As CPO of SketchPop LLC, I acquired Custom Caricatures and drove post-acquisition transformation through AI: deployed AI agents for customer service (40% cost reduction), rebuilt backend with modern AI infrastructure, and implemented AI-driven approval flows. I work extensively with AI agents, LLM orchestration, and operational AI deployment. Currently scaling to $3M revenue with 30-person team and 20% margins.
 
 I stay current with latest AI developments—daily user of GPT-4, Claude, Gemini, Llama for product work and have consulted on AI operations (including sales AI at Ivo.AI).
 

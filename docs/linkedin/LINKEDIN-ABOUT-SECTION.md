@@ -7,7 +7,7 @@ I bring enterprise scale, AI/ML product expertise, and operational turnaround ex
 
 At Intuit, I led the $900M TurboTax Self-Employed business as Principal/Group Product Manager, shipping multiple AI/ML products with human-in-the-loop (HITL) training. I managed a team of 4 PMs, drove 10-15% CAGR revenue growth, and coordinated cross-business-unit AI initiatives. My AI products helped millions of self-employed users optimize tax outcomes using predictive algorithms.
 
-As CEO of SketchPop LLC, I acquired Custom Caricatures and drove post-acquisition transformation through AI: deployed AI chatbot that reduced customer service costs 40%, rebuilt backend with modern AI infrastructure, and improved conversion flows. Currently scaling to $3M revenue with 30-person team and 20% margins.
+As CPO of SketchPop LLC, I acquired Custom Caricatures and drove post-acquisition transformation through AI: deployed AI chatbot that reduced customer service costs 40%, rebuilt backend with modern AI infrastructure, and improved conversion flows. Currently scaling to $3M revenue with 30-person team and 20% margins.
 
 As AI consultant for Ivo.AI and other companies, I've advised on AI operations tools, LLM integration strategies, and AI product roadmaps. I stay current with latest models (GPT-4, Claude, Gemini, Llama) and use AI tools daily for product work.
 
@@ -48,7 +48,7 @@ At Intuit, I led a $900 million business—TurboTax Self-Employed—as Principal
 I learned how to navigate complexity: coordinating across business units, balancing stakeholder priorities, managing at scale, and making product decisions that moved millions in revenue.
 
 THE STARTUP CHAPTER:
-As founder/CEO of SketchPop LLC, I've built a consumer e-commerce business to $3M in revenue with 30 team members and 20% margins. I've personally shipped AI chatbots, rebuilt our backend infrastructure, and redesigned critical user flows. When it's your own money funding the company, you learn product discipline fast.
+As founder/CPO of SketchPop LLC, I've built a consumer e-commerce business to $3M in revenue with 30 team members and 20% margins. I've personally shipped AI chatbots, rebuilt our backend infrastructure, and redesigned critical user flows. When it's your own money funding the company, you learn product discipline fast.
 
 I learned how to move with speed: shipping despite constraints, validating before building, finding product-market fit, and making every dollar count.
 
@@ -85,7 +85,7 @@ $900M at Intuit. $3M as founder. Both matter.
 
 At Intuit, I led the $900 million TurboTax Self-Employed business as Principal/Group Product Manager. 4 PMs. 10-15% CAGR growth. Shipped AI/ML products. Coordinated cross-BU strategy. Launched partner integrations. Built freemium acquisition model.
 
-At SketchPop, I'm CEO/founder of a $3M consumer e-commerce business. 30 people. 20% margins. Shipped AI chatbot. Rebuilt tech stack. Redesigned approval flows. Every dollar is mine.
+At SketchPop - CPO/founder of a $3M consumer e-commerce business. 30 people. 20% margins. Shipped AI chatbot. Rebuilt tech stack. Redesigned approval flows. Every dollar is mine.
 
 Most product leaders have enterprise experience OR startup experience.
 I have both.
@@ -220,7 +220,7 @@ At Intuit, I led the $900 million TurboTax Self-Employed business as Principal/G
 
 At scale, I've seen how product excellence wins.
 
-As CEO of SketchPop LLC, I acquired and scaled Custom Caricatures (Turned Yellow, Make Me Jedi), a consumer e-commerce business now generating $3M in revenue with a 30-person team and 20% margins. Post-acquisition, I shipped AI chatbots, rebuilt the entire backend tech stack, and redesigned customer approval flows—turning around operations and driving product innovation with full P&L accountability.
+As CPO of SketchPop LLC, I acquired and scaled Custom Caricatures (Turned Yellow, Make Me Jedi), a consumer e-commerce business now generating $3M in revenue with a 30-person team and 20% margins. Post-acquisition, I shipped AI chatbots, rebuilt the entire backend tech stack, and redesigned customer approval flows—turning around operations and driving product innovation with full P&L accountability.
 
 At startup stage, I've lived how product speed wins.
 

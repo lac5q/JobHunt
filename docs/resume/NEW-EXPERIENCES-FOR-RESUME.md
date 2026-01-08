@@ -12,7 +12,7 @@ Your updated resume now includes:
 
 ### CURRENT POSITIONS (Always Show - ⭐ Recommended):
 1. **Intuit** - Principal Product Manager (2021-2024) ⭐
-2. **SketchPop** - CEO (2024-Present) ⭐
+2. **SketchPop - CPO (2024-Present) ⭐
 3. **GrowthAlchemyLab** - Founder & Principal Consultant (2024-Present) ⭐
 4. **Epilogue Capital** - Managing Partner (2018-Present) ⭐
 
